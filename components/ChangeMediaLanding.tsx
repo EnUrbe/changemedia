@@ -188,6 +188,7 @@ export default function ChangeMediaLanding() {
             </div>
             <nav className="hidden md:flex items-center gap-8 text-sm text-neutral-300">
               <a href="#work" className="hover:text-white">Work</a>
+              <a href="/why" className="hover:text-white">Why</a>
               <a href="#studio" className="hover:text-white">Studio</a>
               <a href="#services" className="hover:text-white">Services</a>
               <a href="#contact" className="hover:text-white">Contact</a>
@@ -202,6 +203,7 @@ export default function ChangeMediaLanding() {
           <div className="mx-auto max-w-6xl px-4 pb-4 md:hidden">
             <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 text-sm text-neutral-300">
               <a href="#work" className="block rounded-lg px-3 py-2 hover:bg-white/5">Work</a>
+              <a href="/why" className="block rounded-lg px-3 py-2 hover:bg-white/5">Why</a>
               <a href="#studio" className="block rounded-lg px-3 py-2 hover:bg-white/5">Studio</a>
               <a href="#services" className="block rounded-lg px-3 py-2 hover:bg-white/5">Services</a>
               <a href="#contact" className="block rounded-lg px-3 py-2 hover:bg-white/5">Contact</a>
