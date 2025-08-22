@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Airtable is used **ONLY** for the contact form (Inquiries table),
 // **NOT** for the portfolio grid anymore. Portfolio is local/static below.
@@ -55,10 +56,12 @@ function CaseCard({
             poster={img}
           />
         ) : (
-          <img
+          <Image
             src={img}
             alt={title}
-            className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition duration-500 group-hover:scale-[1.03]"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -157,8 +160,8 @@ export default function ChangeMediaLanding() {
       if (!res.ok) throw new Error("Failed to send inquiry");
       setSubmitted(true);
       form.reset();
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setSubmitting(false);
     }
@@ -297,7 +300,14 @@ export default function ChangeMediaLanding() {
           <div className="mt-10 columns-1 sm:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
             {moreCases.map((it) => (
               <a key={it.id} href="#" className="group mb-6 break-inside-avoid rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-                <img src={it.imageUrl} alt={it.title} className="w-full object-cover transition group-hover:scale-[1.02]" />
+                <Image
+                  src={it.imageUrl}
+                  alt={it.title}
+                  width={900}
+                  height={700}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="w-full h-auto object-cover transition group-hover:scale-[1.02]"
+                />
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="font-medium">{it.title}</div>
