@@ -481,7 +481,7 @@ export default function ChangeMediaLanding() {
             return NextResponse.json({ error: t }, { status: 500 });
           }
           return NextResponse.json({ ok: true });
-        } catch (e: any) {
+        } catch (e: unknown) {
           return NextResponse.json({ error: e?.message || "Bad request" }, { status: 400 });
         }
       }
