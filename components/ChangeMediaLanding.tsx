@@ -89,14 +89,23 @@ export default function ChangeMediaLanding() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [annual, setAnnual] = useState(true);
+  const [showStickyCta, setShowStickyCta] = useState(false);
 
   // Subtle grain overlay
   useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `
-      .grain{position:fixed;inset:0;pointer-events:none;opacity:.06;background:url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"160\" height=\"160\" viewBox=\"0  0 160 160\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"1\"/></svg>') repeat;mix-blend-mode:overlay;z-index:5}`;
+      .grain{position:fixed;inset:0;pointer-events:none;opacity:.06;background:url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"160\" height=\"160\" viewBox=\"0 0 160 160\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"1\"/></svg>') repeat;mix-blend-mode:overlay;z-index:5}`;
     document.head.appendChild(style);
     return () => style.remove();
+  }, []);
+
+  // Sticky CTA on scroll
+  useEffect(() => {
+    const onScroll = () => setShowStickyCta(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Static/local portfolio items (edit these to your own links/thumbnails)
@@ -142,6 +151,31 @@ export default function ChangeMediaLanding() {
     imageUrl: `https://picsum.photos/seed/changemedia-${i}/900/700`,
     tags: ["community", "health", "policy"],
   }));
+
+  // Testimonials (placeholder avatars)
+  const testimonials = [
+    {
+      name: "M. Alvarez",
+      role: "Coalition Lead",
+      avatar: "https://picsum.photos/seed/ava1/128/128",
+      quote:
+        "We saw sign-ups triple after the story pack. It changed the temperature of the room at council.",
+    },
+    {
+      name: "D. Chen",
+      role: "Clinic Director",
+      avatar: "https://picsum.photos/seed/ava2/128/128",
+      quote:
+        "They listen like researchers and shoot like filmmakers. The result moved our board to act.",
+    },
+    {
+      name: "S. Patel",
+      role: "Policy Organizer",
+      avatar: "https://picsum.photos/seed/ava3/128/128",
+      quote:
+        "Fast, ethical, effective. The reels traveled further than any memo we’ve published this year.",
+    },
+  ];
 
   // Handle inquiry form POST → /api/inquiry (Airtable Inquiries table)
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -266,6 +300,27 @@ export default function ChangeMediaLanding() {
 
       <style>{`@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}`}</style>
 
+      {/* LOGO CLOUD (startup-style social proof) */}
+      <section className="border-b border-white/10 bg-white/5">
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <div className="text-center text-xs uppercase tracking-[0.22em] text-neutral-400">Trusted by teams who build for people</div>
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 items-center gap-6 opacity-80">
+            {[
+              { src: "/vercel.svg", alt: "Vercel" },
+              { src: "/next.svg", alt: "Next.js" },
+              { src: "/globe.svg", alt: "Globe" },
+              { src: "/window.svg", alt: "Window" },
+              { src: "/file.svg", alt: "File" },
+              { src: "/vercel.svg", alt: "Vercel 2" },
+            ].map((l) => (
+              <div key={l.alt} className="flex items-center justify-center py-2">
+                <Image src={l.src} alt={l.alt} width={100} height={28} className="h-7 w-auto opacity-70" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SHOWREEL */}
       <section id="reel" className="border-b border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
@@ -323,6 +378,25 @@ export default function ChangeMediaLanding() {
         </div>
       </section>
 
+      {/* FEATURE HIGHLIGHTS */}
+      <section id="features" className="border-y border-white/10 bg-white/5">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">Why partners pick us</motion.h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {[
+              { t: "Research-grade rigor", d: "Field reporting, public-health framing, and behavioral science inform every cut." },
+              { t: "Community authorship", d: "Co-create with the people closest to the story, on and off camera." },
+              { t: "From content to consequence", d: "Distribution aligned to services, hearings, and real local action." },
+            ].map((f) => (
+              <div key={f.t} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="text-lg font-medium">{f.t}</div>
+                <p className="mt-2 text-sm text-neutral-300">{f.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* STUDIO */}
       <section id="studio" className="border-y border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-16 grid items-start gap-12 md:grid-cols-2">
@@ -342,37 +416,89 @@ export default function ChangeMediaLanding() {
         </div>
       </section>
 
-      {/* SERVICES */}
+      {/* SERVICES with pricing toggle */}
       <section id="services">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">Services</motion.h2>
           <p className="mt-2 max-w-2xl text-neutral-400">Simple packages to start; scale with add‑ons when you need them.</p>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
+
+          {/* Billing toggle */}
+          <div className="mt-6 inline-flex items-center rounded-xl border border-white/10 bg-white/5 p-1">
+            <button onClick={() => setAnnual(false)} className={`px-3 py-1 text-sm rounded-lg ${!annual ? "bg-white text-neutral-900" : "text-neutral-300"}`}>Monthly</button>
+            <button onClick={() => setAnnual(true)} className={`px-3 py-1 text-sm rounded-lg ${annual ? "bg-white text-neutral-900" : "text-neutral-300"}`}>Annual</button>
+          </div>
+
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
             {[
-              {t: "Monthly Content Retainer", p: "from $2,750/mo", pts: ["4 reels (45–60s)", "20 edited photos", "Strategy + light analytics"]},
-              {t: "Docu‑Short (3–5 min)", p: "$4,500 base", pts: ["1 shoot day", "Interview + b‑roll", "3 vertical cutdowns"]},
-              {t: "Event Story Pack", p: "$2,200", pts: ["Up to 5‑hr coverage", "60–90s recap", "3 reels + 20 photos"]},
-            ].map((c) => (
-              <motion.div {...fade} key={c.t} className="group rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="flex items-center justify-between">
-                  <div className="text-lg font-medium">{c.t}</div>
-                  <div className="text-sm text-neutral-400">{c.p}</div>
-                </div>
-                <ul className="mt-4 text-sm text-neutral-300 space-y-2">
-                  {c.pts.map((pt) => (
-                    <li key={pt} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />{pt}</li>
-                  ))}
-                </ul>
-                <div className="mt-6">
-                  <a href="#contact" className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Book discovery</a>
-                </div>
-              </motion.div>
-            ))}
+              { id: "retainer", t: "Monthly Content Retainer", pMonthly: "from $2,750/mo", pAnnual: "from $2,500/mo (annual)", pts: ["4 reels (45–60s)", "20 edited photos", "Strategy + light analytics"]},
+              { id: "doc", t: "Docu‑Short (3–5 min)", pOne: "$4,500 base", pts: ["1 shoot day", "Interview + b‑roll", "3 vertical cutdowns"]},
+              { id: "event", t: "Event Story Pack", pOne: "$2,200", pts: ["Up to 5‑hr coverage", "60–90s recap", "3 reels + 20 photos"]},
+            ].map((c) => {
+              const price = c.id === "retainer" ? (annual ? c.pAnnual : c.pMonthly) : c.pOne;
+              return (
+                <motion.div {...fade} key={c.t} className="group rounded-3xl border border-white/10 bg-white/5 p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="text-lg font-medium">{c.t}</div>
+                    <div className="text-sm text-neutral-400">{price}</div>
+                  </div>
+                  <ul className="mt-4 text-sm text-neutral-300 space-y-2">
+                    {c.pts.map((pt) => (
+                      <li key={pt} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />{pt}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-6">
+                    <a href="#contact" className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Book discovery</a>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Included kit */}
           <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6">
             <div className="text-sm text-neutral-300">Included kit: Sony A7 IV cinema setup • SM7 broadcast mics + lavs • dome lighting • gimbal option • pro edit & captions. Travel billed at IRS standard rate outside Denver metro.</div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section id="testimonials" className="border-t border-white/10 bg-white/5">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">What partners say</motion.h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {testimonials.map((t) => (
+              <div key={t.name} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-6">
+                <div className="flex items-center gap-3">
+                  <Image src={t.avatar} alt={t.name} width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
+                  <div>
+                    <div className="font-medium">{t.name}</div>
+                    <div className="text-xs text-neutral-400">{t.role}</div>
+                  </div>
+                </div>
+                <p className="mt-4 text-neutral-300">“{t.quote}”</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="border-t border-white/10 bg-white/5">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">FAQ</motion.h2>
+          <div className="mt-6 grid gap-3">
+            {[
+              { q: "How fast can you turn around a project?", a: "Event-to-edit is typically 72 hours. For docu‑shorts, expect 2–4 weeks depending on scope." },
+              { q: "Do you work outside Denver?", a: "Yes. Travel is billed at the IRS standard rate outside the Denver metro, with flexible remote pre‑pro." },
+              { q: "How do you measure impact?", a: "We use resonance (recall/belief shift), behavior (sign‑ups, referrals), and systems (citations, adoption)." },
+            ].map((f) => (
+              <details key={f.q} className="group rounded-2xl border border-white/10 bg-white/5 p-4 open:bg-white/10">
+                <summary className="cursor-pointer list-none font-medium">
+                  <span className="mr-2">➤</span>{f.q}
+                </summary>
+                <p className="mt-2 text-sm text-neutral-300">{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
@@ -447,53 +573,23 @@ export default function ChangeMediaLanding() {
         </div>
       </footer>
 
-      {/* --- Next.js API route to add in your project (Airtable FOR INQUIRIES ONLY) ---
-
-      // app/api/inquiry/route.ts
-      import { NextRequest, NextResponse } from "next/server";
-
-      const BASE = process.env.AIRTABLE_BASE_ID!;
-      const TABLE = process.env.AIRTABLE_TABLE_INQUIRIES!; // e.g., "Inquiries"
-      const PAT = process.env.AIRTABLE_PAT!; // Airtable personal access token
-
-      export async function POST(req: NextRequest) {
-        try {
-          const body = await req.json();
-          const payload = {
-            fields: {
-              Name: body.name || "",
-              Email: body.email || "",
-              Org: body.org || "",
-              Details: body.details || "",
-              Source: "website",
-            },
-          };
-          const res = await fetch(`https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLE)}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${PAT}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            }
-          );
-          if (!res.ok) {
-            const t = await res.text();
-            return NextResponse.json({ error: t }, { status: 500 });
-          }
-          return NextResponse.json({ ok: true });
-        } catch (e: unknown) {
-          return NextResponse.json({ error: e?.message || "Bad request" }, { status: 400 });
-        }
-      }
-
-      // .env.local (set in Vercel Project → Settings → Environment Variables)
-      // AIRTABLE_PAT=pat_xxx
-      // AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
-      // AIRTABLE_TABLE_INQUIRIES=Inquiries
-
-      */}
+      {/* Sticky CTA */}
+      {showStickyCta && (
+        <div className="fixed inset-x-4 bottom-4 z-50">
+          <div className="mx-auto max-w-4xl rounded-2xl border border-white/10 bg-white text-neutral-900 shadow-xl">
+            <div className="flex flex-col items-center justify-between gap-3 px-4 py-3 md:flex-row">
+              <div className="text-center md:text-left">
+                <div className="text-sm font-medium">Ready to move people to act?</div>
+                <div className="text-xs text-neutral-600">Book a 15‑min discovery call. No pressure.</div>
+              </div>
+              <div className="flex gap-2">
+                <a href="#contact" className="inline-flex items-center rounded-xl bg-neutral-900 text-white px-4 py-2 text-sm hover:bg-neutral-800">Book a call</a>
+                <a href="/why" className="inline-flex items-center rounded-xl border border-neutral-900/10 px-4 py-2 text-sm">Why us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
