@@ -1,6 +1,8 @@
-import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import Counter from "@/components/ui/Counter";
+import SectionNav from "@/components/ui/SectionNav";
 
 export const metadata: Metadata = {
   title: "Why CHANGE Studios — Evidence with a heartbeat",
@@ -32,11 +34,23 @@ export default function WhyPage() {
           <p className="mt-5 max-w-3xl text-neutral-300 text-lg">Because stories don’t just describe the world—they draft it.</p>
           <p className="mt-3 max-w-3xl text-neutral-300">We began with a simple observation: change rarely starts with a policy memo. It starts with a sentence that lodges in a heart, a scene someone can’t shake, a truth spoken by the people who lived it. At CHANGE Studios, we build those sentences and scenes with research‑grade rigor and community authorship. We listen in kitchens and clinics, map the systems beneath the surface, and craft narratives designed to move from feeling to action to outcome.</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="/#work" className="rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">See work</a>
-            <a href="/#contact" className="rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Start a project</a>
+            <Link href="/#work" className="rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">See work</Link>
+            <Link href="/#contact" className="rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Start a project</Link>
           </div>
         </div>
       </section>
+
+      {/* Sticky sub‑nav for page sections */}
+      <SectionNav
+        sections={[
+          { id: "metrics", label: "Metrics" },
+          { id: "beliefs", label: "Beliefs" },
+          { id: "different", label: "Different" },
+          { id: "process", label: "Process" },
+          { id: "accountability", label: "Accountability" },
+          { id: "cta", label: "Get in touch" },
+        ]}
+      />
 
       {/* LOGO CLOUD */}
       <section className="border-b border-white/10 bg-white/5">
@@ -60,16 +74,16 @@ export default function WhyPage() {
       </section>
 
       {/* METRICS */}
-      <section>
+      <section id="metrics">
         <div className="mx-auto max-w-6xl px-4 py-12 grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
-            { k: "200+", v: "neighbors reached via direct care" },
-            { k: "10+", v: "policy efforts documented" },
-            { k: "72 hr", v: "typical event‑to‑edit" },
-            { k: "6 mo", v: "recommended retainer" },
+            { val: 200, suffix: "+", v: "neighbors reached via direct care" },
+            { val: 10, suffix: "+", v: "policy efforts documented" },
+            { val: 72, suffix: " hr", v: "typical event‑to‑edit" },
+            { val: 6, suffix: " mo", v: "recommended retainer" },
           ].map((s) => (
-            <div key={s.k} className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-4 text-center">
-              <div className="text-2xl font-semibold">{s.k}</div>
+            <div key={s.v} className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-4 text-center">
+              <Counter value={s.val} suffix={s.suffix} className="text-2xl font-semibold" />
               <div className="text-xs text-neutral-400">{s.v}</div>
             </div>
           ))}
@@ -79,7 +93,7 @@ export default function WhyPage() {
       {/* BELIEFS + DIFFERENTIATORS */}
       <section>
         <div className="mx-auto max-w-6xl px-4 py-16 grid gap-12">
-          <div>
+          <div id="beliefs">
             <h2 className="text-2xl md:text-3xl font-semibold">What we believe</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {[
@@ -96,7 +110,7 @@ export default function WhyPage() {
             </div>
           </div>
 
-          <div>
+          <div id="different">
             <h2 className="text-2xl md:text-3xl font-semibold">What makes us different</h2>
             <div className="mt-4 grid gap-6 md:grid-cols-2">
               {[
@@ -116,7 +130,7 @@ export default function WhyPage() {
       </section>
 
       {/* PROCESS */}
-      <section className="border-y border-white/10 bg-white/5">
+      <section id="process" className="border-y border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <h2 className="text-2xl md:text-3xl font-semibold">How change happens here</h2>
           <p className="mt-2 max-w-3xl text-neutral-300">Listen → Distill → Co‑Create → Test → Move</p>
@@ -151,7 +165,7 @@ export default function WhyPage() {
       </section>
 
       {/* ACCOUNTABILITY */}
-      <section>
+      <section id="accountability">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <h2 className="text-2xl md:text-3xl font-semibold">How we hold ourselves accountable</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2">
@@ -171,7 +185,7 @@ export default function WhyPage() {
       </section>
 
       {/* CTA BAND */}
-      <section className="border-t border-white/10 bg-white/5">
+      <section id="cta" className="border-t border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-10">
           <div className="rounded-2xl border border-white/10 bg-gradient-to-r from-emerald-400/15 via-sky-400/15 to-purple-400/15 p-6">
             <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
@@ -180,8 +194,8 @@ export default function WhyPage() {
                 <div className="text-sm text-neutral-300">Ready to move people to act? Let’s make something that lasts.</div>
               </div>
               <div className="flex gap-2">
-                <a href="/#contact" className="inline-flex items-center rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">Book a call</a>
-                <a href="/#work" className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">See work</a>
+                <Link href="/#contact" className="inline-flex items-center rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">Book a call</Link>
+                <Link href="/#work" className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">See work</Link>
               </div>
             </div>
           </div>
