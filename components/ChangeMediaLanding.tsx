@@ -185,14 +185,32 @@ export default function ChangeMediaLanding() {
     setError(null);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    const payload = Object.fromEntries(formData.entries()) as Record<string, any>;
+    // Add submission timestamp to help server detect bots submitting too quickly
+    payload.ts = Date.now();
+
+    // Minimal client-side validation for quicker feedback
+    const details = String(payload.details || '').trim();
+    if (details.length < 10) {
+      setSubmitting(false);
+      setError("Please provide a bit more detail (min 10 chars).");
+      return;
+    }
+
     try {
       const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("Failed to send inquiry");
+      if (!res.ok) {
+        let msg = "Failed to send inquiry";
+        try {
+          const data = await res.json();
+          if (data?.error) msg = data.error;
+        } catch {}
+        throw new Error(msg);
+      }
       setSubmitted(true);
       form.reset();
     } catch (err: unknown) {
@@ -512,6 +530,11 @@ export default function ChangeMediaLanding() {
             <p className="mt-2 max-w-prose text-neutral-300">Tell us about your story. We’ll reply within 1 business day with a quick scope and next steps.</p>
             <div className="mt-6 rounded-2xl border border-white/10 bg-neutral-900 p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot field (bots tend to fill this). Keep hidden from users. */}
+                <div className="hidden" aria-hidden>
+                  <label>Leave empty</label>
+                  <input name="hp" autoComplete="off" tabIndex={-1} />
+                </div>
                 <div>
                   <label className="block text-sm">Name</label>
                   <input name="name" required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
@@ -532,6 +555,10 @@ export default function ChangeMediaLanding() {
                   {submitted ? "Sent — thanks!" : submitting ? "Sending…" : "Send inquiry"}
                 </button>
                 {error && <p className="text-sm text-red-400">{error}</p>}
+                {/* Screen reader status updates */}
+                <p aria-live="polite" role="status" className="sr-only">
+                  {submitted ? "Inquiry sent successfully." : submitting ? "Sending your inquiry." : error ? `Error: ${error}` : ""}
+                </p>
               </form>
             </div>
           </div>
