@@ -147,14 +147,6 @@ export async function POST(req: Request) {
     const AIRTABLE_TABLE_INQUIRIES = (process.env.AIRTABLE_TABLE_INQUIRIES || "Inquiries").trim();
     const AIRTABLE_TABLE_ID = (process.env.AIRTABLE_TABLE_ID || "").trim();
 
-    if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-      console.error("Airtable configuration missing. Set AIRTABLE_PAT and AIRTABLE_BASE_ID.");
-      return NextResponse.json({ error: "Server not configured" }, { status: 500 });
-    }
-    if (process.env.AIRTABLE_DEBUG === "1" && !AIRTABLE_PAT.startsWith("pat")) {
-      console.warn("AIRTABLE_PAT does not start with 'pat'. Is this an API key or malformed token?");
-    }
-
     const ua = req.headers.get("user-agent") || undefined;
     const referer = req.headers.get("referer") || undefined;
 
@@ -232,6 +224,15 @@ export async function POST(req: Request) {
       }
     }
 
+    // Helper: only include upstream details when AIRTABLE_DEBUG=1
+    function respondUpstream(status: number, message: string, hint?: string) {
+      const allow = process.env.AIRTABLE_DEBUG === "1";
+      const body = allow
+        ? { error: "Upstream error", upstream: { status, message, hint } }
+        : { error: "Upstream error" };
+      return NextResponse.json(body, { status: 502 });
+    }
+
     // Try posting with metadata first; on 422 for metadata fields, drop them; on 422 for unknown core fields, rotate aliases
     let useMetadata = true;
     for (let attempt = 0; attempt < 12; attempt++) {
@@ -289,55 +290,35 @@ export async function POST(req: Request) {
           if (CANDIDATES.name.includes(unknownField)) {
             if (LOCKED.name) {
               const hint = `Configured field name for Name (\"${FIELD_MAP.name}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_NAME.`;
-              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-              return NextResponse.json(
-                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-                { status: 502 }
-              );
+              return respondUpstream(res.status, msg, hint);
             }
             rotated = rotate("name") || rotated;
           }
           if (CANDIDATES.email.includes(unknownField)) {
             if (LOCKED.email) {
               const hint = `Configured field name for Email (\"${FIELD_MAP.email}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_EMAIL.`;
-              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-              return NextResponse.json(
-                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-                { status: 502 }
-              );
+              return respondUpstream(res.status, msg, hint);
             }
             rotated = rotate("email") || rotated;
           }
           if (CANDIDATES.phone.includes(unknownField)) {
             if (LOCKED.phone) {
               const hint = `Configured field name for Phone (\"${FIELD_MAP.phone}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_PHONE.`;
-              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-              return NextResponse.json(
-                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-                { status: 502 }
-              );
+              return respondUpstream(res.status, msg, hint);
             }
             rotated = rotate("phone") || rotated;
           }
           if (CANDIDATES.org.includes(unknownField)) {
             if (LOCKED.org) {
               const hint = `Configured field name for Company (\"${FIELD_MAP.org}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_ORG.`;
-              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-              return NextResponse.json(
-                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-                { status: 502 }
-              );
+              return respondUpstream(res.status, msg, hint);
             }
             rotated = rotate("org") || rotated;
           }
           if (CANDIDATES.details.includes(unknownField)) {
             if (LOCKED.details) {
               const hint = `Configured field name for Details (\"${FIELD_MAP.details}\") was not found in Airtable. Create that column or update AIRTABLE_FIELD_DETAILS. (Your form shows \"Project Details\".)`;
-              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-              return NextResponse.json(
-                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-                { status: 502 }
-              );
+              return respondUpstream(res.status, msg, hint);
             }
             rotated = rotate("details") || rotated;
           }
@@ -359,26 +340,12 @@ export async function POST(req: Request) {
           `phone=[${CANDIDATES.phone.join(", ")}] ` +
           `org=[${CANDIDATES.org.join(", ")}] ` +
           `details=[${CANDIDATES.details.join(", ")}]`;
-        const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
-        return NextResponse.json(
-          { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-          { status: debug ? 502 : 502 }
-        );
+        return respondUpstream(res.status, msg, hint);
       }
 
       // non-422 error handling as before
-      const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
       console.error("Airtable error:", res.status, msg);
-      if (debug) {
-        const hint = res.status === 401
-          ? "Check AIRTABLE_PAT validity, scopes (data.records:write), and base access (appPF4UHX4JsscQsp). Also ensure no extra spaces in the token."
-          : undefined;
-        return NextResponse.json(
-          { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
-          { status: 502 }
-        );
-      }
-      return NextResponse.json({ error: "Upstream error" }, { status: 502 });
+      return respondUpstream(res.status, msg);
     }
 
     // Optional Slack notification (non-blocking)

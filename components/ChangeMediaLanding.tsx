@@ -209,8 +209,7 @@ export default function ChangeMediaLanding() {
         let msg = "Failed to send inquiry";
         try {
           const data = await res.json();
-          if (data?.upstream?.message) msg = `Upstream: ${data.upstream.message}`;
-          else if (data?.error) msg = data.error;
+          if (data?.error) msg = data.error;
         } catch {}
         throw new Error(msg);
       }
@@ -568,6 +567,22 @@ export default function ChangeMediaLanding() {
                 </p>
               </form>
             </div>
+            {/* Airtable embedded form (optional alternative) */}
+            <details className="mt-6 rounded-2xl border border-white/10 bg-neutral-900 overflow-hidden">
+              <summary className="cursor-pointer px-6 py-4 text-sm text-neutral-300">Prefer Airtable? Open alternative form</summary>
+              <div className="border-t border-white/10">
+                <iframe
+                  className="airtable-embed"
+                  src="https://airtable.com/embed/appPF4UHX4JsscQsp/pagNDk9asuvq1NLWV/form"
+                  loading="lazy"
+                  title="Airtable contact form"
+                  frameBorder={0}
+                  width="100%"
+                  height={640}
+                  style={{ background: "transparent", border: "1px solid #ccc" }}
+                />
+              </div>
+            </details>
           </div>
           <div className="md:pt-10">
             <div className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
