@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 
 // Airtable is used **ONLY** for the contact form (Inquiries table),
 // **NOT** for the portfolio grid anymore. Portfolio is local/static below.
@@ -185,9 +186,9 @@ export default function ChangeMediaLanding() {
     setError(null);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries()) as Record<string, any>;
+    const payload = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue>;
     // Add submission timestamp to help server detect bots submitting too quickly
-    payload.ts = Date.now();
+    payload.ts = Date.now() as unknown as FormDataEntryValue;
 
     // Minimal client-side validation for quicker feedback
     const details = String(payload.details || '').trim();
@@ -564,9 +565,16 @@ export default function ChangeMediaLanding() {
           </div>
           <div className="md:pt-10">
             <div className="rounded-2xl border border-white/10 bg-neutral-900 p-6">
-              <h3 className="font-semibold">Book directly</h3>
+              <h3 className="font-semibold">15‑minute discovery call</h3>
               <p className="mt-2 text-sm text-neutral-400">Grab a slot that works and we’ll meet you there.</p>
-              <a href="https://calendly.com/your-link" className="mt-4 inline-flex rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">Open Calendly</a>
+              {/* Calendly inline widget begin */}
+              <div
+                className="calendly-inline-widget mt-4 rounded-xl border border-white/10"
+                data-url="https://calendly.com/william-navarretemoreno-changemedia/30min"
+                style={{ minWidth: "320px", height: "700px" }}
+              />
+              <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+              {/* Calendly inline widget end */}
               <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <div className="text-neutral-400">Email</div>

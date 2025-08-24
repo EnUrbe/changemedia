@@ -1,6 +1,6 @@
 import React from "react";
 
-export function JsonLd({ data }: { data: Record<string, any> }) {
+export function JsonLd({ data }: { data: unknown }) {
   return (
     <script
       type="application/ld+json"
