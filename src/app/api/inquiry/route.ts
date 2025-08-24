@@ -5,7 +5,6 @@ const RL_WINDOW_MS = 60_000; // 1 minute
 const RL_MAX = 5; // max 5 requests per window per IP
 
 declare global {
-  // eslint-disable-next-line no-var
   var __cm_rl: Map<string, number[]> | undefined;
 }
 const rlStore: Map<string, number[]> = globalThis.__cm_rl || new Map();
@@ -251,8 +250,9 @@ export async function POST(req: Request) {
       }
 
       const text = await res.text();
-      let parsed: any = null;
-      try { parsed = JSON.parse(text); } catch {}
+      type AirtableError = { error?: { message?: string; type?: string } };
+      let parsed: AirtableError | null = null;
+      try { parsed = JSON.parse(text) as AirtableError; } catch {}
       const msg: string = parsed?.error?.message || text || "Unknown upstream error";
 
       // 422 handling: try dropping metadata or rotating field aliases
