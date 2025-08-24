@@ -3,8 +3,13 @@ import { NextResponse } from "next/server";
 // Simple in-memory rate limit (best-effort per serverless instance)
 const RL_WINDOW_MS = 60_000; // 1 minute
 const RL_MAX = 5; // max 5 requests per window per IP
-const rlStore: Map<string, number[]> = (globalThis as any).__cm_rl || new Map();
-(globalThis as any).__cm_rl = rlStore;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __cm_rl: Map<string, number[]> | undefined;
+}
+const rlStore: Map<string, number[]> = globalThis.__cm_rl || new Map();
+globalThis.__cm_rl = rlStore;
 
 function getClientIp(req: Request) {
   // Try common proxy headers first
@@ -86,15 +91,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
+    const data = body as Record<string, unknown>;
+
     // Honeypot (bots tend to fill hidden field)
-    const hp = String((body as any).hp || "").trim();
+    const hp = String(data.hp ?? "").trim();
     if (hp) {
       // Silently accept to avoid tipping off bots
       return NextResponse.json({ success: true });
     }
 
     // Timestamp bot check (submissions too fast are likely bots)
-    const tsRaw = (body as any).ts;
+    const tsRaw = data.ts;
     const ts = Number(tsRaw);
     if (Number.isFinite(ts)) {
       const delta = Date.now() - ts;
@@ -107,10 +114,10 @@ export async function POST(req: Request) {
       }
     }
 
-    const name = String((body as any).name || "").trim();
-    const email = String((body as any).email || "").trim();
-    const org = String((body as any).org || "").trim();
-    const details = String((body as any).details || "").trim();
+    const name = String(data.name ?? "").trim();
+    const email = String(data.email ?? "").trim();
+    const org = String(data.org ?? "").trim();
+    const details = String(data.details ?? "").trim();
 
     if (!name || !email || !details) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -184,9 +191,14 @@ export async function POST(req: Request) {
         console.error("Airtable error:", res.status, text);
         return NextResponse.json({ error: "Upstream error" }, { status: 502 });
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       clearTimeout(timeout);
-      if (e?.name === "AbortError") {
+      if (
+        e &&
+        typeof e === "object" &&
+        "name" in e &&
+        (e as { name?: unknown }).name === "AbortError"
+      ) {
         console.error("Airtable request timed out");
         return NextResponse.json({ error: "Upstream timeout" }, { status: 504 });
       }
