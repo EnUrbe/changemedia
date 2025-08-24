@@ -186,7 +186,7 @@ export async function POST(req: Request) {
     const idx = { name: 0, email: 0, phone: 0, org: 0, details: 0 };
 
     function buildCoreFields() {
-      const fields: Record<string, any> = {};
+      const fields: Record<string, string> = {};
       fields[CANDIDATES.name[idx.name]] = name;
       fields[CANDIDATES.email[idx.email]] = email;
       if (phone) fields[CANDIDATES.phone[idx.phone]] = phone;
