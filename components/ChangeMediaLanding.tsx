@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,6 +93,7 @@ export default function ChangeMediaLanding() {
   const [error, setError] = useState<string | null>(null);
   const [annual, setAnnual] = useState(true);
   const [showStickyCta, setShowStickyCta] = useState(false);
+  const formTsRef = useRef<number>(Date.now());
 
   // Subtle grain overlay
   useEffect(() => {
@@ -188,7 +189,7 @@ export default function ChangeMediaLanding() {
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries()) as Record<string, FormDataEntryValue>;
     // Add submission timestamp to help server detect bots submitting too quickly
-    payload.ts = Date.now() as unknown as FormDataEntryValue;
+    payload.ts = formTsRef.current as unknown as FormDataEntryValue;
 
     // Minimal client-side validation for quicker feedback
     const details = String(payload.details || '').trim();
@@ -208,7 +209,8 @@ export default function ChangeMediaLanding() {
         let msg = "Failed to send inquiry";
         try {
           const data = await res.json();
-          if (data?.error) msg = data.error;
+          if (data?.upstream?.message) msg = `Upstream: ${data.upstream.message}`;
+          else if (data?.error) msg = data.error;
         } catch {}
         throw new Error(msg);
       }
@@ -528,7 +530,7 @@ export default function ChangeMediaLanding() {
         <div className="mx-auto max-w-6xl px-4 py-16 grid md:grid-cols-2 gap-10 items-start">
           <div>
             <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">Start a Project</motion.h2>
-            <p className="mt-2 max-w-prose text-neutral-300">Tell us about your story. We’ll reply within 1 business day with a quick scope and next steps.</p>
+            <p className="mt-2 max-w-prose text-neutral-300">Fill out this form to connect with our team. We’ll get back to you about your project or inquiry.</p>
             <div className="mt-6 rounded-2xl border border-white/10 bg-neutral-900 p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Honeypot field (bots tend to fill this). Keep hidden from users. */}
@@ -537,20 +539,24 @@ export default function ChangeMediaLanding() {
                   <input name="hp" autoComplete="off" tabIndex={-1} />
                 </div>
                 <div>
-                  <label className="block text-sm">Name</label>
-                  <input name="name" required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
+                  <label className="block text-sm">Full Name</label>
+                  <input name="name" autoComplete="name" required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
                 </div>
                 <div>
-                  <label className="block text-sm">Email</label>
-                  <input type="email" name="email" required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
+                  <label className="block text-sm">Email Address</label>
+                  <input type="email" name="email" autoComplete="email" required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
                 </div>
                 <div>
-                  <label className="block text-sm">Organization</label>
-                  <input name="org" className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
+                  <label className="block text-sm">Phone Number</label>
+                  <input type="tel" name="phone" autoComplete="tel" className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
                 </div>
                 <div>
-                  <label className="block text-sm">Project details</label>
-                  <textarea name="details" rows={4} required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" placeholder="What do you want to make? Timeline? Budget range?" />
+                  <label className="block text-sm">Company Name</label>
+                  <input name="org" autoComplete="organization" className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm">Project Details</label>
+                  <textarea name="details" rows={4} minLength={10} required className="mt-1 w-full rounded-xl border border-white/10 bg-neutral-950 px-3 py-2" placeholder="What do you want to make? Timeline? Budget range?" />
                 </div>
                 <button disabled={submitting || submitted} className="w-full md:w-auto rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200 disabled:opacity-60">
                   {submitted ? "Sent — thanks!" : submitting ? "Sending…" : "Send inquiry"}
@@ -570,10 +576,10 @@ export default function ChangeMediaLanding() {
               {/* Calendly inline widget begin */}
               <div
                 className="calendly-inline-widget mt-4 rounded-xl border border-white/10"
-                data-url="https://calendly.com/william-navarretemoreno-changemedia/30min"
+                data-url="https://calendly.com/william-navarretemoreno-changemedia/30min?background_color=000000&text_color=ffffff&primary_color=87c8bf"
                 style={{ minWidth: "320px", height: "700px" }}
               />
-              <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+              <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" />
               {/* Calendly inline widget end */}
               <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
                 <div>

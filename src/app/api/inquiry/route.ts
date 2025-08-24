@@ -117,6 +117,7 @@ export async function POST(req: Request) {
     const name = String(data.name ?? "").trim();
     const email = String(data.email ?? "").trim();
     const org = String(data.org ?? "").trim();
+    const phone = String((data as Record<string, unknown>).phone ?? "").trim();
     const details = String(data.details ?? "").trim();
 
     if (!name || !email || !details) {
@@ -141,68 +142,243 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Details too long" }, { status: 400 });
     }
 
-    const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-    const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_INQUIRIES = process.env.AIRTABLE_TABLE_INQUIRIES || "Inquiries";
+    const AIRTABLE_PAT = (process.env.AIRTABLE_PAT || "").trim();
+    const AIRTABLE_BASE_ID = (process.env.AIRTABLE_BASE_ID || "").trim();
+    const AIRTABLE_TABLE_INQUIRIES = (process.env.AIRTABLE_TABLE_INQUIRIES || "Inquiries").trim();
+    const AIRTABLE_TABLE_ID = (process.env.AIRTABLE_TABLE_ID || "").trim();
 
     if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
       console.error("Airtable configuration missing. Set AIRTABLE_PAT and AIRTABLE_BASE_ID.");
       return NextResponse.json({ error: "Server not configured" }, { status: 500 });
     }
+    if (process.env.AIRTABLE_DEBUG === "1" && !AIRTABLE_PAT.startsWith("pat")) {
+      console.warn("AIRTABLE_PAT does not start with 'pat'. Is this an API key or malformed token?");
+    }
 
     const ua = req.headers.get("user-agent") || undefined;
     const referer = req.headers.get("referer") || undefined;
 
-    const payload = {
-      records: [
-        {
-          fields: {
-            Name: name,
-            Email: email,
-            Organization: org || undefined,
-            Details: details,
-            SubmittedAt: new Date().toISOString(),
-            UserAgent: ua,
-            Page: referer,
-            IP: ip,
-          },
-        },
-      ],
+    // Configurable field names with sensible defaults
+    const FIELD_MAP = {
+      name: (process.env.AIRTABLE_FIELD_NAME || "Full Name").trim(),
+      email: (process.env.AIRTABLE_FIELD_EMAIL || "Email Address").trim(),
+      phone: (process.env.AIRTABLE_FIELD_PHONE || "Phone Number").trim(),
+      org: (process.env.AIRTABLE_FIELD_ORG || "Company Name").trim(),
+      details: (process.env.AIRTABLE_FIELD_DETAILS || "Details").trim(), // default to Details
+    } as const;
+
+    const LOCKED = {
+      name: Boolean((process.env.AIRTABLE_FIELD_NAME || "").trim()),
+      email: Boolean((process.env.AIRTABLE_FIELD_EMAIL || "").trim()),
+      phone: Boolean((process.env.AIRTABLE_FIELD_PHONE || "").trim()),
+      org: Boolean((process.env.AIRTABLE_FIELD_ORG || "").trim()),
+      details: Boolean((process.env.AIRTABLE_FIELD_DETAILS || "").trim()),
+    } as const;
+
+    // Optional Source/Status mapping
+    const srcField = (process.env.AIRTABLE_FIELD_SOURCE || "").trim();
+    const srcValue = (process.env.AIRTABLE_DEFAULT_SOURCE || "").trim();
+    const stField = (process.env.AIRTABLE_FIELD_STATUS || "").trim();
+    const stValue = (process.env.AIRTABLE_DEFAULT_STATUS || "").trim();
+    let includeSource = Boolean(srcField && srcValue);
+    let includeStatus = Boolean(stField && stValue);
+
+    // Common aliases to try automatically on 422 UNKNOWN_FIELD_NAME
+    const CANDIDATES: Record<keyof typeof FIELD_MAP, string[]> = {
+      name: [FIELD_MAP.name, "Full Name", "Name"],
+      email: [FIELD_MAP.email, "Email Address", "Email"],
+      phone: [FIELD_MAP.phone, "Phone Number", "Phone"],
+      org: [FIELD_MAP.org, "Company Name", "Organization", "Company", "Org"],
+      details: [FIELD_MAP.details, "Project Details", "Details", "Notes", "Message", "Description"],
     };
 
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_INQUIRIES)}`;
+    const idx = { name: 0, email: 0, phone: 0, org: 0, details: 0 };
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_PAT}`,
-          "Content-Type": "application/json",
+    function buildCoreFields() {
+      const fields: Record<string, any> = {};
+      fields[CANDIDATES.name[idx.name]] = name;
+      fields[CANDIDATES.email[idx.email]] = email;
+      if (phone) fields[CANDIDATES.phone[idx.phone]] = phone;
+      if (org) fields[CANDIDATES.org[idx.org]] = org;
+      fields[CANDIDATES.details[idx.details]] = details;
+
+      // Optional: map default Source/Status if configured and not dropped
+      if (includeSource) fields[srcField] = srcValue;
+      if (includeStatus) fields[stField] = stValue;
+
+      return fields;
+    }
+
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_ID || AIRTABLE_TABLE_INQUIRIES)}`;
+
+    async function postToAirtable(body: unknown) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_PAT}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        return res;
+      } catch (e) {
+        clearTimeout(timeout);
+        throw e;
+      }
+    }
+
+    // Try posting with metadata first; on 422 for metadata fields, drop them; on 422 for unknown core fields, rotate aliases
+    let useMetadata = true;
+    for (let attempt = 0; attempt < 12; attempt++) {
+      const coreFields = buildCoreFields();
+      const records = [
+        {
+          fields: useMetadata
+            ? { ...coreFields, SubmittedAt: new Date().toISOString(), UserAgent: ua, Page: referer, IP: ip }
+            : coreFields,
         },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
+      ];
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("Airtable error:", res.status, text);
-        return NextResponse.json({ error: "Upstream error" }, { status: 502 });
+      const res = await postToAirtable({ records, typecast: true });
+      if (res.ok) {
+        break; // success
       }
-    } catch (e: unknown) {
-      clearTimeout(timeout);
-      if (
-        e &&
-        typeof e === "object" &&
-        "name" in e &&
-        (e as { name?: unknown }).name === "AbortError"
-      ) {
-        console.error("Airtable request timed out");
-        return NextResponse.json({ error: "Upstream timeout" }, { status: 504 });
+
+      const text = await res.text();
+      let parsed: any = null;
+      try { parsed = JSON.parse(text); } catch {}
+      const msg: string = parsed?.error?.message || text || "Unknown upstream error";
+
+      // 422 handling: try dropping metadata or rotating field aliases
+      if (res.status === 422) {
+        const unknownMatch = msg.match(/Unknown field name: \"([^\"]+)\"/);
+        const unknownField = unknownMatch?.[1];
+
+        // If a metadata field is unknown, drop metadata and retry
+        if (unknownField && ["SubmittedAt", "UserAgent", "Page", "IP"].includes(unknownField)) {
+          useMetadata = false;
+          continue;
+        }
+
+        // If a core field alias is unknown, rotate that logical field to the next candidate
+        const rotate = (key: keyof typeof idx) => {
+          if (idx[key] < CANDIDATES[key].length - 1) {
+            idx[key]++;
+            return true;
+          }
+          return false;
+        };
+
+        let rotated = false;
+        if (unknownField) {
+          // Drop optional Source/Status fields if they caused the error
+          if (includeSource && unknownField === srcField) {
+            includeSource = false;
+            continue;
+          }
+          if (includeStatus && unknownField === stField) {
+            includeStatus = false;
+            continue;
+          }
+
+          if (CANDIDATES.name.includes(unknownField)) {
+            if (LOCKED.name) {
+              const hint = `Configured field name for Name (\"${FIELD_MAP.name}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_NAME.`;
+              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+              return NextResponse.json(
+                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+                { status: 502 }
+              );
+            }
+            rotated = rotate("name") || rotated;
+          }
+          if (CANDIDATES.email.includes(unknownField)) {
+            if (LOCKED.email) {
+              const hint = `Configured field name for Email (\"${FIELD_MAP.email}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_EMAIL.`;
+              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+              return NextResponse.json(
+                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+                { status: 502 }
+              );
+            }
+            rotated = rotate("email") || rotated;
+          }
+          if (CANDIDATES.phone.includes(unknownField)) {
+            if (LOCKED.phone) {
+              const hint = `Configured field name for Phone (\"${FIELD_MAP.phone}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_PHONE.`;
+              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+              return NextResponse.json(
+                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+                { status: 502 }
+              );
+            }
+            rotated = rotate("phone") || rotated;
+          }
+          if (CANDIDATES.org.includes(unknownField)) {
+            if (LOCKED.org) {
+              const hint = `Configured field name for Company (\"${FIELD_MAP.org}\") was not found in Airtable. Rename the column or update AIRTABLE_FIELD_ORG.`;
+              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+              return NextResponse.json(
+                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+                { status: 502 }
+              );
+            }
+            rotated = rotate("org") || rotated;
+          }
+          if (CANDIDATES.details.includes(unknownField)) {
+            if (LOCKED.details) {
+              const hint = `Configured field name for Details (\"${FIELD_MAP.details}\") was not found in Airtable. Create that column or update AIRTABLE_FIELD_DETAILS. (Your form shows \"Project Details\".)`;
+              const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+              return NextResponse.json(
+                { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+                { status: 502 }
+              );
+            }
+            rotated = rotate("details") || rotated;
+          }
+        }
+
+        if (rotated) {
+          continue; // try again with next alias
+        }
+
+        // No idea which field; fallback by dropping metadata if still on, else give detailed debug
+        if (useMetadata) {
+          useMetadata = false;
+          continue;
+        }
+
+        const hint = "Check field names in your Airtable table. Expected one of: " +
+          `name=[${CANDIDATES.name.join(", ")}] ` +
+          `email=[${CANDIDATES.email.join(", ")}] ` +
+          `phone=[${CANDIDATES.phone.join(", ")}] ` +
+          `org=[${CANDIDATES.org.join(", ")}] ` +
+          `details=[${CANDIDATES.details.join(", ")}]`;
+        const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+        return NextResponse.json(
+          { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+          { status: debug ? 502 : 502 }
+        );
       }
-      throw e;
+
+      // non-422 error handling as before
+      const debug = process.env.NODE_ENV !== "production" || process.env.AIRTABLE_DEBUG === "1";
+      console.error("Airtable error:", res.status, msg);
+      if (debug) {
+        const hint = res.status === 401
+          ? "Check AIRTABLE_PAT validity, scopes (data.records:write), and base access (appPF4UHX4JsscQsp). Also ensure no extra spaces in the token."
+          : undefined;
+        return NextResponse.json(
+          { error: "Upstream error", upstream: { status: res.status, message: msg, hint } },
+          { status: 502 }
+        );
+      }
+      return NextResponse.json({ error: "Upstream error" }, { status: 502 });
     }
 
     // Optional Slack notification (non-blocking)
