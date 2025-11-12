@@ -115,6 +115,7 @@ export default function Page() {
           className="absolute inset-0"
         >
           {/* Full-bleed background video (drop your file at public/hero.mp4) */}
+          <div className="absolute inset-0 animate-pulse bg-[radial-gradient(ellipse_at_center,rgba(120,60,160,0.08),transparent_60%)]" />
           <video
             className="w-full h-full object-cover"
             src="/hero.mp4"
@@ -122,7 +123,7 @@ export default function Page() {
             loop
             muted
             playsInline
-            poster="/hero-poster.jpg"
+            poster="/hero-poster.svg"
           />
           {/* Vignette and color washes for legibility */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90" />
