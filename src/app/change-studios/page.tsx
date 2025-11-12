@@ -2,112 +2,300 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+
+// Magnetic button component
+function MagneticButton({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleMouse = (e: React.MouseEvent) => {
+    if (!buttonRef.current) return;
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
+    const x = (clientX - (left + width / 2)) * 0.3;
+    const y = (clientY - (top + height / 2)) * 0.3;
+    setPosition({ x, y });
+  };
+
+  return (
+    <motion.button
+      ref={buttonRef}
+      className={className}
+      onMouseMove={handleMouse}
+      onMouseLeave={() => setPosition({ x: 0, y: 0 })}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+// Reveal text animation
+function RevealText({ children, delay = 0 }: { children: string, delay?: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <span ref={ref} className="inline-block overflow-hidden">
+      <motion.span
+        initial={{ y: "100%" }}
+        animate={isInView ? { y: 0 } : { y: "100%" }}
+        transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay }}
+        className="inline-block"
+      >
+        {children}
+      </motion.span>
+    </span>
+  );
+}
 
 export default function ChangeStudiosPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+  
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+  
+  const heroOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
+  const heroScale = useTransform(smoothProgress, [0, 0.3], [1, 1.2]);
+  const heroY = useTransform(smoothProgress, [0, 0.5], [0, -300]);
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updateMouse = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', updateMouse);
+    return () => window.removeEventListener('mousemove', updateMouse);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
-      {/* Fixed nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-medium tracking-tight">CHANGE®</Link>
-          <div className="flex items-center gap-8 text-sm">
-            <Link href="/" className="hover:text-neutral-400 transition">Home</Link>
-            <Link href="/apothecary" className="hover:text-neutral-400 transition">Apothecary</Link>
-            <Link href="/why" className="hover:text-neutral-400 transition">Why</Link>
-            <a href="#contact" className="rounded-full bg-white text-neutral-950 px-5 py-2 text-sm font-medium hover:bg-neutral-200 transition">Get in touch</a>
+    <div ref={containerRef} className="min-h-screen bg-neutral-950 text-white overflow-x-hidden">
+      {/* Custom cursor */}
+      <motion.div
+        className="fixed w-6 h-6 border-2 border-cyan-400/50 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
+        animate={{ x: mousePosition.x - 12, y: mousePosition.y - 12 }}
+        transition={{ type: "spring", stiffness: 500, damping: 28 }}
+      />
+
+      {/* Glassmorphic nav */}
+      <motion.nav 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
+        className="fixed top-4 left-4 right-4 z-50 bg-neutral-900/30 backdrop-blur-2xl border border-white/10 rounded-2xl"
+      >
+        <div className="mx-auto max-w-7xl px-8 py-4 flex items-center justify-between">
+          <Link href="/" className="text-xl font-medium tracking-tight hover:text-cyan-400 transition-colors">
+            CHANGE<span className="text-cyan-400">®</span>
+          </Link>
+          <div className="hidden md:flex items-center gap-12 text-sm font-light">
+            <Link href="/#work" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Work</Link>
+            <Link href="/photography" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Photography</Link>
+            <Link href="/why" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Why</Link>
           </div>
+          <MagneticButton className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-6 py-2.5 text-sm font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-shadow">
+            Get in touch
+          </MagneticButton>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80"
-          alt="Studio workspace"
-          fill
-          priority
-          className="object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-950/50 to-neutral-950" />
-        <div className="relative z-10 text-center px-6">
+      {/* Hero with parallax */}
+      <section ref={heroRef} className="relative h-[100vh] flex items-center justify-center overflow-hidden">
+        <motion.div 
+          style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80"
+            alt="Studio workspace"
+            fill
+            priority
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/50 via-neutral-950/30 to-neutral-950" />
+        </motion.div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="mb-8"
           >
-            <p className="text-sm uppercase tracking-[0.3em] text-neutral-400 mb-6">Change Studios®</p>
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[0.9] mb-8">
-              Design studio based in<br />Denver, built for brands<br />driven by <span className="italic">impact</span>.
-            </h1>
-            <p className="text-lg md:text-xl text-neutral-300 max-w-2xl mx-auto mb-10">
-              Through cutting-edge visuals, strategic storytelling, and innovative design,<br />we transform ideas into unforgettable digital identities.
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <a href="#work" className="rounded-full bg-white text-neutral-950 px-8 py-3 font-medium hover:bg-neutral-200 transition">View work</a>
-              <a href="#contact" className="rounded-full border border-white/20 px-8 py-3 hover:bg-white/10 transition">Start a project</a>
-            </div>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/5 backdrop-blur-sm text-sm text-cyan-400">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              Design Studio • Denver
+            </span>
           </motion.div>
-        </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <svg className="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
-      </section>
 
-      {/* Why Choose */}
-      <section id="why" className="py-32 px-6">
-        <div className="mx-auto max-w-7xl">
+          <h1 className="text-7xl md:text-[10rem] font-bold leading-[0.9] tracking-tighter mb-8">
+            <div className="overflow-hidden">
+              <RevealText delay={0.2}>Create</RevealText>
+            </div>
+            <div className="overflow-hidden">
+              <RevealText delay={0.3}>Impact</RevealText>
+            </div>
+            <div className="overflow-hidden bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+              <RevealText delay={0.4}>Together</RevealText>
+            </div>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed"
+          >
+            Webby-level design studio crafting digital experiences that don't just look beautiful—they change minds and move markets.
+          </motion.p>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="mt-12 flex items-center justify-center gap-4"
           >
-            <h2 className="text-5xl md:text-6xl font-bold mb-16">Why Choose <span className="text-neutral-500">Change Studios?</span></h2>
-            <div className="grid md:grid-cols-3 gap-16">
-              <div>
-                <h3 className="text-2xl font-semibold mb-4">Cutting-Edge Creativity</h3>
-                <p className="text-neutral-400 leading-relaxed">Field reporting, public-health framing, and behavioral science inform every cut. We shoot like filmmakers and think like researchers.</p>
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold mb-4">24/7 Email Support</h3>
-                <p className="text-neutral-400 leading-relaxed">Co-create with the people closest to the story, on and off camera. Community authorship meets editorial craft.</p>
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold mb-4">Fast & Efficient Turnarounds</h3>
-                <p className="text-neutral-400 leading-relaxed">Event-to-edit in 72 hours. Distribution aligned to services, hearings, and real local action.</p>
-              </div>
-            </div>
+            <MagneticButton className="group relative px-8 py-4 rounded-full bg-white text-neutral-950 font-medium overflow-hidden">
+              <span className="relative z-10">Start a project</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </MagneticButton>
+            <button className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 font-medium hover:bg-white/5 transition-all">
+              View work
+            </button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2"
+            >
+              <motion.div className="w-1.5 h-1.5 rounded-full bg-white" />
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Featured Work Grid */}
-      <section id="work" className="py-32 px-6 border-t border-white/10">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-5xl font-bold mb-16">Featured <span className="text-neutral-500">Projects.</span></h2>
-          <div className="grid md:grid-cols-2 gap-8">
+      {/* Stats with counter animation */}
+      <section className="relative py-32 border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {[
-              { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", title: "LuxeWear", cat: "Brand Identity" },
-              { img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80", title: "Community Health Fair", cat: "Documentary" },
-              { img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80", title: "Policy Testimony Reel", cat: "Advocacy Campaign" },
-              { img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80", title: "Neighborhood Leader", cat: "Portrait Series" },
-            ].map((project, i) => (
+              { number: "150+", label: "Projects shipped" },
+              { number: "95%", label: "Client satisfaction" },
+              { number: "12", label: "Awards won" },
+              { number: "8yr", label: "In business" }
+            ].map((stat, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="group relative aspect-[4/3] overflow-hidden rounded-2xl cursor-pointer"
+                transition={{ delay: i * 0.1 }}
+                className="text-center group"
               >
-                <Image src={project.img} alt={project.title} fill className="object-cover group-hover:scale-105 transition duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="text-sm text-neutral-400 mb-2">{project.cat}</p>
-                  <h3 className="text-3xl font-semibold">{project.title}</h3>
+                <motion.div
+                  className="text-5xl md:text-7xl font-bold bg-gradient-to-br from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {stat.number}
+                </motion.div>
+                <div className="text-sm text-neutral-500 uppercase tracking-wider">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services with hover effects */}
+      <section className="relative py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6">
+              What we <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">create</span>
+            </h2>
+            <p className="text-xl text-neutral-400 max-w-2xl">
+              Award-winning digital experiences across all touchpoints
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Brand Systems",
+                desc: "Complete visual identities that scale",
+                price: "$15,000+",
+                features: ["Logo & Typography", "Color Systems", "Guidelines", "Asset Library"]
+              },
+              {
+                title: "Web Experiences",
+                desc: "Sites that convert and captivate",
+                price: "$25,000+",
+                features: ["UI/UX Design", "Development", "CMS Integration", "Performance"]
+              },
+              {
+                title: "Digital Products",
+                desc: "Apps and platforms users love",
+                price: "$40,000+",
+                features: ["Product Strategy", "User Research", "Design System", "Prototyping"]
+              }
+            ].map((service, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -10 }}
+                className="group relative p-8 rounded-3xl border border-white/10 bg-gradient-to-br from-neutral-900/50 to-neutral-950/50 backdrop-blur-xl hover:border-cyan-400/50 transition-all duration-500"
+              >
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
+                
+                <div className="relative z-10">
+                  <div className="text-5xl font-bold text-cyan-400/20 group-hover:text-cyan-400/40 transition-colors mb-4">
+                    0{i + 1}
+                  </div>
+                  <h3 className="text-3xl font-bold mb-3">{service.title}</h3>
+                  <p className="text-neutral-400 mb-6">{service.desc}</p>
+                  <div className="text-2xl font-bold text-cyan-400 mb-6">{service.price}</div>
+                  <ul className="space-y-2 mb-8">
+                    {service.features.map((feature, j) => (
+                      <li key={j} className="flex items-center gap-2 text-sm text-neutral-400">
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <button className="w-full py-3 rounded-full border border-white/20 group-hover:bg-white group-hover:text-neutral-950 font-medium transition-all duration-300">
+                    Learn more
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -115,53 +303,38 @@ export default function ChangeStudiosPage() {
         </div>
       </section>
 
-      {/* Services Pricing */}
-      <section className="py-32 px-6 border-t border-white/10">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-5xl font-bold mb-16">Services.</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "Monthly Content Retainer", price: "from $2,750/mo", features: ["4 reels (45–60s)", "20 edited photos", "Strategy + light analytics"] },
-              { name: "Docu-Short (3–5 min)", price: "$4,500 base", features: ["1 shoot day", "Interview + b-roll", "3 vertical cutdowns"] },
-              { name: "Event Story Pack", price: "$2,200", features: ["Up to 5-hr coverage", "60–90s recap", "3 reels + 20 photos"] },
-            ].map((service, i) => (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
-                <h3 className="text-2xl font-semibold mb-2">{service.name}</h3>
-                <p className="text-3xl font-bold text-neutral-400 mb-6">{service.price}</p>
-                <ul className="space-y-3 text-neutral-300 mb-8">
-                  {service.features.map((f, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a href="#contact" className="block text-center rounded-full border border-white/20 px-6 py-3 hover:bg-white/10 transition">Book discovery</a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section id="contact" className="py-32 px-6 border-t border-white/10">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-6">Let's create something<br /><span className="italic text-neutral-500">unforgettable</span> together.</h2>
-          <p className="text-xl text-neutral-400 mb-12">Email us at <a href="mailto:hello@changemedia.org" className="underline hover:text-white transition">hello@changemedia.org</a> to start.</p>
-          <a href="mailto:hello@changemedia.org" className="inline-block rounded-full bg-white text-neutral-950 px-10 py-4 text-lg font-medium hover:bg-neutral-200 transition">Get in touch</a>
+      {/* CTA */}
+      <section className="relative py-32">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative p-16 rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5" />
+            <div className="relative z-10">
+              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
+                Ready to create something extraordinary?
+              </h2>
+              <p className="text-xl text-neutral-400 mb-8">
+                Let's build your next award-winning project together
+              </p>
+              <MagneticButton className="px-10 py-5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-lg font-medium hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow">
+                Start your project →
+              </MagneticButton>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12 px-6">
-        <div className="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
-          <p>© {new Date().getFullYear()} CHANGE Media Studios. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition">Privacy</a>
-            <a href="#" className="hover:text-white transition">Terms</a>
-            <a href="#" className="hover:text-white transition">Instagram</a>
+      <footer className="border-t border-white/10 py-12">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <div className="text-sm text-neutral-500">© 2025 CHANGE Media Studios</div>
+          <div className="flex items-center gap-6 text-sm text-neutral-500">
+            <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition">Terms</Link>
           </div>
         </div>
       </footer>
