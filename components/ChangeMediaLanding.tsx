@@ -241,10 +241,12 @@ export default function ChangeMediaLanding() {
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-emerald-400 to-sky-400" />
               <span className="font-semibold tracking-tight">CHANGE Media</span>
             </div>
-            <nav className="hidden md:flex items-center gap-8 text-sm text-neutral-300">
+                        <nav className="hidden md:flex items-center gap-8 text-sm text-neutral-300">
               <a href="#work" className="hover:text-white">Work</a>
               <Link href="/why" className="hover:text-white">Why</Link>
-              <a href="#studio" className="hover:text-white">Studio</a>
+              <Link href="/change-studios" className="hover:text-white">Studios</Link>
+              <Link href="/photography" className="hover:text-white">Photography</Link>
+              <a href="#studio" className="hover:text-white">About</a>
               <a href="#services" className="hover:text-white">Services</a>
               <a href="#contact" className="hover:text-white">Contact</a>
             </nav>
@@ -259,7 +261,9 @@ export default function ChangeMediaLanding() {
             <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 text-sm text-neutral-300">
               <a href="#work" className="block rounded-lg px-3 py-2 hover:bg-white/5">Work</a>
               <Link href="/why" className="block rounded-lg px-3 py-2 hover:bg-white/5">Why</Link>
-              <a href="#studio" className="block rounded-lg px-3 py-2 hover:bg-white/5">Studio</a>
+              <Link href="/change-studios" className="block rounded-lg px-3 py-2 hover:bg-white/5">Studios</Link>
+              <Link href="/photography" className="block rounded-lg px-3 py-2 hover:bg-white/5">Photography</Link>
+              <a href="#studio" className="block rounded-lg px-3 py-2 hover:bg-white/5">About</a>
               <a href="#services" className="block rounded-lg px-3 py-2 hover:bg-white/5">Services</a>
               <a href="#contact" className="block rounded-lg px-3 py-2 hover:bg-white/5">Contact</a>
             </div>
