@@ -75,7 +75,7 @@ export default function Page() {
         className="fixed top-6 left-6 right-6 z-50 bg-neutral-900/20 backdrop-blur-2xl border border-white/10 rounded-full"
       >
         <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-light tracking-widest">
+          <Link href="/" className="text-base md:text-lg font-normal tracking-tight">
             CHANGE<span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">®</span>
           </Link>
           <div className="hidden md:flex items-center gap-10 text-sm font-light">
@@ -167,7 +167,7 @@ export default function Page() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-8xl md:text-[14rem] font-bold leading-[0.85] tracking-tighter mb-10"
+            className="text-6xl md:text-8xl lg:text-9xl font-semibold leading-[0.95] tracking-tight mb-8"
           >
             <span className="block">Stories</span>
             <span className="block">That</span>
@@ -180,7 +180,7 @@ export default function Page() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-2xl md:text-3xl text-neutral-300 font-light max-w-4xl mx-auto mb-14 leading-relaxed"
+            className="text-lg md:text-xl text-neutral-300 font-light max-w-3xl mx-auto mb-10 leading-relaxed"
           >
             We craft cinematic films, stunning photography, and powerful brand experiences that move people and drive real impact
           </motion.p>
@@ -195,7 +195,7 @@ export default function Page() {
               href="#work"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative px-12 py-5 rounded-full bg-white text-black font-medium text-lg overflow-hidden"
+              className="group relative px-8 py-4 rounded-full bg-white text-black font-medium text-base overflow-hidden"
             >
               <span className="relative z-10">Explore our work</span>
               <motion.div
@@ -209,7 +209,7 @@ export default function Page() {
               href="#services"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-12 py-5 rounded-full border border-white/30 hover:border-white/60 font-medium text-lg backdrop-blur-sm hover:bg-white/5 transition-all"
+              className="px-8 py-4 rounded-full border border-white/30 hover:border-white/60 font-medium text-base backdrop-blur-sm hover:bg-white/5 transition-all"
             >
               Our services
             </motion.a>
@@ -220,7 +220,7 @@ export default function Page() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-32 grid grid-cols-3 gap-16 max-w-3xl mx-auto"
+            className="mt-16 grid grid-cols-3 gap-10 max-w-3xl mx-auto"
           >
             {[
               { num: "200+", label: "Projects" },
@@ -228,7 +228,7 @@ export default function Page() {
               { num: "10", label: "Awards" }
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-5xl md:text-6xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                   {stat.num}
                 </div>
                 <div className="text-sm text-neutral-500 uppercase tracking-widest">{stat.label}</div>
@@ -264,13 +264,13 @@ export default function Page() {
             viewport={{ once: true }}
             className="mb-20"
           >
-            <h2 className="text-7xl md:text-9xl font-bold tracking-tighter mb-6 leading-[0.9]">
+            <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1]">
               Featured{" "}
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
                 Work
               </span>
             </h2>
-            <p className="text-2xl text-neutral-400 font-light">
+            <p className="text-lg text-neutral-400 font-light">
               Selected projects that showcase our creative vision
             </p>
           </motion.div>
@@ -310,7 +310,7 @@ export default function Page() {
                     <span className="text-sm text-purple-400 uppercase tracking-wider mb-2 block">
                       {project.category}
                     </span>
-                    <h3 className="text-4xl font-bold mb-3">{project.title}</h3>
+                    <h3 className="text-3xl font-bold mb-3">{project.title}</h3>
                     <div className="flex items-center gap-2 text-neutral-400">
                       <span>View case study</span>
                       <motion.span
@@ -352,13 +352,13 @@ export default function Page() {
             viewport={{ once: true }}
             className="mb-24 text-center"
           >
-            <h2 className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 leading-[0.9]">
+            <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1]">
               What We{" "}
               <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Create
               </span>
             </h2>
-            <p className="text-2xl text-neutral-400 font-light max-w-3xl mx-auto">
+            <p className="text-lg text-neutral-400 font-light max-w-2xl mx-auto">
               Full-spectrum creative services from concept to delivery
             </p>
           </motion.div>
@@ -394,9 +394,9 @@ export default function Page() {
                 whileHover={{ y: -10, scale: 1.02 }}
                 className="group p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-neutral-900/50 to-neutral-950/50 backdrop-blur-xl hover:border-purple-400/30 transition-all duration-500"
               >
-                <div className="text-6xl mb-6">{service.icon}</div>
-                <h3 className="text-3xl font-bold mb-4">{service.title}</h3>
-                <p className="text-neutral-400 text-lg leading-relaxed mb-6">
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                <p className="text-neutral-400 text-base leading-relaxed mb-5">
                   {service.desc}
                 </p>
                 <div className="flex items-center gap-2 text-purple-400">
@@ -439,7 +439,7 @@ export default function Page() {
             </div>
 
             <div className="relative z-10">
-              <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
+              <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1]">
                 Ready to create
                 <br />
                 something
@@ -448,13 +448,13 @@ export default function Page() {
                   extraordinary?
                 </span>
               </h2>
-              <p className="text-2xl text-neutral-300 font-light mb-12 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-300 font-light mb-10 max-w-2xl mx-auto">
                 Let&apos;s bring your vision to life with storytelling that moves people
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-14 py-6 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-xl font-medium hover:shadow-2xl hover:shadow-purple-500/50 transition-shadow"
+                className="px-10 py-5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-base font-medium hover:shadow-2xl hover:shadow-purple-500/50 transition-shadow"
               >
                 Start your project →
               </motion.button>
