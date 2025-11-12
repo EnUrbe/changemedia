@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Bebas_Neue } from "next/font/google";
+const display = Bebas_Neue({ subsets: ["latin"], weight: "400" });
 import { useRef, useState, useEffect } from "react";
 
 export default function Page() {
@@ -167,12 +169,11 @@ export default function Page() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-semibold leading-[0.95] tracking-tight mb-8"
+            className={`${display.className} text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.9] tracking-[0.01em] mb-6 uppercase`}
           >
-            <span className="block">Stories</span>
-            <span className="block">That</span>
+            <span className="block">Change</span>
             <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-              Change
+              Media
             </span>
           </motion.h1>
 
