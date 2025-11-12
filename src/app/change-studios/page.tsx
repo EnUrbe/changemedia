@@ -158,7 +158,7 @@ export default function ChangeStudiosPage() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Webby-level design studio crafting digital experiences that don't just look beautiful—they change minds and move markets.
+            Webby-level design studio crafting digital experiences that don&apos;t just look beautiful—they change minds and move markets.
           </motion.p>
 
           <motion.div
