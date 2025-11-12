@@ -318,7 +318,7 @@ export default function ChangeStudiosPage() {
                 Ready to create something extraordinary?
               </h2>
               <p className="text-xl text-neutral-400 mb-8">
-                Let's build your next award-winning project together
+                Let&apos;s build your next award-winning project together
               </p>
               <MagneticButton className="px-10 py-5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-lg font-medium hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow">
                 Start your project →

@@ -2,86 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useSpring as useSpringValue, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useSpring as useSpringValue } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
 // Parallax image component with 3D tilt
-function ParallaxImage({ src, alt, index }: { src: string, alt: string, index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const rotateX = useSpringValue(useTransform(mouseY, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpringValue(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-    setIsHovered(false);
-  };
-
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
-      transition={{ duration: 0.8, delay: index * 0.08, ease: [0.33, 1, 0.68, 1] }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      className="relative perspective-1000"
-      style={{ perspective: "1000px" }}
-    >
-      <motion.div
-        style={{
-          rotateX: isHovered ? rotateX : 0,
-          rotateY: isHovered ? rotateY : 0,
-        }}
-        className="relative overflow-hidden rounded-2xl group cursor-pointer"
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div className="relative aspect-[4/5] overflow-hidden">
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-          {/* Gradient overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"
-          />
-          {/* Info overlay */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileHover={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="absolute bottom-0 left-0 right-0 p-8"
-          >
-            <p className="text-white text-xl font-light mb-1">{alt}</p>
-            <p className="text-white/60 text-sm">View project →</p>
-          </motion.div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 // Floating navigation
 function FloatingNav() {
@@ -327,7 +251,7 @@ export default function PhotographyPage() {
               whileTap={{ scale: 0.95 }}
               className="px-10 py-5 rounded-full border border-white/30 hover:border-white/60 font-medium text-lg backdrop-blur-sm hover:bg-white/5 transition-all"
             >
-              Let's talk
+              Let&apos;s talk
             </motion.button>
           </motion.div>
 
@@ -635,7 +559,7 @@ export default function PhotographyPage() {
                 viewport={{ once: true }}
                 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]"
               >
-                Let's create
+                Let&apos;s create
                 <br />
                 something
                 <br />
