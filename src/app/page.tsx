@@ -3,8 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Bebas_Neue } from "next/font/google";
-const display = Bebas_Neue({ subsets: ["latin"], weight: "400" });
+import { Inter, Instrument_Serif } from "next/font/google";
+
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-serif" });
+
 import { useRef, useState, useEffect } from "react";
 
 export default function Page() {
@@ -61,7 +64,7 @@ export default function Page() {
   ];
 
   return (
-  <div ref={containerRef} className="min-h-screen bg-white text-black overflow-x-hidden">
+    <div ref={containerRef} className={`min-h-screen bg-white text-black overflow-x-hidden ${sans.variable} font-sans`}>
       {/* Custom cursor */}
       <motion.div
         className="fixed w-8 h-8 border border-purple-400/50 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
@@ -176,7 +179,7 @@ export default function Page() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.35 }}
-              className={`${display.className} text-left text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.88] tracking-[0.01em] mb-6 uppercase`}
+              className={`${serif.variable} font-serif text-left text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.88] tracking-tight mb-6 uppercase`}
             >
               <span className="block">Change</span>
               <span className="block bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
