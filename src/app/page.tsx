@@ -109,20 +109,25 @@ export default function Page() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <motion.div 
+      <section className="relative h-screen overflow-hidden">
+        <motion.div
           style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
           className="absolute inset-0"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80"
-            alt="Hero"
-            fill
-            priority
-            className="object-cover"
+          {/* Full-bleed background video (drop your file at public/hero.mp4) */}
+          <video
+            className="w-full h-full object-cover"
+            src="/hero.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/hero-poster.jpg"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-pink-900/30" />
+          {/* Vignette and color washes for legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
+          <div className="absolute -bottom-32 left-0 right-0 h-64 bg-gradient-to-t from-black/60 to-transparent" />
         </motion.div>
 
         {/* Floating particles */}
@@ -147,95 +152,97 @@ export default function Page() {
             />
           ))}
         </div>
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-8"
-          >
-            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-purple-400/30 bg-purple-400/5 backdrop-blur-xl text-sm">
-              <motion.span 
-                className="w-2 h-2 rounded-full bg-purple-400"
-                animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              Award-winning creative studio • Denver & Beyond
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className={`${display.className} text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.9] tracking-[0.01em] mb-6 uppercase`}
-          >
-            <span className="block">Change</span>
-            <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-              Media
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-lg md:text-xl text-neutral-300 font-light max-w-3xl mx-auto mb-10 leading-relaxed"
-          >
-            We craft cinematic films, stunning photography, and powerful brand experiences that move people and drive real impact
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="flex items-center justify-center gap-5"
-          >
-            <motion.a
-              href="#work"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 rounded-full bg-white text-black font-medium text-base overflow-hidden"
+        {/* Headline and CTAs pinned to bottom-left (Scarlet-style) */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 h-full flex items-end">
+          <div className="w-full md:w-[72%] lg:w-[65%] pb-16 md:pb-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mb-6 md:mb-8"
             >
-              <span className="relative z-10">Explore our work</span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
-            <motion.a
-              href="#services"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-full border border-white/30 hover:border-white/60 font-medium text-base backdrop-blur-sm hover:bg-white/5 transition-all"
-            >
-              Our services
-            </motion.a>
-          </motion.div>
+              <span className="inline-flex items-center gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-white/20 bg-black/20 backdrop-blur-xl text-xs md:text-sm">
+                <motion.span
+                  className="w-2 h-2 rounded-full bg-purple-400"
+                  animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                Editorial • Cinematic • Direction — Denver / Global
+              </span>
+            </motion.div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-16 grid grid-cols-3 gap-10 max-w-3xl mx-auto"
-          >
-            {[
-              { num: "200+", label: "Projects" },
-              { num: "50+", label: "Clients" },
-              { num: "10", label: "Awards" }
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                  {stat.num}
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.35 }}
+              className={`${display.className} text-left text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.88] tracking-[0.01em] mb-6 uppercase`}
+            >
+              <span className="block">Change</span>
+              <span className="block bg-gradient-to-r from-purple-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">
+                Media
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-left text-base md:text-xl text-neutral-300 font-light max-w-2xl md:max-w-3xl mb-8 md:mb-10 leading-relaxed"
+            >
+              We craft cinematic films, stunning photography, and powerful brand experiences that move people and drive real impact
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="flex items-center gap-4 md:gap-5"
+            >
+              <motion.a
+                href="#work"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative px-6 md:px-8 py-3.5 md:py-4 rounded-full bg-white text-black font-medium text-sm md:text-base overflow-hidden"
+              >
+                <span className="relative z-10">Explore our work</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.a>
+              <motion.a
+                href="#services"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 md:px-8 py-3.5 md:py-4 rounded-full border border-white/30 hover:border-white/60 font-medium text-sm md:text-base backdrop-blur-sm hover:bg-white/5 transition-all"
+              >
+                Our services
+              </motion.a>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
+              className="mt-10 md:mt-12 grid grid-cols-3 gap-6 md:gap-10 max-w-xl md:max-w-3xl"
+            >
+              {[
+                { num: "200+", label: "Projects" },
+                { num: "50+", label: "Clients" },
+                { num: "10", label: "Awards" }
+              ].map((stat, i) => (
+                <div key={i} className="text-left">
+                  <div className="text-3xl md:text-5xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1 md:mb-2">
+                    {stat.num}
+                  </div>
+                  <div className="text-[10px] md:text-sm text-neutral-500 uppercase tracking-widest">{stat.label}</div>
                 </div>
-                <div className="text-sm text-neutral-500 uppercase tracking-widest">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -243,7 +250,7 @@ export default function Page() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
         >
           <motion.div
             animate={{ y: [0, 15, 0] }}
