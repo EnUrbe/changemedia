@@ -61,7 +61,7 @@ export default function Page() {
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-black text-white overflow-x-hidden">
+  <div ref={containerRef} className="min-h-screen bg-white text-black overflow-x-hidden">
       {/* Custom cursor */}
       <motion.div
         className="fixed w-8 h-8 border border-purple-400/50 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
@@ -74,34 +74,34 @@ export default function Page() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
-        className="fixed top-6 left-6 right-6 z-50 bg-neutral-900/20 backdrop-blur-2xl border border-white/10 rounded-full"
+        className="fixed top-6 left-6 right-6 z-50 bg-white/70 backdrop-blur-xl border border-neutral-200 rounded-full shadow-sm"
       >
         <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
           <Link href="/" className="text-base md:text-lg font-normal tracking-tight">
-            CHANGE<span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">®</span>
+            CHANGE<span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">®</span>
           </Link>
           <div className="hidden md:flex items-center gap-10 text-sm font-light">
-            <Link href="#work" className="hover:text-purple-400 transition-colors relative group">
+            <Link href="#work" className="hover:text-neutral-900 transition-colors relative group">
               Work
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
             </Link>
-            <Link href="/change-studios" className="hover:text-purple-400 transition-colors relative group">
+            <Link href="/change-studios" className="hover:text-neutral-900 transition-colors relative group">
               Studios
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
             </Link>
-            <Link href="/photography" className="hover:text-purple-400 transition-colors relative group">
+            <Link href="/photography" className="hover:text-neutral-900 transition-colors relative group">
               Photography
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
             </Link>
-            <Link href="/why" className="hover:text-purple-400 transition-colors relative group">
+            <Link href="/why" className="hover:text-neutral-900 transition-colors relative group">
               Why
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
             </Link>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-sm font-medium"
+            className="px-6 py-2.5 rounded-full bg-black text-white text-sm font-medium"
           >
             Let&apos;s talk
           </motion.button>
@@ -125,10 +125,10 @@ export default function Page() {
             playsInline
             poster="/hero-poster.svg"
           />
-          {/* Vignette and color washes for legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
-          <div className="absolute -bottom-32 left-0 right-0 h-64 bg-gradient-to-t from-black/60 to-transparent" />
+          {/* Light wash and vignette for legibility on a white theme */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-transparent" />
+          <div className="absolute -bottom-32 left-0 right-0 h-64 bg-gradient-to-t from-white/60 to-transparent" />
         </motion.div>
 
         {/* Floating particles */}
@@ -136,7 +136,7 @@ export default function Page() {
           {[...Array(30)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-purple-400/20 rounded-full"
+              className="absolute w-1 h-1 bg-neutral-800/10 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -162,9 +162,9 @@ export default function Page() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mb-6 md:mb-8"
             >
-              <span className="inline-flex items-center gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-white/20 bg-black/20 backdrop-blur-xl text-xs md:text-sm">
+              <span className="inline-flex items-center gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-neutral-200 bg-white/70 backdrop-blur-xl text-xs md:text-sm">
                 <motion.span
-                  className="w-2 h-2 rounded-full bg-purple-400"
+                  className="w-2 h-2 rounded-full bg-neutral-900"
                   animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
@@ -179,7 +179,7 @@ export default function Page() {
               className={`${display.className} text-left text-7xl md:text-9xl lg:text-[10rem] font-normal leading-[0.88] tracking-[0.01em] mb-6 uppercase`}
             >
               <span className="block">Change</span>
-              <span className="block bg-gradient-to-r from-purple-300 via-pink-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 Media
               </span>
             </motion.h1>
@@ -188,7 +188,7 @@ export default function Page() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-left text-base md:text-xl text-neutral-300 font-light max-w-2xl md:max-w-3xl mb-8 md:mb-10 leading-relaxed"
+              className="text-left text-base md:text-xl text-neutral-600 font-light max-w-2xl md:max-w-3xl mb-8 md:mb-10 leading-relaxed"
             >
               We craft cinematic films, stunning photography, and powerful brand experiences that move people and drive real impact
             </motion.p>
@@ -203,11 +203,11 @@ export default function Page() {
                 href="#work"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group relative px-6 md:px-8 py-3.5 md:py-4 rounded-full bg-white text-black font-medium text-sm md:text-base overflow-hidden"
+                className="group relative px-6 md:px-8 py-3.5 md:py-4 rounded-full bg-black text-white font-medium text-sm md:text-base overflow-hidden"
               >
                 <span className="relative z-10">Explore our work</span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500"
+                  className="absolute inset-0 bg-neutral-900"
                   initial={{ x: "-100%" }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.3 }}
@@ -217,7 +217,7 @@ export default function Page() {
                 href="#services"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 md:px-8 py-3.5 md:py-4 rounded-full border border-white/30 hover:border-white/60 font-medium text-sm md:text-base backdrop-blur-sm hover:bg-white/5 transition-all"
+                className="px-6 md:px-8 py-3.5 md:py-4 rounded-full border border-neutral-300 hover:border-neutral-900 font-medium text-sm md:text-base backdrop-blur-sm hover:bg-neutral-50 transition-all"
               >
                 Our services
               </motion.a>
@@ -236,7 +236,7 @@ export default function Page() {
                 { num: "10", label: "Awards" }
               ].map((stat, i) => (
                 <div key={i} className="text-left">
-                  <div className="text-3xl md:text-5xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-1 md:mb-2">
+                  <div className="text-3xl md:text-5xl font-bold text-neutral-900 mb-1 md:mb-2">
                     {stat.num}
                   </div>
                   <div className="text-[10px] md:text-sm text-neutral-500 uppercase tracking-widest">{stat.label}</div>
@@ -259,7 +259,7 @@ export default function Page() {
             className="flex flex-col items-center"
           >
             <span className="text-xs uppercase tracking-widest text-neutral-500 mb-3">Scroll</span>
-            <div className="w-px h-16 bg-gradient-to-b from-purple-400/50 to-transparent" />
+            <div className="w-px h-16 bg-gradient-to-b from-neutral-900/40 to-transparent" />
           </motion.div>
         </motion.div>
       </section>
@@ -275,7 +275,7 @@ export default function Page() {
           >
             <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1]">
               Featured{" "}
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 Work
               </span>
             </h2>
@@ -344,7 +344,7 @@ export default function Page() {
           >
             <Link
               href="/photography"
-              className="inline-block px-10 py-4 rounded-full border border-white/30 hover:border-purple-400/50 hover:bg-purple-400/5 font-medium transition-all"
+              className="inline-block px-10 py-4 rounded-full border border-neutral-300 hover:border-neutral-900 hover:bg-neutral-50 font-medium transition-all"
             >
               View all work →
             </Link>
@@ -353,7 +353,7 @@ export default function Page() {
       </section>
 
       {/* Services */}
-      <section id="services" className="relative py-32 border-y border-white/5">
+      <section id="services" className="relative py-32 border-y border-neutral-200">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -363,7 +363,7 @@ export default function Page() {
           >
             <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1]">
               What We{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 Create
               </span>
             </h2>
@@ -401,7 +401,7 @@ export default function Page() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className="group p-12 rounded-3xl border border-white/10 bg-gradient-to-br from-neutral-900/50 to-neutral-950/50 backdrop-blur-xl hover:border-purple-400/30 transition-all duration-500"
+                className="group p-12 rounded-3xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 backdrop-blur-xl hover:border-neutral-900 transition-all duration-500"
               >
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
@@ -431,19 +431,19 @@ export default function Page() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-20 rounded-3xl border border-white/10 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-orange-500/10 backdrop-blur-2xl text-center overflow-hidden"
+            className="relative p-20 rounded-3xl border border-neutral-200 bg-gradient-to-br from-neutral-100 via-white to-neutral-50 backdrop-blur-2xl text-center overflow-hidden"
           >
             {/* Animated gradient orbs */}
             <div className="absolute inset-0">
               <motion.div
                 animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
                 transition={{ duration: 10, repeat: Infinity }}
-                className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+                className="absolute top-0 left-0 w-96 h-96 bg-neutral-200 rounded-full blur-3xl"
               />
               <motion.div
                 animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
                 transition={{ duration: 15, repeat: Infinity }}
-                className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"
+                className="absolute bottom-0 right-0 w-96 h-96 bg-neutral-300 rounded-full blur-3xl"
               />
             </div>
 
@@ -453,17 +453,17 @@ export default function Page() {
                 <br />
                 something
                 <br />
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                   extraordinary?
                 </span>
               </h2>
-              <p className="text-lg text-neutral-300 font-light mb-10 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-600 font-light mb-10 max-w-2xl mx-auto">
                 Let&apos;s bring your vision to life with storytelling that moves people
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-base font-medium hover:shadow-2xl hover:shadow-purple-500/50 transition-shadow"
+                className="px-10 py-5 rounded-full bg-black text-white text-base font-medium hover:shadow-2xl hover:shadow-neutral-600/20 transition-shadow"
               >
                 Start your project →
               </motion.button>
@@ -473,47 +473,47 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-20">
+      <footer className="border-t border-neutral-200 py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div>
               <h3 className="text-2xl font-bold mb-4">
-                CHANGE<span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">®</span>
+                CHANGE<span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">®</span>
               </h3>
-              <p className="text-neutral-500 text-sm">
+              <p className="text-neutral-600 text-sm">
                 Cinematic stories & visual impact
               </p>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Services</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><Link href="/change-studios" className="hover:text-white transition">Video Production</Link></li>
-                <li><Link href="/photography" className="hover:text-white transition">Photography</Link></li>
-                <li><Link href="/change-studios" className="hover:text-white transition">Brand Design</Link></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><Link href="/change-studios" className="hover:text-black transition">Video Production</Link></li>
+                <li><Link href="/photography" className="hover:text-black transition">Photography</Link></li>
+                <li><Link href="/change-studios" className="hover:text-black transition">Brand Design</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><Link href="/why" className="hover:text-white transition">Why</Link></li>
-                <li><Link href="#work" className="hover:text-white transition">Work</Link></li>
-                <li><Link href="#services" className="hover:text-white transition">Services</Link></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><Link href="/why" className="hover:text-black transition">Why</Link></li>
+                <li><Link href="#work" className="hover:text-black transition">Work</Link></li>
+                <li><Link href="#services" className="hover:text-black transition">Services</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Connect</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><a href="#" className="hover:text-white transition">Instagram</a></li>
-                <li><a href="#" className="hover:text-white transition">Email</a></li>
-                <li><a href="#" className="hover:text-white transition">LinkedIn</a></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><a href="#" className="hover:text-black transition">Instagram</a></li>
+                <li><a href="#" className="hover:text-black transition">Email</a></li>
+                <li><a href="#" className="hover:text-black transition">LinkedIn</a></li>
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+          <div className="pt-8 border-t border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-600">
             <div>© 2025 CHANGE Media • Denver, CO</div>
             <div className="flex items-center gap-8">
-              <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
-              <Link href="/terms" className="hover:text-white transition">Terms</Link>
+              <Link href="/privacy" className="hover:text-black transition">Privacy</Link>
+              <Link href="/terms" className="hover:text-black transition">Terms</Link>
             </div>
           </div>
         </div>
