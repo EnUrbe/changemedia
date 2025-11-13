@@ -1,0 +1,91 @@
+{
+  "projects": [
+    {
+      "id": "hope-clinic-spring-25",
+      "clientName": "Hope Clinic",
+      "projectTitle": "Community Testing Day Story Pack",
+      "status": "in-review",
+      "summary": "Micro-doc, 3 reels, and a photo set covering Hope Clinic's spring testing day.",
+      "dueDate": "2025-03-14",
+      "pointOfContact": {
+        "name": "D. Chen",
+        "email": "director@hopeclinic.org"
+      },
+      "accessCode": "hope-2025",
+      "deliverables": [
+        {
+          "id": "vid-01",
+          "type": "video",
+          "title": "60s Recap Cut",
+          "description": "Hero reel optimized for IG + FB.",
+          "url": "https://player.vimeo.com/video/76979871",
+          "thumbnail": "https://picsum.photos/seed/hope-video/800/450",
+          "status": "ready"
+        },
+        {
+          "id": "vid-02",
+          "type": "video",
+          "title": "Policy Testimony Snippets",
+          "description": "Three 30s clips with burned-in captions.",
+          "url": "https://player.vimeo.com/video/32768035",
+          "thumbnail": "https://picsum.photos/seed/hope/snippet/800/450",
+          "status": "needs-review"
+        },
+        {
+          "id": "photo-01",
+          "type": "gallery",
+          "title": "Edited Photo Selects",
+          "description": "ZIP file with 25 selects.",
+          "url": "https://example.com/hope-photos.zip",
+          "status": "ready"
+        }
+      ],
+      "feedback": [
+        {
+          "id": "fd-1",
+          "author": "D. Chen",
+          "role": "Clinic Director",
+          "message": "Love the pacing on the recap. Could we brighten the clinic signage at 0:18?",
+          "timestamp": "2025-02-22T16:25:00.000Z"
+        }
+      ],
+      "checklist": [
+        "Confirm Spanish captions",
+        "Prep 9:16 export for TikTok",
+        "Share photo selects"
+      ],
+      "aiNotes": "Pending summary"
+    },
+    {
+      "id": "catalyst-fund-q2",
+      "clientName": "Catalyst Fund",
+      "projectTitle": "Neighborhood Leader Docu-short",
+      "status": "in-production",
+      "summary": "5-minute anchor film with three derivative social cuts.",
+      "dueDate": "2025-04-05",
+      "pointOfContact": {
+        "name": "S. Patel",
+        "email": "spatel@catalystfund.org"
+      },
+      "accessCode": "catalyst-bridge",
+      "deliverables": [
+        {
+          "id": "doc-rough",
+          "type": "video",
+          "title": "Docu-short Rough Cut",
+          "description": "Work-in-progress for comments.",
+          "url": "https://player.vimeo.com/video/1084537",
+          "thumbnail": "https://picsum.photos/seed/catalystdoc/800/450",
+          "status": "needs-review"
+        }
+      ],
+      "feedback": [],
+      "checklist": [
+        "Confirm archival still licenses",
+        "Schedule VO pickup",
+        "Prep donor-facing treatment"
+      ],
+      "aiNotes": "Pending summary"
+    }
+  ]
+}

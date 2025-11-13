@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## CHANGE Media Platform
 
-## Getting Started
+This repo powers the CHANGE Media homepage, a token-protected CMS for the studio team, and client-facing workspaces where partners can review deliverables, leave timestamped feedback, and see AI-powered next steps.
 
-First, run the development server:
+### Stack
+- **Next.js 15 / App Router** for the marketing site & dashboards
+- **Tailwind v4** for styling
+- **File-backed stores** (`content/site.json`, `content/projects.json`) validated with **Zod**
+- **OpenAI** (optional) for AI insights (`OPENAI_API_KEY`)
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` for the public landing page and `http://localhost:3000/cms` for the admin workspace.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Required env vars
+Create `.env.local` with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+CMS_ADMIN_TOKEN=super-secret-string
+OPENAI_API_KEY=sk-... # optional, falls back to deterministic copy if missing
+```
 
-## Learn More
+### Content model quickstart
+- All public copy + imagery comes from `content/site.json`. Edit via the CMS JSON editor or directly in Git.
+- Historic saves live under `content/history/` (auto-created). Use `/api/content/revisions` to inspect/restore.
+- Client deliverables + feedback live in `content/projects.json`. Each project has an `accessCode` for secure sharing.
 
-To learn more about Next.js, take a look at the following resources:
+### CMS workflows (`/cms`)
+1. Enter the admin token to unlock the dashboard (stored locally per browser).
+2. Edit the landing page JSON, publish, and revalidate the home page instantly.
+3. Spin up client workspaces, append deliverables, and trigger AI insight summaries for prep notes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Client portal (`/clients/[projectId]?key=<accessCode>`)
+- Presents deliverables (with playable video embeds), checklists, AI notes, and a structured feedback form.
+- Feedback posts back to `/api/projects/:id/feedback` and appears in the CMS immediately.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Testing / linting
 
-## Deploy on Vercel
+```bash
+npm run lint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Add Playwright/Jest coverage as the CMS and client portal expand (see `docs/cms-architecture.md` for roadmap).

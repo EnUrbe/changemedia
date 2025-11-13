@@ -1,10 +1,10 @@
 'use client';
-
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
+import type { SiteContent } from "@/lib/contentSchema";
 
 // Airtable is used **ONLY** for the contact form (Inquiries table),
 // **NOT** for the portfolio grid anymore. Portfolio is local/static below.
@@ -86,7 +86,20 @@ function CaseCard({
   );
 }
 
-export default function ChangeMediaLanding() {
+type LandingProps = {
+  content: SiteContent;
+};
+
+const ctaStyles: Record<"primary" | "secondary" | "ghost", string> = {
+  primary:
+    "rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200",
+  secondary:
+    "rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5",
+  ghost:
+    "rounded-xl border border-white/0 bg-gradient-to-br from-emerald-400/20 to-sky-400/20 px-4 py-2 text-sm hover:from-emerald-400/30 hover:to-sky-400/30",
+};
+
+export default function ChangeMediaLanding({ content }: LandingProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -94,6 +107,16 @@ export default function ChangeMediaLanding() {
   const [annual, setAnnual] = useState(true);
   const [showStickyCta, setShowStickyCta] = useState(false);
   const formTsRef = useRef<number>(Date.now());
+
+  const hero = content.hero;
+  const heroRemainder = hero.title.replace(hero.titleGradient, "").trim();
+  const heroSecondaryLine = heroRemainder.length ? heroRemainder : hero.title;
+  const features = content.features;
+  const studio = content.studio;
+  const services = content.services;
+  const testimonials = content.testimonials;
+  const faqs = content.faqs;
+  const contact = content.contact;
 
   // Subtle grain overlay
   useEffect(() => {
@@ -111,74 +134,8 @@ export default function ChangeMediaLanding() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Static/local portfolio items (edit these to your own links/thumbnails)
-  const featured = [
-    {
-      id: "1",
-      title: "Health Fair for Unhoused Neighbors",
-      subtitle: "60–90s recap • case study",
-      imageUrl: "https://picsum.photos/seed/case1/1200/800",
-      videoUrl: "https://cdn.coverr.co/videos/coverr-community-garden-4712/1080p.mp4",
-      tags: ["event", "community care", "recap"],
-    },
-    {
-      id: "2",
-      title: "Community Testing Day",
-      subtitle: "Micro‑doc • social cutdowns",
-      imageUrl: "https://picsum.photos/seed/case2/1200/800",
-      videoUrl: "https://cdn.coverr.co/videos/coverr-helping-hands-8022/1080p.mp4",
-      tags: ["micro‑doc", "public health"],
-    },
-    {
-      id: "3",
-      title: "Policy Testimony Reel",
-      subtitle: "Reels package",
-      imageUrl: "https://picsum.photos/seed/case3/1200/800",
-      videoUrl: "https://cdn.coverr.co/videos/coverr-voices-of-the-people-8478/1080p.mp4",
-      tags: ["policy", "advocacy", "reels"],
-    },
-    {
-      id: "4",
-      title: "Neighborhood Leader Story",
-      subtitle: "3–5 min docu‑short",
-      imageUrl: "https://picsum.photos/seed/case4/1200/800",
-      videoUrl: "https://cdn.coverr.co/videos/coverr-walking-through-the-city-1580/1080p.mp4",
-      tags: ["portrait", "docu‑short"],
-    },
-  ];
-
-  const moreCases = [1, 2, 3, 4, 5, 6].map((i) => ({
-    id: `m-${i}`,
-    title: `Case Study ${i}`,
-    subtitle: "60–90s • Micro‑doc",
-    imageUrl: `https://picsum.photos/seed/changemedia-${i}/900/700`,
-    tags: ["community", "health", "policy"],
-  }));
-
-  // Testimonials (placeholder avatars)
-  const testimonials = [
-    {
-      name: "M. Alvarez",
-      role: "Coalition Lead",
-      avatar: "https://picsum.photos/seed/ava1/128/128",
-      quote:
-        "We saw sign-ups triple after the story pack. It changed the temperature of the room at council.",
-    },
-    {
-      name: "D. Chen",
-      role: "Clinic Director",
-      avatar: "https://picsum.photos/seed/ava2/128/128",
-      quote:
-        "They listen like researchers and shoot like filmmakers. The result moved our board to act.",
-    },
-    {
-      name: "S. Patel",
-      role: "Policy Organizer",
-      avatar: "https://picsum.photos/seed/ava3/128/128",
-      quote:
-        "Fast, ethical, effective. The reels traveled further than any memo we’ve published this year.",
-    },
-  ];
+  const featured = content.featuredCases;
+  const moreCases = content.galleryCases;
 
   // Handle inquiry form POST → /api/inquiry (Airtable Inquiries table)
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -276,27 +233,29 @@ export default function ChangeMediaLanding() {
         <div className="mx-auto max-w-6xl px-4 pt-12 pb-20 md:pt-20 md:pb-28">
           <motion.div {...fade}>
             <div className="flex flex-wrap items-end gap-3">
-              <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">Cinematic • Documentary • Reels</p>
-              <Pill>Denver & Beyond</Pill>
+              <p className="text-xs uppercase tracking-[0.28em] text-neutral-400">{hero.eyebrow}</p>
+              <Pill>{hero.locationPill}</Pill>
             </div>
             <h1 className="mt-5 text-5xl md:text-7xl font-semibold leading-[1.02]">
-              <span className="bg-gradient-to-br from-emerald-300 via-sky-300 to-purple-300 bg-clip-text text-transparent">Story is policy</span>
-              <br /> in a language everyone can read.
+              <span className="bg-gradient-to-br from-emerald-300 via-sky-300 to-purple-300 bg-clip-text text-transparent">{hero.titleGradient}</span>
+              <br /> {heroSecondaryLine}
             </h1>
-            <p className="mt-5 max-w-2xl text-neutral-300">Youth‑led studio making micro‑docs, reels, and campaign assets about health, community, and public imagination. Built like a studio, guided like a movement.</p>
+            <p className="mt-5 max-w-2xl text-neutral-300">{hero.subtitle}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a href="#work" className="rounded-xl bg-white text-neutral-900 px-4 py-2 text-sm font-medium hover:bg-neutral-200">See work</a>
-              <a href="#contact" className="rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Start a project</a>
-              <a href="#reel" className="rounded-xl border border-white/0 bg-gradient-to-br from-emerald-400/20 to-sky-400/20 px-4 py-2 text-sm hover:from-emerald-400/30 hover:to-sky-400/30">Play showreel</a>
+              {hero.ctas.map((cta) => (
+                <a key={cta.label} href={cta.href} className={ctaStyles[cta.variant]}>
+                  {cta.label}
+                </a>
+              ))}
             </div>
           </motion.div>
 
           {/* Floating metrics */}
           <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">
-            {[{k:"200+", v:"neighbors reached via direct care"},{k:"10+", v:"policy efforts documented"},{k:"72 hr", v:"typical event‑to‑edit"},{k:"6 mo", v:"recommended retainer"}].map((s)=> (
-              <motion.div key={s.k} {...fade} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
-                <div className="text-2xl font-semibold">{s.k}</div>
-                <div className="text-xs text-neutral-400">{s.v}</div>
+            {hero.metrics.map((metric) => (
+              <motion.div key={metric.value} {...fade} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
+                <div className="text-2xl font-semibold">{metric.value}</div>
+                <div className="text-xs text-neutral-400">{metric.label}</div>
               </motion.div>
             ))}
           </div>
@@ -307,17 +266,8 @@ export default function ChangeMediaLanding() {
       <section className="border-y border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-6 overflow-hidden">
           <div className="animate-[marquee_30s_linear_infinite] whitespace-nowrap text-neutral-400">
-            {[
-              "micro‑docs",
-              "reels",
-              "community testing",
-              "health fairs",
-              "youth storytelling",
-              "policy testimony",
-              "coalition work",
-              "editorial film",
-            ].map((w) => (
-              <span key={w} className="mx-6">• {w.toUpperCase()} •</span>
+            {content.marquee.phrases.map((phrase) => (
+              <span key={phrase} className="mx-6">• {phrase.toUpperCase()} •</span>
             ))}
           </div>
         </div>
@@ -328,18 +278,11 @@ export default function ChangeMediaLanding() {
       {/* LOGO CLOUD (startup-style social proof) */}
       <section className="border-b border-white/10 bg-white/5">
         <div className="mx-auto max-w-6xl px-4 py-10">
-          <div className="text-center text-xs uppercase tracking-[0.22em] text-neutral-400">Trusted by teams who build for people</div>
+          <div className="text-center text-xs uppercase tracking-[0.22em] text-neutral-400">{content.logoCloud.heading}</div>
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 items-center gap-6 opacity-80">
-            {[
-              { src: "/vercel.svg", alt: "Vercel" },
-              { src: "/next.svg", alt: "Next.js" },
-              { src: "/globe.svg", alt: "Globe" },
-              { src: "/window.svg", alt: "Window" },
-              { src: "/file.svg", alt: "File" },
-              { src: "/vercel.svg", alt: "Vercel 2" },
-            ].map((l) => (
-              <div key={l.alt} className="flex items-center justify-center py-2">
-                <Image src={l.src} alt={l.alt} width={100} height={28} className="h-7 w-auto opacity-70" />
+            {content.logoCloud.logos.map((logo) => (
+              <div key={logo.alt} className="flex items-center justify-center py-2">
+                <Image src={logo.src} alt={logo.alt} width={100} height={28} className="h-7 w-auto opacity-70" />
               </div>
             ))}
           </div>
@@ -408,14 +351,10 @@ export default function ChangeMediaLanding() {
         <div className="mx-auto max-w-6xl px-4 py-16">
           <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">Why partners pick us</motion.h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {[
-              { t: "Research-grade rigor", d: "Field reporting, public-health framing, and behavioral science inform every cut." },
-              { t: "Community authorship", d: "Co-create with the people closest to the story, on and off camera." },
-              { t: "From content to consequence", d: "Distribution aligned to services, hearings, and real local action." },
-            ].map((f) => (
-              <div key={f.t} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="text-lg font-medium">{f.t}</div>
-                <p className="mt-2 text-sm text-neutral-300">{f.d}</p>
+            {features.map((feature) => (
+              <div key={feature.title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="text-lg font-medium">{feature.title}</div>
+                <p className="mt-2 text-sm text-neutral-300">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -427,16 +366,24 @@ export default function ChangeMediaLanding() {
         <div className="mx-auto max-w-6xl px-4 py-16 grid items-start gap-12 md:grid-cols-2">
           <motion.div {...fade}>
             <h3 className="text-2xl md:text-3xl font-semibold">Studio ethos</h3>
-            <p className="mt-3 text-neutral-300">Editorial craft meets community practice. Fast field interviews, clean sound, mobile‑first edits that keep a cinematic core. Consent‑forward workflows and de‑identification options where needed.</p>
+            <p className="mt-3 text-neutral-300">{studio.ethos}</p>
             <ul className="mt-6 space-y-3 text-sm text-neutral-300">
-              <li className="flex gap-2"><span className="h-1.5 w-1.5 mt-2 rounded-full bg-emerald-400"/>Formats: reels, shorts, 3–5 min anchors</li>
-              <li className="flex gap-2"><span className="h-1.5 w-1.5 mt-2 rounded-full bg-sky-400"/>Field kit: A7 IV, SM7 + lavs, dome light, gimbal</li>
-              <li className="flex gap-2"><span className="h-1.5 w-1.5 mt-2 rounded-full bg-purple-400"/>Data care: consent logs, secure storage</li>
+              {studio.bullets.map((bullet, idx) => (
+                <li key={bullet} className="flex gap-2">
+                  <span
+                    className="h-1.5 w-1.5 mt-2 rounded-full"
+                    style={{
+                      backgroundColor: ["#34d399", "#38bdf8", "#a855f7", "#f472b6"][idx % 4],
+                    }}
+                  />
+                  {bullet}
+                </li>
+              ))}
             </ul>
           </motion.div>
           <motion.blockquote {...fade} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-6">
-            <p className="text-lg leading-relaxed">“The map should learn from the foot that walks it. Our job is to listen, film, and translate care into images that move people to act.”</p>
-            <footer className="mt-3 text-sm text-neutral-400">— CHANGE Media Notes</footer>
+            <p className="text-lg leading-relaxed">“{studio.quote}”</p>
+            <footer className="mt-3 text-sm text-neutral-400">{studio.attribution}</footer>
           </motion.blockquote>
         </div>
       </section>
@@ -454,25 +401,27 @@ export default function ChangeMediaLanding() {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
-            {[
-              { id: "retainer", t: "Monthly Content Retainer", pMonthly: "from $2,750/mo", pAnnual: "from $2,500/mo (annual)", pts: ["4 reels (45–60s)", "20 edited photos", "Strategy + light analytics"]},
-              { id: "doc", t: "Docu‑Short (3–5 min)", pOne: "$4,500 base", pts: ["1 shoot day", "Interview + b‑roll", "3 vertical cutdowns"]},
-              { id: "event", t: "Event Story Pack", pOne: "$2,200", pts: ["Up to 5‑hr coverage", "60–90s recap", "3 reels + 20 photos"]},
-            ].map((c) => {
-              const price = c.id === "retainer" ? (annual ? c.pAnnual : c.pMonthly) : c.pOne;
+            {services.map((service) => {
+              const priceLabel = service.price.onetime && !service.price.monthly && !service.price.annual
+                ? service.price.onetime
+                : annual
+                  ? service.price.annual ?? service.price.monthly ?? service.price.onetime ?? "Contact for quote"
+                  : service.price.monthly ?? service.price.annual ?? service.price.onetime ?? "Contact for quote";
               return (
-                <motion.div {...fade} key={c.t} className="group rounded-3xl border border-white/10 bg-white/5 p-6">
+                <motion.div {...fade} key={service.id} className="group rounded-3xl border border-white/10 bg-white/5 p-6">
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-medium">{c.t}</div>
-                    <div className="text-sm text-neutral-400">{price}</div>
+                    <div className="text-lg font-medium">{service.title}</div>
+                    <div className="text-sm text-neutral-400">{priceLabel}</div>
                   </div>
                   <ul className="mt-4 text-sm text-neutral-300 space-y-2">
-                    {c.pts.map((pt) => (
+                    {service.bullets.map((pt) => (
                       <li key={pt} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />{pt}</li>
                     ))}
                   </ul>
                   <div className="mt-6">
-                    <a href="#contact" className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">Book discovery</a>
+                    <a href={service.ctaHref} className="inline-flex items-center rounded-xl border border-white/20 px-4 py-2 text-sm hover:bg-white/5">
+                      {service.ctaLabel}
+                    </a>
                   </div>
                 </motion.div>
               );
@@ -481,7 +430,7 @@ export default function ChangeMediaLanding() {
 
           {/* Included kit */}
           <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6">
-            <div className="text-sm text-neutral-300">Included kit: Sony A7 IV cinema setup • SM7 broadcast mics + lavs • dome lighting • gimbal option • pro edit & captions. Travel billed at IRS standard rate outside Denver metro.</div>
+            <div className="text-sm text-neutral-300">{content.includedKit}</div>
           </div>
         </div>
       </section>
@@ -492,7 +441,7 @@ export default function ChangeMediaLanding() {
           <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">What partners say</motion.h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {testimonials.map((t) => (
-              <div key={t.name} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-6">
+              <div key={t.id} className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-6">
                 <div className="flex items-center gap-3">
                   <Image src={t.avatar} alt={t.name} width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
                   <div>
@@ -512,16 +461,12 @@ export default function ChangeMediaLanding() {
         <div className="mx-auto max-w-6xl px-4 py-16">
           <motion.h2 {...fade} className="text-2xl md:text-3xl font-semibold">FAQ</motion.h2>
           <div className="mt-6 grid gap-3">
-            {[
-              { q: "How fast can you turn around a project?", a: "Event-to-edit is typically 72 hours. For docu‑shorts, expect 2–4 weeks depending on scope." },
-              { q: "Do you work outside Denver?", a: "Yes. Travel is billed at the IRS standard rate outside the Denver metro, with flexible remote pre‑pro." },
-              { q: "How do you measure impact?", a: "We use resonance (recall/belief shift), behavior (sign‑ups, referrals), and systems (citations, adoption)." },
-            ].map((f) => (
-              <details key={f.q} className="group rounded-2xl border border-white/10 bg-white/5 p-4 open:bg-white/10">
+            {faqs.map((faq) => (
+              <details key={faq.id} className="group rounded-2xl border border-white/10 bg-white/5 p-4 open:bg-white/10">
                 <summary className="cursor-pointer list-none font-medium">
-                  <span className="mr-2">➤</span>{f.q}
+                  <span className="mr-2">➤</span>{faq.question}
                 </summary>
-                <p className="mt-2 text-sm text-neutral-300">{f.a}</p>
+                <p className="mt-2 text-sm text-neutral-300">{faq.answer}</p>
               </details>
             ))}
           </div>
@@ -595,7 +540,7 @@ export default function ChangeMediaLanding() {
               {/* Calendly inline widget begin */}
               <div
                 className="calendly-inline-widget mt-4 rounded-xl border border-white/10"
-                data-url="https://calendly.com/william-navarretemoreno-changemedia/30min?background_color=000000&text_color=ffffff&primary_color=87c8bf"
+                data-url={contact.calendlyUrl}
                 style={{ minWidth: "320px", height: "700px" }}
               />
               <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" />
@@ -603,19 +548,23 @@ export default function ChangeMediaLanding() {
               <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <div className="text-neutral-400">Email</div>
-                  <div>hello@changemedia.org</div>
+                  <a href={`mailto:${contact.email}`} className="underline-offset-2 hover:underline">{contact.email}</a>
                 </div>
                 <div>
                   <div className="text-neutral-400">City</div>
-                  <div>Denver, CO</div>
+                  <div>{contact.city}</div>
                 </div>
                 <div>
                   <div className="text-neutral-400">Instagram</div>
-                  <a href="#" className="underline">@changemedia</a>
+                  <a href={contact.instagram.url} className="underline" target="_blank" rel="noreferrer">
+                    {contact.instagram.handle}
+                  </a>
                 </div>
                 <div>
                   <div className="text-neutral-400">YouTube</div>
-                  <a href="#" className="underline">CHANGE Media</a>
+                  <a href={contact.youtube.url} className="underline" target="_blank" rel="noreferrer">
+                    {contact.youtube.label}
+                  </a>
                 </div>
               </div>
             </div>

@@ -1,0 +1,243 @@
+{
+  "hero": {
+    "eyebrow": "Cinematic • Documentary • Reels",
+    "locationPill": "Denver & Beyond",
+    "title": "Story is policy in a language everyone can read.",
+    "titleGradient": "Story is policy",
+    "subtitle": "Youth-led studio making micro-docs, reels, and campaign assets about health, community, and public imagination. Built like a studio, guided like a movement.",
+    "ctas": [
+      { "label": "See work", "href": "#work", "variant": "primary" },
+      { "label": "Start a project", "href": "#contact", "variant": "secondary" },
+      { "label": "Play showreel", "href": "#reel", "variant": "ghost" }
+    ],
+    "metrics": [
+      { "value": "200+", "label": "neighbors reached via direct care" },
+      { "value": "10+", "label": "policy efforts documented" },
+      { "value": "72 hr", "label": "typical event-to-edit" },
+      { "value": "6 mo", "label": "recommended retainer" }
+    ]
+  },
+  "marquee": {
+    "phrases": [
+      "micro-docs",
+      "reels",
+      "community testing",
+      "health fairs",
+      "youth storytelling",
+      "policy testimony",
+      "coalition work",
+      "editorial film"
+    ]
+  },
+  "logoCloud": {
+    "heading": "Trusted by teams who build for people",
+    "logos": [
+      { "src": "/vercel.svg", "alt": "Vercel" },
+      { "src": "/next.svg", "alt": "Next.js" },
+      { "src": "/globe.svg", "alt": "Globe" },
+      { "src": "/window.svg", "alt": "Window" },
+      { "src": "/file.svg", "alt": "File" },
+      { "src": "/vercel.svg", "alt": "Vercel 2" }
+    ]
+  },
+  "featuredCases": [
+    {
+      "id": "hf-001",
+      "title": "Health Fair for Unhoused Neighbors",
+      "subtitle": "60–90s recap • case study",
+      "imageUrl": "https://picsum.photos/seed/case1/1200/800",
+      "videoUrl": "https://cdn.coverr.co/videos/coverr-community-garden-4712/1080p.mp4",
+      "tags": ["event", "community care", "recap"]
+    },
+    {
+      "id": "ctd-002",
+      "title": "Community Testing Day",
+      "subtitle": "Micro-doc • social cutdowns",
+      "imageUrl": "https://picsum.photos/seed/case2/1200/800",
+      "videoUrl": "https://cdn.coverr.co/videos/coverr-helping-hands-8022/1080p.mp4",
+      "tags": ["micro-doc", "public health"]
+    },
+    {
+      "id": "ptr-003",
+      "title": "Policy Testimony Reel",
+      "subtitle": "Reels package",
+      "imageUrl": "https://picsum.photos/seed/case3/1200/800",
+      "videoUrl": "https://cdn.coverr.co/videos/coverr-voices-of-the-people-8478/1080p.mp4",
+      "tags": ["policy", "advocacy", "reels"]
+    },
+    {
+      "id": "nls-004",
+      "title": "Neighborhood Leader Story",
+      "subtitle": "3–5 min docu-short",
+      "imageUrl": "https://picsum.photos/seed/case4/1200/800",
+      "videoUrl": "https://cdn.coverr.co/videos/coverr-walking-through-the-city-1580/1080p.mp4",
+      "tags": ["portrait", "docu-short"]
+    }
+  ],
+  "galleryCases": [
+    {
+      "id": "gm-1",
+      "title": "Case Study 1",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-1/900/700",
+      "tags": ["community", "health", "policy"]
+    },
+    {
+      "id": "gm-2",
+      "title": "Case Study 2",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-2/900/700",
+      "tags": ["community", "health", "policy"]
+    },
+    {
+      "id": "gm-3",
+      "title": "Case Study 3",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-3/900/700",
+      "tags": ["community", "health", "policy"]
+    },
+    {
+      "id": "gm-4",
+      "title": "Case Study 4",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-4/900/700",
+      "tags": ["community", "health", "policy"]
+    },
+    {
+      "id": "gm-5",
+      "title": "Case Study 5",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-5/900/700",
+      "tags": ["community", "health", "policy"]
+    },
+    {
+      "id": "gm-6",
+      "title": "Case Study 6",
+      "subtitle": "60–90s • Micro-doc",
+      "imageUrl": "https://picsum.photos/seed/changemedia-6/900/700",
+      "tags": ["community", "health", "policy"]
+    }
+  ],
+  "features": [
+    {
+      "title": "Research-grade rigor",
+      "description": "Field reporting, public-health framing, and behavioral science inform every cut."
+    },
+    {
+      "title": "Community authorship",
+      "description": "Co-create with the people closest to the story, on and off camera."
+    },
+    {
+      "title": "From content to consequence",
+      "description": "Distribution aligned to services, hearings, and real local action."
+    }
+  ],
+  "studio": {
+    "ethos": "Editorial craft meets community practice. Fast field interviews, clean sound, mobile-first edits that keep a cinematic core. Consent-forward workflows and de-identification options where needed.",
+    "bullets": [
+      "Formats: reels, shorts, 3–5 min anchors",
+      "Field kit: A7 IV, SM7 + lavs, dome light, gimbal",
+      "Data care: consent logs, secure storage"
+    ],
+    "quote": "The map should learn from the foot that walks it. Our job is to listen, film, and translate care into images that move people to act.",
+    "attribution": "— CHANGE Media Notes"
+  },
+  "services": [
+    {
+      "id": "retainer",
+      "title": "Monthly Content Retainer",
+      "price": {
+        "monthly": "from $2,750/mo",
+        "annual": "from $2,500/mo (annual)"
+      },
+      "bullets": [
+        "4 reels (45–60s)",
+        "20 edited photos",
+        "Strategy + light analytics"
+      ],
+      "ctaLabel": "Book discovery",
+      "ctaHref": "#contact"
+    },
+    {
+      "id": "doc-short",
+      "title": "Docu-Short (3–5 min)",
+      "price": {
+        "onetime": "$4,500 base"
+      },
+      "bullets": [
+        "1 shoot day",
+        "Interview + b-roll",
+        "3 vertical cutdowns"
+      ],
+      "ctaLabel": "Book discovery",
+      "ctaHref": "#contact"
+    },
+    {
+      "id": "event-pack",
+      "title": "Event Story Pack",
+      "price": {
+        "onetime": "$2,200"
+      },
+      "bullets": [
+        "Up to 5-hr coverage",
+        "60–90s recap",
+        "3 reels + 20 photos"
+      ],
+      "ctaLabel": "Book discovery",
+      "ctaHref": "#contact"
+    }
+  ],
+  "includedKit": "Included kit: Sony A7 IV cinema setup • SM7 broadcast mics + lavs • dome lighting • gimbal option • pro edit & captions. Travel billed at IRS standard rate outside Denver metro.",
+  "testimonials": [
+    {
+      "id": "t1",
+      "name": "M. Alvarez",
+      "role": "Coalition Lead",
+      "avatar": "https://picsum.photos/seed/ava1/128/128",
+      "quote": "We saw sign-ups triple after the story pack. It changed the temperature of the room at council."
+    },
+    {
+      "id": "t2",
+      "name": "D. Chen",
+      "role": "Clinic Director",
+      "avatar": "https://picsum.photos/seed/ava2/128/128",
+      "quote": "They listen like researchers and shoot like filmmakers. The result moved our board to act."
+    },
+    {
+      "id": "t3",
+      "name": "S. Patel",
+      "role": "Policy Organizer",
+      "avatar": "https://picsum.photos/seed/ava3/128/128",
+      "quote": "Fast, ethical, effective. The reels traveled further than any memo we’ve published this year."
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq1",
+      "question": "How fast can you turn around a project?",
+      "answer": "Event-to-edit is typically 72 hours. For docu-shorts, expect 2–4 weeks depending on scope."
+    },
+    {
+      "id": "faq2",
+      "question": "Do you work outside Denver?",
+      "answer": "Yes. Travel is billed at the IRS standard rate outside the Denver metro, with flexible remote pre-pro."
+    },
+    {
+      "id": "faq3",
+      "question": "How do you measure impact?",
+      "answer": "We use resonance (recall/belief shift), behavior (sign-ups, referrals), and systems (citations, adoption)."
+    }
+  ],
+  "contact": {
+    "email": "hello@changemedia.org",
+    "city": "Denver, CO",
+    "instagram": { "handle": "@changemedia", "url": "https://instagram.com/changemedia" },
+    "youtube": { "label": "CHANGE Media", "url": "https://youtube.com/@changemedia" },
+    "calendlyUrl": "https://calendly.com/william-navarretemoreno-changemedia/30min?background_color=000000&text_color=ffffff&primary_color=87c8bf"
+  },
+  "seo": {
+    "title": "CHANGE Media — Story is policy",
+    "description": "Youth-led studio making micro-docs, reels, and story packs for health, policy, and community imagination.",
+    "ogImage": "https://picsum.photos/seed/changemedia-og/1200/630"
+  }
+}
