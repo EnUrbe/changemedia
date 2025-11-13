@@ -3,7 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Inter, Instrument_Serif } from "next/font/google";
 import { useRef, useState, useEffect } from "react";
+
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-serif" });
 
 // Parallax image component with 3D tilt
 
@@ -26,38 +30,38 @@ function FloatingNav() {
         scrolled ? 'py-4' : 'py-6'
       }`}
     >
-      <div className="max-w-[95%] mx-auto px-8 py-4 flex items-center justify-between rounded-full border border-white/10 backdrop-blur-2xl"
+      <div className="max-w-[95%] mx-auto px-8 py-4 flex items-center justify-between rounded-full border border-neutral-200 backdrop-blur-xl shadow-sm"
         style={{
           background: scrolled 
-            ? 'rgba(10, 10, 10, 0.8)' 
-            : 'rgba(10, 10, 10, 0.3)'
+            ? 'rgba(255, 255, 255, 0.9)' 
+            : 'rgba(255, 255, 255, 0.7)'
         }}
       >
-        <Link href="/" className="text-lg font-light tracking-widest hover:text-purple-400 transition-colors">
-          CHANGE<span className="text-purple-400 font-normal">®</span>
+        <Link href="/" className="text-lg font-light tracking-widest hover:text-neutral-900 transition-colors">
+          CHANGE<span className="text-neutral-900 font-normal">®</span>
         </Link>
         <div className="hidden md:flex items-center gap-12 text-sm font-light">
-          <Link href="/change-studios" className="hover:text-purple-400 transition-colors relative group">
+          <Link href="/change-studios" className="hover:text-neutral-900 transition-colors relative group">
             Studios
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+            <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
           </Link>
-          <Link href="/why" className="hover:text-purple-400 transition-colors relative group">
+          <Link href="/why" className="hover:text-neutral-900 transition-colors relative group">
             Why
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+            <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
           </Link>
-          <Link href="/#work" className="hover:text-purple-400 transition-colors relative group">
+          <Link href="/#work" className="hover:text-neutral-900 transition-colors relative group">
             Work
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-purple-400 transition-all group-hover:w-full" />
+            <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
           </Link>
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-sm font-medium relative overflow-hidden group"
+          className="px-6 py-2.5 rounded-full bg-black text-white text-sm font-medium relative overflow-hidden group"
         >
           <span className="relative z-10">Book shoot</span>
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500"
+            className="absolute inset-0 bg-neutral-900"
             initial={{ x: "100%" }}
             whileHover={{ x: 0 }}
             transition={{ duration: 0.3 }}
@@ -129,13 +133,13 @@ export default function PhotographyPage() {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div ref={containerRef} className={`min-h-screen bg-white text-black overflow-x-hidden ${sans.variable} font-sans`}>
       {/* Custom cursor */}
       <motion.div
         variants={cursorVariants}
         animate={cursorVariant}
         transition={{ type: "spring", stiffness: 500, damping: 28 }}
-        className="fixed w-8 h-8 border border-purple-400/50 rounded-full pointer-events-none z-[100] hidden md:block"
+        className="fixed w-8 h-8 border border-neutral-900/50 rounded-full pointer-events-none z-[100] hidden md:block"
       />
 
       <FloatingNav />
@@ -155,8 +159,8 @@ export default function PhotographyPage() {
             className="object-cover"
           />
           {/* Multiple gradient overlays for depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-pink-900/20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-transparent" />
         </motion.div>
 
         {/* Floating elements in background */}
@@ -164,7 +168,7 @@ export default function PhotographyPage() {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-purple-400/30 rounded-full"
+              className="absolute w-1 h-1 bg-neutral-800/10 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -193,9 +197,9 @@ export default function PhotographyPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-8"
           >
-            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-purple-400/30 bg-purple-400/5 backdrop-blur-xl text-sm">
+            <span className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-neutral-200 bg-white/70 backdrop-blur-xl text-sm">
               <motion.span 
-                className="w-2 h-2 rounded-full bg-purple-400"
+                className="w-2 h-2 rounded-full bg-neutral-900"
                 animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
@@ -209,10 +213,10 @@ export default function PhotographyPage() {
               initial={{ y: 100 }}
               animate={{ y: 0 }}
               transition={{ duration: 1, ease: [0.33, 1, 0.68, 1], delay: 0.3 }}
-              className="text-8xl md:text-[12rem] font-bold leading-[0.85] tracking-tighter"
+              className={`${serif.variable} font-serif text-8xl md:text-[12rem] font-bold leading-[0.85] tracking-tight`}
             >
               <span className="block">Photography</span>
-              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 That Moves
               </span>
             </motion.h1>
@@ -222,7 +226,7 @@ export default function PhotographyPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-xl md:text-3xl text-neutral-300 font-light max-w-3xl mx-auto mb-14 leading-relaxed"
+            className="text-xl md:text-3xl text-neutral-600 font-light max-w-3xl mx-auto mb-14 leading-relaxed"
           >
             Crafting visual narratives for brands, campaigns, and stories that refuse to be ignored
           </motion.p>
@@ -236,11 +240,11 @@ export default function PhotographyPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative px-10 py-5 rounded-full bg-white text-black font-medium text-lg overflow-hidden"
+              className="group relative px-10 py-5 rounded-full bg-black text-white font-medium text-lg overflow-hidden"
             >
               <span className="relative z-10">Explore work</span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500"
+                className="absolute inset-0 bg-neutral-900"
                 initial={{ x: "-100%" }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.3 }}
@@ -249,7 +253,7 @@ export default function PhotographyPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-5 rounded-full border border-white/30 hover:border-white/60 font-medium text-lg backdrop-blur-sm hover:bg-white/5 transition-all"
+              className="px-10 py-5 rounded-full border border-neutral-300 hover:border-neutral-900 font-medium text-lg backdrop-blur-sm hover:bg-neutral-50 transition-all"
             >
               Let&apos;s talk
             </motion.button>
@@ -268,7 +272,7 @@ export default function PhotographyPage() {
               { num: "15", label: "Awards" }
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-neutral-900 mb-2">
                   {stat.num}
                 </div>
                 <div className="text-sm text-neutral-500 uppercase tracking-widest">{stat.label}</div>
@@ -290,7 +294,7 @@ export default function PhotographyPage() {
             className="flex flex-col items-center"
           >
             <span className="text-xs uppercase tracking-widest text-neutral-500 mb-3">Scroll to explore</span>
-            <div className="w-px h-16 bg-gradient-to-b from-purple-400/50 to-transparent" />
+            <div className="w-px h-16 bg-gradient-to-b from-neutral-900/40 to-transparent" />
           </motion.div>
         </motion.div>
       </section>
@@ -305,13 +309,13 @@ export default function PhotographyPage() {
             transition={{ duration: 0.8 }}
             className="mb-20 text-center"
           >
-            <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6">
+            <h2 className={`${serif.variable} font-serif text-6xl md:text-8xl font-bold tracking-tight mb-6`}>
               Selected{" "}
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 Works
               </span>
             </h2>
-            <p className="text-neutral-400 text-xl font-light">
+            <p className="text-neutral-600 text-xl font-light">
               A curated collection of recent projects and collaborations
             </p>
           </motion.div>
@@ -366,18 +370,18 @@ export default function PhotographyPage() {
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col justify-end p-10"
+                    className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-10"
                   >
                     <motion.div
                       initial={{ y: 20, opacity: 0 }}
                       whileHover={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.3, delay: 0.1 }}
                     >
-                      <span className="text-sm text-purple-400 uppercase tracking-wider mb-2 block">
+                      <span className="text-sm text-neutral-200 uppercase tracking-wider mb-2 block">
                         {photo.cat}
                       </span>
-                      <h3 className="text-3xl font-bold mb-3">{photo.title}</h3>
-                      <div className="flex items-center gap-2 text-sm text-neutral-400">
+                      <h3 className="text-3xl font-bold text-white mb-3">{photo.title}</h3>
+                      <div className="flex items-center gap-2 text-sm text-neutral-300">
                         <span>View project</span>
                         <motion.span
                           initial={{ x: 0 }}
@@ -397,7 +401,7 @@ export default function PhotographyPage() {
       </section>
 
       {/* Services Section */}
-      <section className="relative py-32 border-y border-white/5">
+      <section className="relative py-32 border-y border-neutral-200">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -405,13 +409,13 @@ export default function PhotographyPage() {
             viewport={{ once: true }}
             className="mb-24 max-w-4xl"
           >
-            <h2 className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 leading-[0.9]">
+            <h2 className={`${serif.variable} font-serif text-7xl md:text-9xl font-bold tracking-tight mb-8 leading-[0.9]`}>
               Services &{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                 Pricing
               </span>
             </h2>
-            <p className="text-2xl text-neutral-400 font-light leading-relaxed">
+            <p className="text-2xl text-neutral-600 font-light leading-relaxed">
               Premium photography services for brands that demand excellence
             </p>
           </motion.div>
@@ -473,13 +477,13 @@ export default function PhotographyPage() {
                 whileHover={{ y: -10 }}
                 className="group relative"
               >
-                <div className={`relative p-12 rounded-3xl border border-${service.border} bg-gradient-to-br ${service.gradient} backdrop-blur-xl hover:border-white/40 transition-all duration-500 h-full`}>
+                <div className={`relative p-12 rounded-3xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 backdrop-blur-xl hover:border-neutral-900 transition-all duration-500 h-full`}>
                   <div className="mb-8">
-                    <div className="text-8xl font-bold text-white/5 group-hover:text-white/10 transition-colors mb-6">
+                    <div className="text-8xl font-bold text-neutral-100 group-hover:text-neutral-200 transition-colors mb-6">
                       0{i + 1}
                     </div>
                     <h3 className="text-4xl font-bold mb-4">{service.title}</h3>
-                    <p className="text-neutral-400 text-lg font-light leading-relaxed">
+                    <p className="text-neutral-600 text-lg font-light leading-relaxed">
                       {service.desc}
                     </p>
                   </div>
@@ -488,7 +492,7 @@ export default function PhotographyPage() {
                     <div className="text-sm text-neutral-500 uppercase tracking-wider mb-2">
                       {service.period}
                     </div>
-                    <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <div className="text-5xl font-bold text-neutral-900">
                       {service.price}
                     </div>
                   </div>
@@ -503,8 +507,8 @@ export default function PhotographyPage() {
                         transition={{ delay: i * 0.15 + j * 0.05 }}
                         className="flex items-center gap-3"
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-pink-400" />
-                        <span className="text-neutral-300">{feature}</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
+                        <span className="text-neutral-700">{feature}</span>
                       </motion.li>
                     ))}
                   </ul>
@@ -512,7 +516,7 @@ export default function PhotographyPage() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 rounded-full border border-white/20 group-hover:bg-gradient-to-r group-hover:from-purple-500 group-hover:to-pink-500 group-hover:border-transparent font-medium transition-all duration-300"
+                    className="w-full py-4 rounded-full border border-neutral-300 hover:bg-black hover:text-white hover:border-black font-medium transition-all duration-300"
                   >
                     Book this package
                   </motion.button>
@@ -530,7 +534,7 @@ export default function PhotographyPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-20 rounded-3xl border border-white/10 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-orange-500/10 backdrop-blur-2xl overflow-hidden"
+            className="relative p-20 rounded-3xl border border-neutral-200 bg-gradient-to-br from-neutral-100 via-white to-neutral-50 backdrop-blur-2xl overflow-hidden"
           >
             {/* Animated background gradient orbs */}
             <div className="absolute inset-0">
@@ -540,7 +544,7 @@ export default function PhotographyPage() {
                   y: [0, 50, 0],
                 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+                className="absolute top-0 left-0 w-96 h-96 bg-neutral-200 rounded-full blur-3xl"
               />
               <motion.div
                 animate={{
@@ -548,7 +552,7 @@ export default function PhotographyPage() {
                   y: [0, -50, 0],
                 }}
                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"
+                className="absolute bottom-0 right-0 w-96 h-96 bg-neutral-300 rounded-full blur-3xl"
               />
             </div>
 
@@ -557,13 +561,13 @@ export default function PhotographyPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]"
+                className={`${serif.variable} font-serif text-6xl md:text-8xl font-bold tracking-tight mb-8 leading-[0.9]`}
               >
                 Let&apos;s create
                 <br />
                 something
                 <br />
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
                   unforgettable
                 </span>
               </motion.h2>
@@ -573,7 +577,7 @@ export default function PhotographyPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-2xl text-neutral-300 font-light mb-12 max-w-2xl mx-auto"
+                className="text-2xl text-neutral-600 font-light mb-12 max-w-2xl mx-auto"
               >
                 Whether it&apos;s a brand campaign, editorial project, or something entirely new—let&apos;s bring your vision to life
               </motion.p>
@@ -585,7 +589,7 @@ export default function PhotographyPage() {
                 transition={{ delay: 0.2 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-14 py-6 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-xl font-medium hover:shadow-2xl hover:shadow-purple-500/50 transition-shadow"
+                className="px-14 py-6 rounded-full bg-black text-white text-xl font-medium hover:shadow-2xl hover:shadow-neutral-600/20 transition-shadow"
               >
                 Start your project →
               </motion.button>
@@ -595,44 +599,44 @@ export default function PhotographyPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-20">
+      <footer className="border-t border-neutral-200 py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div>
-              <h3 className="text-2xl font-bold mb-4">CHANGE<span className="text-purple-400">®</span></h3>
-              <p className="text-neutral-500 text-sm">Photography & visual storytelling</p>
+              <h3 className="text-2xl font-bold mb-4">CHANGE<span className="text-neutral-900">®</span></h3>
+              <p className="text-neutral-600 text-sm">Photography & visual storytelling</p>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Services</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><Link href="#" className="hover:text-white transition">Brand Photography</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Editorial</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Events</Link></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><Link href="#" className="hover:text-black transition">Brand Photography</Link></li>
+                <li><Link href="#" className="hover:text-black transition">Editorial</Link></li>
+                <li><Link href="#" className="hover:text-black transition">Events</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><Link href="/change-studios" className="hover:text-white transition">Studios</Link></li>
-                <li><Link href="/why" className="hover:text-white transition">Why</Link></li>
-                <li><Link href="/#work" className="hover:text-white transition">Work</Link></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><Link href="/change-studios" className="hover:text-black transition">Studios</Link></li>
+                <li><Link href="/why" className="hover:text-black transition">Why</Link></li>
+                <li><Link href="/#work" className="hover:text-black transition">Work</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Connect</h4>
-              <ul className="space-y-2 text-sm text-neutral-500">
-                <li><Link href="#" className="hover:text-white transition">Instagram</Link></li>
-                <li><Link href="#" className="hover:text-white transition">Email</Link></li>
-                <li><Link href="#" className="hover:text-white transition">LinkedIn</Link></li>
+              <ul className="space-y-2 text-sm text-neutral-600">
+                <li><Link href="#" className="hover:text-black transition">Instagram</Link></li>
+                <li><Link href="#" className="hover:text-black transition">Email</Link></li>
+                <li><Link href="#" className="hover:text-black transition">LinkedIn</Link></li>
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-500">
+          <div className="pt-8 border-t border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-600">
             <div>© 2025 CHANGE Media • Photography by EnUrbe</div>
             <div className="flex items-center gap-8">
-              <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
-              <Link href="/terms" className="hover:text-white transition">Terms</Link>
-              <Link href="/contact" className="hover:text-white transition">Contact</Link>
+              <Link href="/privacy" className="hover:text-black transition">Privacy</Link>
+              <Link href="/terms" className="hover:text-black transition">Terms</Link>
+              <Link href="/contact" className="hover:text-black transition">Contact</Link>
             </div>
           </div>
         </div>

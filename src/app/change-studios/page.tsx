@@ -3,7 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { Inter, Instrument_Serif } from "next/font/google";
 import { useRef, useState, useEffect } from "react";
+
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-serif" });
 
 // Magnetic button component
 function MagneticButton({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -81,10 +85,10 @@ export default function ChangeStudiosPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-neutral-950 text-white overflow-x-hidden">
+    <div ref={containerRef} className={`min-h-screen bg-white text-black overflow-x-hidden ${sans.variable} font-sans`}>
       {/* Custom cursor */}
       <motion.div
-        className="fixed w-6 h-6 border-2 border-cyan-400/50 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
+        className="fixed w-6 h-6 border-2 border-neutral-900/50 rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
         animate={{ x: mousePosition.x - 12, y: mousePosition.y - 12 }}
         transition={{ type: "spring", stiffness: 500, damping: 28 }}
       />
@@ -94,18 +98,18 @@ export default function ChangeStudiosPage() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
-        className="fixed top-4 left-4 right-4 z-50 bg-neutral-900/30 backdrop-blur-2xl border border-white/10 rounded-2xl"
+        className="fixed top-4 left-4 right-4 z-50 bg-white/70 backdrop-blur-xl border border-neutral-200 rounded-2xl shadow-sm"
       >
         <div className="mx-auto max-w-7xl px-8 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-medium tracking-tight hover:text-cyan-400 transition-colors">
-            CHANGE<span className="text-cyan-400">®</span>
+          <Link href="/" className="text-xl font-medium tracking-tight hover:text-neutral-900 transition-colors">
+            CHANGE<span className="text-neutral-900">®</span>
           </Link>
           <div className="hidden md:flex items-center gap-12 text-sm font-light">
-            <Link href="/#work" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Work</Link>
-            <Link href="/photography" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Photography</Link>
-            <Link href="/why" className="hover:text-cyan-400 transition-all hover:tracking-wider duration-300">Why</Link>
+            <Link href="/#work" className="hover:text-neutral-900 transition-all hover:tracking-wider duration-300">Work</Link>
+            <Link href="/photography" className="hover:text-neutral-900 transition-all hover:tracking-wider duration-300">Photography</Link>
+            <Link href="/why" className="hover:text-neutral-900 transition-all hover:tracking-wider duration-300">Why</Link>
           </div>
-          <MagneticButton className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-6 py-2.5 text-sm font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-shadow">
+          <MagneticButton className="rounded-full bg-black text-white px-6 py-2.5 text-sm font-medium hover:shadow-lg hover:shadow-neutral-600/20 transition-shadow">
             Get in touch
           </MagneticButton>
         </div>
@@ -124,7 +128,7 @@ export default function ChangeStudiosPage() {
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/50 via-neutral-950/30 to-neutral-950" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/10" />
         </motion.div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
@@ -134,20 +138,20 @@ export default function ChangeStudiosPage() {
             transition={{ duration: 1, delay: 0.5 }}
             className="mb-8"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/5 backdrop-blur-sm text-sm text-cyan-400">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-200 bg-white/70 backdrop-blur-sm text-sm text-neutral-900">
+              <span className="w-2 h-2 rounded-full bg-neutral-900 animate-pulse" />
               Design Studio • Denver
             </span>
           </motion.div>
 
-          <h1 className="text-7xl md:text-[10rem] font-bold leading-[0.9] tracking-tighter mb-8">
+          <h1 className={`${serif.variable} font-serif text-7xl md:text-[10rem] font-bold leading-[0.9] tracking-tight mb-8`}>
             <div className="overflow-hidden">
               <RevealText delay={0.2}>Create</RevealText>
             </div>
             <div className="overflow-hidden">
               <RevealText delay={0.3}>Impact</RevealText>
             </div>
-            <div className="overflow-hidden bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+            <div className="overflow-hidden bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
               <RevealText delay={0.4}>Together</RevealText>
             </div>
           </h1>
@@ -156,7 +160,7 @@ export default function ChangeStudiosPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-light leading-relaxed"
+            className="text-xl md:text-2xl text-neutral-600 max-w-3xl mx-auto font-light leading-relaxed"
           >
             Webby-level design studio crafting digital experiences that don&apos;t just look beautiful—they change minds and move markets.
           </motion.p>
@@ -167,16 +171,16 @@ export default function ChangeStudiosPage() {
             transition={{ duration: 0.8, delay: 1 }}
             className="mt-12 flex items-center justify-center gap-4"
           >
-            <MagneticButton className="group relative px-8 py-4 rounded-full bg-white text-neutral-950 font-medium overflow-hidden">
+            <MagneticButton className="group relative px-8 py-4 rounded-full bg-black text-white font-medium overflow-hidden">
               <span className="relative z-10">Start a project</span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500"
+                className="absolute inset-0 bg-neutral-900"
                 initial={{ x: "-100%" }}
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.3 }}
               />
             </MagneticButton>
-            <button className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 font-medium hover:bg-white/5 transition-all">
+            <button className="px-8 py-4 rounded-full border border-neutral-300 hover:border-neutral-900 font-medium hover:bg-neutral-50 transition-all">
               View work
             </button>
           </motion.div>
@@ -190,16 +194,16 @@ export default function ChangeStudiosPage() {
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2"
+              className="w-6 h-10 rounded-full border-2 border-neutral-300 flex items-start justify-center p-2"
             >
-              <motion.div className="w-1.5 h-1.5 rounded-full bg-white" />
+              <motion.div className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Stats with counter animation */}
-      <section className="relative py-32 border-y border-white/10">
+      <section className="relative py-32 border-y border-neutral-200">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {[
@@ -217,7 +221,7 @@ export default function ChangeStudiosPage() {
                 className="text-center group"
               >
                 <motion.div
-                  className="text-5xl md:text-7xl font-bold bg-gradient-to-br from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2"
+                  className="text-5xl md:text-7xl font-bold text-neutral-900 mb-2"
                   whileHover={{ scale: 1.05 }}
                 >
                   {stat.number}
@@ -238,10 +242,10 @@ export default function ChangeStudiosPage() {
             viewport={{ once: true }}
             className="mb-20"
           >
-            <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6">
-              What we <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">create</span>
+            <h2 className={`${serif.variable} font-serif text-6xl md:text-8xl font-bold tracking-tight mb-6`}>
+              What we <span className="bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">create</span>
             </h2>
-            <p className="text-xl text-neutral-400 max-w-2xl">
+            <p className="text-xl text-neutral-600 max-w-2xl">
               Award-winning digital experiences across all touchpoints
             </p>
           </motion.div>
@@ -274,26 +278,26 @@ export default function ChangeStudiosPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group relative p-8 rounded-3xl border border-white/10 bg-gradient-to-br from-neutral-900/50 to-neutral-950/50 backdrop-blur-xl hover:border-cyan-400/50 transition-all duration-500"
+                className="group relative p-8 rounded-3xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 backdrop-blur-xl hover:border-neutral-900 transition-all duration-500"
               >
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 transition-all duration-500" />
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neutral-100/0 to-neutral-200/0 group-hover:from-neutral-100/50 group-hover:to-neutral-200/50 transition-all duration-500" />
                 
                 <div className="relative z-10">
-                  <div className="text-5xl font-bold text-cyan-400/20 group-hover:text-cyan-400/40 transition-colors mb-4">
+                  <div className="text-5xl font-bold text-neutral-200 group-hover:text-neutral-300 transition-colors mb-4">
                     0{i + 1}
                   </div>
                   <h3 className="text-3xl font-bold mb-3">{service.title}</h3>
-                  <p className="text-neutral-400 mb-6">{service.desc}</p>
-                  <div className="text-2xl font-bold text-cyan-400 mb-6">{service.price}</div>
+                  <p className="text-neutral-600 mb-6">{service.desc}</p>
+                  <div className="text-2xl font-bold text-neutral-900 mb-6">{service.price}</div>
                   <ul className="space-y-2 mb-8">
                     {service.features.map((feature, j) => (
-                      <li key={j} className="flex items-center gap-2 text-sm text-neutral-400">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                      <li key={j} className="flex items-center gap-2 text-sm text-neutral-700">
+                        <div className="w-1.5 h-1.5 rounded-full bg-neutral-900" />
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  <button className="w-full py-3 rounded-full border border-white/20 group-hover:bg-white group-hover:text-neutral-950 font-medium transition-all duration-300">
+                  <button className="w-full py-3 rounded-full border border-neutral-300 hover:bg-black hover:text-white hover:border-black font-medium transition-all duration-300">
                     Learn more
                   </button>
                 </div>
@@ -310,17 +314,17 @@ export default function ChangeStudiosPage() {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-16 rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-xl overflow-hidden"
+            className="relative p-16 rounded-3xl border border-neutral-200 bg-gradient-to-br from-neutral-100 via-white to-neutral-50 backdrop-blur-xl overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5" />
+            <div className="absolute inset-0 bg-gradient-to-br from-neutral-200/30 to-neutral-300/30" />
             <div className="relative z-10">
-              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
+              <h2 className={`${serif.variable} font-serif text-5xl md:text-7xl font-bold tracking-tight mb-6`}>
                 Ready to create something extraordinary?
               </h2>
-              <p className="text-xl text-neutral-400 mb-8">
+              <p className="text-xl text-neutral-600 mb-8">
                 Let&apos;s build your next award-winning project together
               </p>
-              <MagneticButton className="px-10 py-5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-lg font-medium hover:shadow-2xl hover:shadow-cyan-500/30 transition-shadow">
+              <MagneticButton className="px-10 py-5 rounded-full bg-black text-white text-lg font-medium hover:shadow-2xl hover:shadow-neutral-600/20 transition-shadow">
                 Start your project →
               </MagneticButton>
             </div>
@@ -329,12 +333,12 @@ export default function ChangeStudiosPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12">
+      <footer className="border-t border-neutral-200 py-12">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div className="text-sm text-neutral-500">© 2025 CHANGE Media Studios</div>
-          <div className="flex items-center gap-6 text-sm text-neutral-500">
-            <Link href="/privacy" className="hover:text-white transition">Privacy</Link>
-            <Link href="/terms" className="hover:text-white transition">Terms</Link>
+          <div className="text-sm text-neutral-600">© 2025 CHANGE Media Studios</div>
+          <div className="flex items-center gap-6 text-sm text-neutral-600">
+            <Link href="/privacy" className="hover:text-black transition">Privacy</Link>
+            <Link href="/terms" className="hover:text-black transition">Terms</Link>
           </div>
         </div>
       </footer>
