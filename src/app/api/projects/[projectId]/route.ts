@@ -4,11 +4,12 @@ import { getProjectById, saveProject } from "@/lib/projectsStore";
 import { projectSchema } from "@/lib/projectsSchema";
 
 interface RouteParams {
-  params: { projectId: string };
+  params: Promise<{ projectId: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
-  const project = await getProjectById(params.projectId);
+  const { projectId } = await params;
+  const project = await getProjectById(projectId);
   if (!project) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -25,10 +26,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
+  const { projectId } = await params;
   if (!isAdminRequest(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const project = await getProjectById(params.projectId);
+  const project = await getProjectById(projectId);
   if (!project) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
