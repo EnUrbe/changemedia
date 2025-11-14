@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { appendFeedback, getProjectById } from "@/lib/projectsStore";
 
 interface RouteParams {
-  params: { projectId: string };
+  params: Promise<{ projectId: string }>;
 }
 
 export async function POST(request: NextRequest, { params }: RouteParams) {
-  const project = await getProjectById(params.projectId);
+  const { projectId } = await params;
+  const project = await getProjectById(projectId);
   if (!project) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
