@@ -32,22 +32,22 @@ type Props = {
 };
 
 const vibeOptions = [
-  { id: "luminous", label: "Luminous minimalism", description: "Soft daylight, sculpted whites." },
-  { id: "editorial", label: "Editorial gloss", description: "Magazine-forward, directional light." },
-  { id: "documentary", label: "Documentary", description: "Candid motion, lived-in warmth." },
-  { id: "noir", label: "Monochrome noir", description: "Graphic contrast, timeless silhouettes." },
+  { id: "luminous", label: "Luminous & light", description: "Soft natural light, airy feel." },
+  { id: "editorial", label: "Editorial vibe", description: "Magazine-style, polished look." },
+  { id: "documentary", label: "Candid & relaxed", description: "Natural moments, authentic." },
+  { id: "noir", label: "Moody & dramatic", description: "Bold contrast, timeless." },
 ];
 
 const lightingOptions = [
-  { id: "studio", label: "Studio portrait" },
-  { id: "location", label: "On-location" },
-  { id: "hybrid", label: "Hybrid" },
+  { id: "studio", label: "Studio setup" },
+  { id: "location", label: "Outdoor/on-location" },
+  { id: "hybrid", label: "Mix of both" },
 ];
 
 const paletteOptions = [
-  { id: "pastel", label: "Soft pastels" },
-  { id: "neutral", label: "Modern neutrals" },
-  { id: "bold", label: "Vivid & bold" },
+  { id: "pastel", label: "Light & airy" },
+  { id: "neutral", label: "Classic neutrals" },
+  { id: "bold", label: "Bold & vibrant" },
 ];
 
 const inputClass = "w-full rounded-2xl border border-neutral-200 bg-white/70 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none";
@@ -187,18 +187,18 @@ export default function PortraitExperiencePortal({ content }: Props) {
         </div>
         <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-32 text-center">
           <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mx-auto inline-flex items-center gap-3 rounded-full border border-neutral-200/60 bg-white/80 px-5 py-2 text-xs uppercase tracking-[0.4em] text-neutral-500">
-            Executive portraits • Founder imaging
+            Senior portraits • Graduation sessions
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.05]" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Premium portraiture engineered for C-suite decision-makers and investor-facing founders.
+            Artful senior portraits that honor your story, not just your diploma.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mx-auto max-w-3xl text-lg text-neutral-600">
-            White-glove portrait commissions for executives who understand the ROI of expert brand imaging. Full creative direction, wardrobe consultation, and retouching included.
+            Elevated portrait sessions for high school seniors and college graduates. Thoughtfully crafted imagery for announcements, yearbooks, and family keepsakes—curated with the same care I bring to editorial work.
           </motion.p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-600">
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Same-week scheduling for urgent press</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Full usage rights & unlimited downloads</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Retainer packages for Series A+</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Private 1-on-1 sessions</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Locations around Denver</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Full digital gallery included</div>
           </div>
         </div>
       </section>
@@ -206,11 +206,11 @@ export default function PortraitExperiencePortal({ content }: Props) {
       <section className="relative px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <p className={labelClass}>Investment tiers</p>
+            <p className={labelClass}>Recent sessions</p>
             <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-              Recent work with venture-backed founders
+              Portfolio highlights from this year
             </h2>
-            <p className="mt-3 text-base text-neutral-600">Headshots, team portraits, and brand campaigns for companies pre-IPO through Series C.</p>
+            <p className="mt-3 text-base text-neutral-600">Each senior session is treated like editorial portraiture—intentional lighting, natural posing, and authentic moments.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {content.portfolio.slice(0, 6).map((item) => (
@@ -233,14 +233,14 @@ export default function PortraitExperiencePortal({ content }: Props) {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className={labelClass}>Investment structure</p>
+              <p className={labelClass}>Session options</p>
               <h2 className="mt-3 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                Executive portrait retainers
+                Senior portrait packages
               </h2>
-              <p className="mt-3 text-neutral-600">Select the tier aligned with your growth stage—from single-day executive sessions to annual retainers for distributed teams.</p>
+              <p className="mt-3 text-neutral-600">Choose the session length that fits your vision—from classic yearbook headshots to full lifestyle sessions with outfit changes.</p>
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-white/70 px-5 py-4 text-sm text-neutral-600">
-              Pro tip: Series A+ companies often choose retainer packages for quarterly headshot refreshes and investor decks.
+              Tip: Most seniors book the 2-hour session for variety—multiple locations and wardrobe options included.
             </div>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -283,20 +283,20 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="rounded-[40px] border border-neutral-200 bg-white/90 p-8 shadow-[0_30px_100px_rgba(15,23,42,0.1)]">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className={labelClass}>Executive intake</p>
+                <p className={labelClass}>Session booking</p>
                 <h2 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                  Booking request + creative brief
+                  Tell me about your vision
                 </h2>
               </div>
-              <div className="text-xs text-neutral-500">Avg. completion: 3 min</div>
+              <div className="text-xs text-neutral-500">Takes about 3 minutes</div>
             </div>
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-sm">
               <div className="grid gap-4 md:grid-cols-2">
-                <input className={inputClass} placeholder="Full name" required value={form.clientName} onChange={(e) => setForm({ ...form, clientName: e.target.value })} />
+                <input className={inputClass} placeholder="Your name" required value={form.clientName} onChange={(e) => setForm({ ...form, clientName: e.target.value })} />
                 <input className={inputClass} placeholder="Email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
               <div className="grid gap-4 md:grid-cols-2">
-                <input className={inputClass} placeholder="Brand or company" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
+                <input className={inputClass} placeholder="School or university (optional)" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
                 <input className={inputClass} placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               </div>
               <div className="grid gap-4 md:grid-cols-3">
@@ -305,23 +305,23 @@ export default function PortraitExperiencePortal({ content }: Props) {
                   <input type="date" className={`${inputClass} mt-2`} value={form.preferredDate} onChange={(e) => setForm({ ...form, preferredDate: e.target.value })} />
                 </div>
                 <div>
-                  <label className={labelClass}>Time window</label>
+                  <label className={labelClass}>Time of day</label>
                   <select className={`${inputClass} mt-2`} value={form.timeWindow} onChange={(e) => setForm({ ...form, timeWindow: e.target.value })}>
                     <option value="">Select</option>
-                    <option value="sunrise">Sunrise</option>
+                    <option value="sunrise">Early morning</option>
                     <option value="midday">Midday</option>
-                    <option value="golden-hour">Golden hour</option>
+                    <option value="golden-hour">Golden hour (sunset)</option>
                     <option value="evening">Evening</option>
                   </select>
                 </div>
                 <div>
-                  <label className={labelClass}>Location notes</label>
-                  <input className={`${inputClass} mt-2`} placeholder="Studio, rooftop, etc." value={form.locationNotes} onChange={(e) => setForm({ ...form, locationNotes: e.target.value })} />
+                  <label className={labelClass}>Location ideas</label>
+                  <input className={`${inputClass} mt-2`} placeholder="Park, urban, home, etc." value={form.locationNotes} onChange={(e) => setForm({ ...form, locationNotes: e.target.value })} />
                 </div>
               </div>
 
               <div className="rounded-3xl border border-neutral-200 bg-white/70 p-5">
-                <p className={labelClass}>Brand imaging preferences</p>
+                <p className={labelClass}>Visual style preferences</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2">
                   {vibeOptions.map((option) => (
                     <button
@@ -369,19 +369,19 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 </div>
                 <textarea
                   className={`${inputClass} mt-4 min-h-[120px]`}
-                  placeholder="Notes about wardrobe, art direction, or inspiration."
+                  placeholder="Any ideas about outfits, props, or specific shots you want? (Cap and gown, sports uniform, casual looks, etc.)"
                   value={styleQuiz.inspirationNotes}
                   onChange={(e) => setStyleQuiz((prev) => ({ ...prev, inspirationNotes: e.target.value }))}
                 />
               </div>
 
-              <textarea className={`${inputClass} min-h-[120px]`} placeholder="Use case (investor deck, press kit, LinkedIn, website team page, etc.)" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
+              <textarea className={`${inputClass} min-h-[120px]`} placeholder="What will you use these photos for? (Announcements, yearbook, social media, gifts for family, etc.)" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
 
               <div className="rounded-3xl border border-dashed border-neutral-300 bg-white/70 p-5 text-sm">
-                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Reference imagery (optional)</p>
-                <p className="mt-2 text-neutral-600">Upload examples of portrait styles you admire—competitor headshots, magazine covers, or moodboards. JPG, PNG, or PDF.</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Inspiration photos (optional)</p>
+                <p className="mt-2 text-neutral-600">Have Pinterest boards or sample photos you love? Upload them here so I can get a sense of your style. JPG, PNG, or PDF.</p>
                 <label className="mt-4 inline-flex cursor-pointer items-center gap-3 rounded-full border border-neutral-900/10 px-5 py-3 text-xs uppercase tracking-[0.3em] text-neutral-900 hover:bg-neutral-900 hover:text-white">
-                  Attach references
+                  Attach inspiration
                   <input type="file" accept="image/*,.pdf" multiple className="hidden" onChange={handleFileChange} />
                 </label>
                 {files.length > 0 && (
@@ -409,9 +409,9 @@ export default function PortraitExperiencePortal({ content }: Props) {
 
           <div className="flex flex-col gap-6">
             <div className="rounded-[32px] border border-neutral-200 bg-white/85 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-              <p className={labelClass}>Selected tier</p>
+              <p className={labelClass}>Your session</p>
               <h3 className="mt-3 text-2xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                {selectedPackage?.title ?? "Executive portrait"}
+                {selectedPackage?.title ?? "Senior portrait session"}
               </h3>
               <p className="mt-2 text-sm text-neutral-600">{selectedPackage?.description}</p>
               <ul className="mt-4 space-y-2 text-sm text-neutral-600">
@@ -423,12 +423,12 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 ))}
               </ul>
               <div className="mt-6 rounded-2xl border border-neutral-200 bg-white/70 p-4 text-sm">
-                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Request status</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Booking status</div>
                 <div className="text-lg font-semibold text-neutral-900">
                   {submission?.status ? submission.status.replace("-", " ") : "Not yet submitted"}
                 </div>
                 {submission?.trackingCode && (
-                  <p className="text-xs text-neutral-500">Reference • {submission.trackingCode}</p>
+                  <p className="text-xs text-neutral-500">Confirmation code • {submission.trackingCode}</p>
                 )}
               </div>
             </div>
@@ -443,7 +443,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
             </div>
 
             <div className="rounded-[32px] border border-neutral-200 bg-white/90 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-              <p className={labelClass}>Timeline updates</p>
+              <p className={labelClass}>Session updates</p>
               {submission?.updates?.length ? (
                 <ul className="mt-4 space-y-4 text-sm text-neutral-700">
                   {submission.updates.map((update) => (
@@ -467,7 +467,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-4 text-sm text-neutral-500">Your account manager will send scheduling and deliverable updates here.</p>
+                <p className="mt-4 text-sm text-neutral-500">I'll send you updates here once your booking is confirmed—including session details and sneak peeks!</p>
               )}
             </div>
           </div>
@@ -476,16 +476,17 @@ export default function PortraitExperiencePortal({ content }: Props) {
 
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-5xl rounded-[48px] border border-neutral-200 bg-white/90 p-12 text-center shadow-[0_40px_120px_rgba(15,23,42,0.1)]">
-          <p className={labelClass}>Need a custom proposal?</p>
+          <p className={labelClass}>Questions?</p>
           <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Schedule a discovery call or request a detailed scope of work.
+            Let's chat about your session ideas.
           </h2>
+          <p className="mt-4 text-neutral-600">Email me directly or check out my other work at Change Studios Media.</p>
           <div className="mt-6 flex flex-col gap-3 md:flex-row md:justify-center">
-            <a href="mailto:partnerships@changemedia.studio" className="rounded-full border border-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-neutral-900">
-              Email partnerships
+            <a href="mailto:portraits@changemedia.studio" className="rounded-full border border-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-neutral-900">
+              Email me
             </a>
-            <a href="https://cal.com" target="_blank" rel="noreferrer" className="rounded-full bg-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-white">
-              Schedule consult
+            <a href="/change-studios" className="rounded-full bg-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-white">
+              See my other work
             </a>
           </div>
         </div>
