@@ -1,0 +1,215 @@
+{
+  "hero": {
+    "eyebrow": "Private Commissions • Editorial",
+    "availability": "Denver & Worldwide",
+    "title": "Photography",
+    "highlight": "That Moves",
+    "subtitle": "Crafting visual narratives for brands, campaigns, and leaders who need their stories to travel well beyond the room.",
+    "primaryCta": { "label": "Explore work", "href": "#portfolio", "variant": "primary" },
+    "secondaryCta": { "label": "Let's talk", "href": "#contact", "variant": "secondary" },
+    "stats": [
+      { "value": "500+", "label": "Projects" },
+      { "value": "100+", "label": "Clients" },
+      { "value": "15", "label": "Awards" }
+    ]
+  },
+  "portfolio": [
+    {
+      "id": "brand-campaign",
+      "title": "Brand Campaign 2024",
+      "category": "Commercial",
+      "summary": "Product storylines with cinematic polish.",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/brand-campaign.jpg",
+        "alt": "Brand campaign photography"
+      },
+      "layout": { "colSpan": 8, "rowSpan": 2 }
+    },
+    {
+      "id": "portrait-series",
+      "title": "Portrait Series",
+      "category": "Editorial",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/portrait-series.jpg",
+        "alt": "Editorial portrait"
+      },
+      "layout": { "colSpan": 4, "rowSpan": 1 }
+    },
+    {
+      "id": "product-launch",
+      "title": "Product Launch",
+      "category": "Commercial",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/product-launch.jpg",
+        "alt": "Product launch"
+      },
+      "layout": { "colSpan": 4, "rowSpan": 1 }
+    },
+    {
+      "id": "lifestyle-campaign",
+      "title": "Lifestyle Campaign",
+      "category": "Editorial",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/lifestyle-campaign.jpg",
+        "alt": "Lifestyle campaign"
+      },
+      "layout": { "colSpan": 5, "rowSpan": 1 }
+    },
+    {
+      "id": "fashion-editorial",
+      "title": "Fashion Editorial",
+      "category": "Fashion",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/fashion-editorial.jpg",
+        "alt": "Fashion editorial"
+      },
+      "layout": { "colSpan": 7, "rowSpan": 2 }
+    },
+    {
+      "id": "corporate-portraits",
+      "title": "Corporate Portraits",
+      "category": "Corporate",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/corporate-portraits.jpg",
+        "alt": "Corporate portrait"
+      },
+      "layout": { "colSpan": 5, "rowSpan": 1 }
+    },
+    {
+      "id": "creative-campaign",
+      "title": "Creative Campaign",
+      "category": "Commercial",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/creative-campaign.jpg",
+        "alt": "Creative campaign"
+      },
+      "layout": { "colSpan": 6, "rowSpan": 1 }
+    },
+    {
+      "id": "environmental",
+      "title": "Environmental",
+      "category": "Editorial",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/environmental.jpg",
+        "alt": "Environmental portrait"
+      },
+      "layout": { "colSpan": 6, "rowSpan": 2 }
+    },
+    {
+      "id": "studio-session",
+      "title": "Studio Session",
+      "category": "Fashion",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/studio-session.jpg",
+        "alt": "Studio session"
+      },
+      "layout": { "colSpan": 4, "rowSpan": 1 }
+    },
+    {
+      "id": "executive-portraits",
+      "title": "Executive Portraits",
+      "category": "Corporate",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/executive-portraits.jpg",
+        "alt": "Executive portrait"
+      },
+      "layout": { "colSpan": 4, "rowSpan": 1 }
+    },
+    {
+      "id": "beauty-campaign",
+      "title": "Beauty Campaign",
+      "category": "Fashion",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/beauty-campaign.jpg",
+        "alt": "Beauty campaign"
+      },
+      "layout": { "colSpan": 4, "rowSpan": 1 }
+    },
+    {
+      "id": "tech-startup",
+      "title": "Tech Startup",
+      "category": "Corporate",
+      "image": {
+        "src": "https://res.cloudinary.com/demo/image/upload/q_auto,f_auto/v1731340000/tech-startup.jpg",
+        "alt": "Tech startup team"
+      },
+      "layout": { "colSpan": 12, "rowSpan": 1 }
+    }
+  ],
+  "services": [
+    {
+      "id": "brand-product",
+      "numeral": "I",
+      "title": "Brand & Product",
+      "description": "High-impact visual campaigns that sell.",
+      "price": "$3,500",
+      "periodLabel": "Retainers from",
+      "features": [
+        "Full-day or half-day shoots",
+        "Studio & on-location",
+        "Professional retouching",
+        "Full commercial usage rights",
+        "Art direction included"
+      ],
+      "surface": "linear-gradient(135deg, rgba(87,126,243,0.08), rgba(255,193,149,0.08))",
+      "border": "rgba(87,126,243,0.18)",
+      "buttonLabel": "Reserve time"
+    },
+    {
+      "id": "editorial-portraits",
+      "numeral": "II",
+      "title": "Editorial & Portraits",
+      "description": "Authentic stories, compelling moments.",
+      "price": "$2,200",
+      "periodLabel": "Collections from",
+      "features": [
+        "2-4 hour creative sessions",
+        "Mood board development",
+        "Creative direction",
+        "High-res deliverables",
+        "Social media assets"
+      ],
+      "surface": "linear-gradient(135deg, rgba(240,165,176,0.12), rgba(241,206,164,0.12))",
+      "border": "rgba(241,165,176,0.25)",
+      "buttonLabel": "Reserve time"
+    },
+    {
+      "id": "events-coverage",
+      "numeral": "III",
+      "title": "Events & Coverage",
+      "description": "Capture every moment that matters.",
+      "price": "$1,800",
+      "periodLabel": "Capsules from",
+      "features": [
+        "Full event coverage",
+        "2 photographers available",
+        "Same-day highlights",
+        "Curated online gallery",
+        "Fast turnaround"
+      ],
+      "surface": "linear-gradient(135deg, rgba(210,218,210,0.2), rgba(255,255,255,0.6))",
+      "border": "rgba(15,23,42,0.1)",
+      "buttonLabel": "Reserve time"
+    }
+  ],
+  "cta": {
+    "eyebrow": "Private Commissions",
+    "headline": "Let’s build the stills system your leadership team can’t live without.",
+    "description": "High-frequency retainers, art-directed launches, and on-call portraiture for executives, founders, and senior partners across North America.",
+    "primaryCta": { "label": "Schedule a call", "href": "/contact", "variant": "primary" },
+    "secondaryCta": { "label": "Request deck", "href": "/deck", "variant": "secondary" }
+  },
+  "seo": {
+    "title": "CHANGE Media Photography",
+    "description": "Luxury photography studio for founders, policy leaders, and premium brands.",
+    "ogImage": "https://res.cloudinary.com/demo/image/upload/c_fill,q_auto,f_auto,w_1200,h_630/v1731340000/photography-og.jpg"
+  },
+  "media": {
+    "delivery": "external",
+    "cloudinary": {
+      "cloudName": "demo",
+      "deliveryType": "image",
+      "folder": "changemedia/photography"
+    }
+  }
+}

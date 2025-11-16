@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "cdn.coverr.co" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
 };
