@@ -187,18 +187,18 @@ export default function PortraitExperiencePortal({ content }: Props) {
         </div>
         <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-32 text-center">
           <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mx-auto inline-flex items-center gap-3 rounded-full border border-neutral-200/60 bg-white/80 px-5 py-2 text-xs uppercase tracking-[0.4em] text-neutral-500">
-            Senior portraits • Graduation sessions
+            Portrait atelier • Denver
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.05]" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Artful senior portraits that honor your story, not just your diploma.
+            Thoughtful portraits for people who value craft over convention.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mx-auto max-w-3xl text-lg text-neutral-600">
-            Elevated portrait sessions for high school seniors and college graduates. Thoughtfully crafted imagery for announcements, yearbooks, and family keepsakes—curated with the same care I bring to editorial work.
+            Contemporary portrait sessions rooted in editorial technique and intentional direction. For milestones, personal branding, or simply creating heirloom imagery that reflects who you are right now.
           </motion.p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-600">
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Private 1-on-1 sessions</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Locations around Denver</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Full digital gallery included</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Intimate 1-on-1 sessions</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Curated locations & lighting</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Full digital gallery</div>
           </div>
         </div>
       </section>
@@ -206,11 +206,11 @@ export default function PortraitExperiencePortal({ content }: Props) {
       <section className="relative px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <p className={labelClass}>Recent sessions</p>
+            <p className={labelClass}>Recent work</p>
             <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-              Portfolio highlights from this year
+              A selection from the archive
             </h2>
-            <p className="mt-3 text-base text-neutral-600">Each senior session is treated like editorial portraiture—intentional lighting, natural posing, and authentic moments.</p>
+            <p className="mt-3 text-base text-neutral-600">Each session is approached like an editorial commission—considered composition, intentional light, and imagery that feels both timeless and unmistakably you.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {content.portfolio.slice(0, 6).map((item) => (
@@ -233,14 +233,14 @@ export default function PortraitExperiencePortal({ content }: Props) {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className={labelClass}>Session options</p>
+              <p className={labelClass}>Session types</p>
               <h2 className="mt-3 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                Senior portrait packages
+                How we work together
               </h2>
-              <p className="mt-3 text-neutral-600">Choose the session length that fits your vision—from classic yearbook headshots to full lifestyle sessions with outfit changes.</p>
+              <p className="mt-3 text-neutral-600">From focused headshot sessions to full creative collaborations with wardrobe, styling, and multiple locations—choose what feels right for your needs.</p>
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-white/70 px-5 py-4 text-sm text-neutral-600">
-              Tip: Most seniors book the 2-hour session for variety—multiple locations and wardrobe options included.
+              Most clients choose the mid-tier option for variety and flexibility.
             </div>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -283,12 +283,12 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="rounded-[40px] border border-neutral-200 bg-white/90 p-8 shadow-[0_30px_100px_rgba(15,23,42,0.1)]">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className={labelClass}>Session booking</p>
+                <p className={labelClass}>Begin here</p>
                 <h2 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                  Tell me about your vision
+                  Share your vision
                 </h2>
               </div>
-              <div className="text-xs text-neutral-500">Takes about 3 minutes</div>
+              <div className="text-xs text-neutral-500">3 minutes</div>
             </div>
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-sm">
               <div className="grid gap-4 md:grid-cols-2">
@@ -296,7 +296,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 <input className={inputClass} placeholder="Email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
               <div className="grid gap-4 md:grid-cols-2">
-                <input className={inputClass} placeholder="School or university (optional)" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
+                <input className={inputClass} placeholder="Instagram handle (optional)" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
                 <input className={inputClass} placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               </div>
               <div className="grid gap-4 md:grid-cols-3">
@@ -369,19 +369,19 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 </div>
                 <textarea
                   className={`${inputClass} mt-4 min-h-[120px]`}
-                  placeholder="Any ideas about outfits, props, or specific shots you want? (Cap and gown, sports uniform, casual looks, etc.)"
+                  placeholder="Tell me about your vision—outfits, specific locations, props, or the vibe you're going for."
                   value={styleQuiz.inspirationNotes}
                   onChange={(e) => setStyleQuiz((prev) => ({ ...prev, inspirationNotes: e.target.value }))}
                 />
               </div>
 
-              <textarea className={`${inputClass} min-h-[120px]`} placeholder="What will you use these photos for? (Announcements, yearbook, social media, gifts for family, etc.)" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
+              <textarea className={`${inputClass} min-h-[120px]`} placeholder="What's the occasion or purpose? (Personal branding, milestone celebration, artist portfolio, dating apps, family gift, just because...)" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
 
               <div className="rounded-3xl border border-dashed border-neutral-300 bg-white/70 p-5 text-sm">
-                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Inspiration photos (optional)</p>
-                <p className="mt-2 text-neutral-600">Have Pinterest boards or sample photos you love? Upload them here so I can get a sense of your style. JPG, PNG, or PDF.</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Visual references (optional)</p>
+                <p className="mt-2 text-neutral-600">Pinterest boards, magazine tears, photos you admire—anything that helps me understand your aesthetic. JPG, PNG, or PDF.</p>
                 <label className="mt-4 inline-flex cursor-pointer items-center gap-3 rounded-full border border-neutral-900/10 px-5 py-3 text-xs uppercase tracking-[0.3em] text-neutral-900 hover:bg-neutral-900 hover:text-white">
-                  Attach inspiration
+                  Upload references
                   <input type="file" accept="image/*,.pdf" multiple className="hidden" onChange={handleFileChange} />
                 </label>
                 {files.length > 0 && (
@@ -411,7 +411,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
             <div className="rounded-[32px] border border-neutral-200 bg-white/85 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
               <p className={labelClass}>Your session</p>
               <h3 className="mt-3 text-2xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                {selectedPackage?.title ?? "Senior portrait session"}
+                {selectedPackage?.title ?? "Portrait session"}
               </h3>
               <p className="mt-2 text-sm text-neutral-600">{selectedPackage?.description}</p>
               <ul className="mt-4 space-y-2 text-sm text-neutral-600">
@@ -423,12 +423,12 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 ))}
               </ul>
               <div className="mt-6 rounded-2xl border border-neutral-200 bg-white/70 p-4 text-sm">
-                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Booking status</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Request status</div>
                 <div className="text-lg font-semibold text-neutral-900">
                   {submission?.status ? submission.status.replace("-", " ") : "Not yet submitted"}
                 </div>
                 {submission?.trackingCode && (
-                  <p className="text-xs text-neutral-500">Confirmation code • {submission.trackingCode}</p>
+                  <p className="text-xs text-neutral-500">Reference • {submission.trackingCode}</p>
                 )}
               </div>
             </div>
@@ -443,7 +443,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
             </div>
 
             <div className="rounded-[32px] border border-neutral-200 bg-white/90 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-              <p className={labelClass}>Session updates</p>
+              <p className={labelClass}>Updates</p>
               {submission?.updates?.length ? (
                 <ul className="mt-4 space-y-4 text-sm text-neutral-700">
                   {submission.updates.map((update) => (
@@ -467,7 +467,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-4 text-sm text-neutral-500">I'll send you updates here once your booking is confirmed—including session details and sneak peeks!</p>
+                <p className="mt-4 text-sm text-neutral-500">Session details, scheduling, and sneak peeks will appear here once I've reviewed your request.</p>
               )}
             </div>
           </div>
@@ -476,17 +476,17 @@ export default function PortraitExperiencePortal({ content }: Props) {
 
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-5xl rounded-[48px] border border-neutral-200 bg-white/90 p-12 text-center shadow-[0_40px_120px_rgba(15,23,42,0.1)]">
-          <p className={labelClass}>Questions?</p>
+          <p className={labelClass}>Still deciding?</p>
           <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Let's chat about your session ideas.
+            Let's talk through your ideas.
           </h2>
-          <p className="mt-4 text-neutral-600">Email me directly or check out my other work at Change Studios Media.</p>
+          <p className="mt-4 text-neutral-600">Send me a note, or check out my other creative work at Change Studios Media.</p>
           <div className="mt-6 flex flex-col gap-3 md:flex-row md:justify-center">
             <a href="mailto:portraits@changemedia.studio" className="rounded-full border border-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-neutral-900">
-              Email me
+              Get in touch
             </a>
             <a href="/change-studios" className="rounded-full bg-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-white">
-              See my other work
+              View other work
             </a>
           </div>
         </div>
