@@ -186,6 +186,12 @@ export interface FeedbackNote {
 2. Clients view ready/needs-review assets, see due dates and checklists, and read AI notes.
 3. Feedback form posts to `/api/projects/:id/feedback` with the same key, instantly updating the project's JSON record.
 
+### Portrait Experience Intake (new)
+- Luxury portrait reservations now live at `/photography/portrait`, pulling pricing + portfolio data from `content/photography.json`.
+- Clients complete a combined booking form + style quiz, upload inspiration files (stored under `public/uploads/portrait`), and receive an auto-generated tracking code.
+- Submissions persist in `content/portrait-experience.json` via `POST /api/photography/portrait-experience` (no auth required).
+- Photographers/Admins can call `PATCH /api/photography/portrait-experience` with a bearer token to update status or push timeline notes/attachments; updates stream back to clients in real time when they refresh with their tracking code.
+
 ## AI Automation
 - `generateAiInsights()` calls OpenAI (when `OPENAI_API_KEY` exists) for summaries + next steps; otherwise it falls back to deterministic messaging.
 - `/api/ai/insights` secures the workflow and writes results back to the CMS dashboard.

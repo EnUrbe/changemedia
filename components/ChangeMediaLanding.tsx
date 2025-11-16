@@ -116,6 +116,9 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               <Link href="/photography" className="hover:text-neutral-900">
                 Photography
               </Link>
+              <Link href="/photography/portrait" className="hover:text-neutral-900">
+                Portraits
+              </Link>
             </div>
             <Link
               href="#contact"

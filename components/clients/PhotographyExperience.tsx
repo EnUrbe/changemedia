@@ -160,13 +160,15 @@ function FloatingNav() {
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-neutral-900 transition-all group-hover:w-full" />
           </Link>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-2.5 rounded-full bg-neutral-900 text-white text-sm font-semibold shadow-[0_12px_30px_rgba(15,23,42,0.15)]"
-        >
-          Book shoot
-        </motion.button>
+        <Link href="/photography/portrait">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-2.5 rounded-full bg-neutral-900 text-white text-sm font-semibold shadow-[0_12px_30px_rgba(15,23,42,0.15)]"
+          >
+            Book portrait
+          </motion.button>
+        </Link>
       </div>
     </motion.nav>
   );
@@ -505,18 +507,18 @@ export function PhotographyExperience({ content }: PhotographyExperienceProps) {
               <h4 className="text-sm font-medium uppercase tracking-wider mb-4">Services</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="#" className="hover:text-neutral-900 transition">
+                  <Link href="/photography" className="hover:text-neutral-900 transition">
                     Brand Photography
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-neutral-900 transition">
+                  <Link href="/photography" className="hover:text-neutral-900 transition">
                     Editorial
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:text-neutral-900 transition">
-                    Events
+                  <Link href="/photography/portrait" className="hover:text-neutral-900 transition">
+                    Portrait Experience
                   </Link>
                 </li>
               </ul>
