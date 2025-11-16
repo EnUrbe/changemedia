@@ -187,18 +187,18 @@ export default function PortraitExperiencePortal({ content }: Props) {
         </div>
         <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-32 text-center">
           <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mx-auto inline-flex items-center gap-3 rounded-full border border-neutral-200/60 bg-white/80 px-5 py-2 text-xs uppercase tracking-[0.4em] text-neutral-500">
-            Portrait atelier • Bespoke sittings
+            Executive portraits • Founder imaging
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.05]" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Portrait reservations designed for founders, creators, and cultivated teams.
+            Premium portraiture engineered for C-suite decision-makers and investor-facing founders.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mx-auto max-w-3xl text-lg text-neutral-600">
-            Preview recent commissions, select the capsule that fits, answer a couture-style questionnaire, and send us the references you adore.
+            White-glove portrait commissions for executives who understand the ROI of expert brand imaging. Full creative direction, wardrobe consultation, and retouching included.
           </motion.p>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-neutral-600">
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">48h concierge reply</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">On-set creative director</div>
-            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Global travel ready</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Same-week scheduling for urgent press</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Full usage rights & unlimited downloads</div>
+            <div className="rounded-full border border-neutral-200/80 bg-white/70 px-5 py-2">Retainer packages for Series A+</div>
           </div>
         </div>
       </section>
@@ -206,11 +206,11 @@ export default function PortraitExperiencePortal({ content }: Props) {
       <section className="relative px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <p className={labelClass}>Portfolio notes</p>
+            <p className={labelClass}>Investment tiers</p>
             <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-              Selected portrait capsules
+              Recent work with venture-backed founders
             </h2>
-            <p className="mt-3 text-base text-neutral-600">Swim through the recent portrait work across founder stories, editorial press, and live premieres.</p>
+            <p className="mt-3 text-base text-neutral-600">Headshots, team portraits, and brand campaigns for companies pre-IPO through Series C.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {content.portfolio.slice(0, 6).map((item) => (
@@ -233,14 +233,14 @@ export default function PortraitExperiencePortal({ content }: Props) {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className={labelClass}>Packages</p>
+              <p className={labelClass}>Investment structure</p>
               <h2 className="mt-3 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                Portrait retainers & day rates
+                Executive portrait retainers
               </h2>
-              <p className="mt-3 text-neutral-600">Choose the capsule that matches your momentum—retainer, editorial sitting, or event coverage.</p>
+              <p className="mt-3 text-neutral-600">Select the tier aligned with your growth stage—from single-day executive sessions to annual retainers for distributed teams.</p>
             </div>
             <div className="rounded-2xl border border-neutral-200 bg-white/70 px-5 py-4 text-sm text-neutral-600">
-              Concierge tip: Upload your inspiration for whichever package you select.
+              Pro tip: Series A+ companies often choose retainer packages for quarterly headshot refreshes and investor decks.
             </div>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
@@ -283,12 +283,12 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="rounded-[40px] border border-neutral-200 bg-white/90 p-8 shadow-[0_30px_100px_rgba(15,23,42,0.1)]">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className={labelClass}>Reserve & brief</p>
+                <p className={labelClass}>Executive intake</p>
                 <h2 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                  Booking form + style quiz
+                  Booking request + creative brief
                 </h2>
               </div>
-              <div className="text-xs text-neutral-500">Average completion: 4 minutes</div>
+              <div className="text-xs text-neutral-500">Avg. completion: 3 min</div>
             </div>
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-sm">
               <div className="grid gap-4 md:grid-cols-2">
@@ -321,7 +321,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
               </div>
 
               <div className="rounded-3xl border border-neutral-200 bg-white/70 p-5">
-                <p className={labelClass}>Style questionnaire</p>
+                <p className={labelClass}>Brand imaging preferences</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2">
                   {vibeOptions.map((option) => (
                     <button
@@ -375,13 +375,13 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 />
               </div>
 
-              <textarea className={`${inputClass} min-h-[120px]`} placeholder="Comments, creative requirements, or deliverables" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
+              <textarea className={`${inputClass} min-h-[120px]`} placeholder="Use case (investor deck, press kit, LinkedIn, website team page, etc.)" value={form.comments} onChange={(e) => setForm({ ...form, comments: e.target.value })} />
 
               <div className="rounded-3xl border border-dashed border-neutral-300 bg-white/70 p-5 text-sm">
-                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Upload references</p>
-                <p className="mt-2 text-neutral-600">Attach up to six looks you love. We accept JPG, PNG, or PDF moodboards.</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">Reference imagery (optional)</p>
+                <p className="mt-2 text-neutral-600">Upload examples of portrait styles you admire—competitor headshots, magazine covers, or moodboards. JPG, PNG, or PDF.</p>
                 <label className="mt-4 inline-flex cursor-pointer items-center gap-3 rounded-full border border-neutral-900/10 px-5 py-3 text-xs uppercase tracking-[0.3em] text-neutral-900 hover:bg-neutral-900 hover:text-white">
-                  Add files
+                  Attach references
                   <input type="file" accept="image/*,.pdf" multiple className="hidden" onChange={handleFileChange} />
                 </label>
                 {files.length > 0 && (
@@ -409,9 +409,9 @@ export default function PortraitExperiencePortal({ content }: Props) {
 
           <div className="flex flex-col gap-6">
             <div className="rounded-[32px] border border-neutral-200 bg-white/85 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-              <p className={labelClass}>Your capsule</p>
+              <p className={labelClass}>Selected tier</p>
               <h3 className="mt-3 text-2xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-                {selectedPackage?.title ?? "Signature portrait"}
+                {selectedPackage?.title ?? "Executive portrait"}
               </h3>
               <p className="mt-2 text-sm text-neutral-600">{selectedPackage?.description}</p>
               <ul className="mt-4 space-y-2 text-sm text-neutral-600">
@@ -423,12 +423,12 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 ))}
               </ul>
               <div className="mt-6 rounded-2xl border border-neutral-200 bg-white/70 p-4 text-sm">
-                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Status</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-neutral-500">Request status</div>
                 <div className="text-lg font-semibold text-neutral-900">
-                  {submission?.status ? submission.status.replace("-", " ") : "Awaiting intake"}
+                  {submission?.status ? submission.status.replace("-", " ") : "Not yet submitted"}
                 </div>
                 {submission?.trackingCode && (
-                  <p className="text-xs text-neutral-500">Tracking code • {submission.trackingCode}</p>
+                  <p className="text-xs text-neutral-500">Reference • {submission.trackingCode}</p>
                 )}
               </div>
             </div>
@@ -443,7 +443,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
             </div>
 
             <div className="rounded-[32px] border border-neutral-200 bg-white/90 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-              <p className={labelClass}>Producer updates</p>
+              <p className={labelClass}>Timeline updates</p>
               {submission?.updates?.length ? (
                 <ul className="mt-4 space-y-4 text-sm text-neutral-700">
                   {submission.updates.map((update) => (
@@ -467,7 +467,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-4 text-sm text-neutral-500">Updates land here once a producer reviews your submission.</p>
+                <p className="mt-4 text-sm text-neutral-500">Your account manager will send scheduling and deliverable updates here.</p>
               )}
             </div>
           </div>
@@ -476,16 +476,16 @@ export default function PortraitExperiencePortal({ content }: Props) {
 
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-5xl rounded-[48px] border border-neutral-200 bg-white/90 p-12 text-center shadow-[0_40px_120px_rgba(15,23,42,0.1)]">
-          <p className={labelClass}>Still exploring?</p>
+          <p className={labelClass}>Need a custom proposal?</p>
           <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Email concierge@change.studio or book a discovery call.
+            Schedule a discovery call or request a detailed scope of work.
           </h2>
           <div className="mt-6 flex flex-col gap-3 md:flex-row md:justify-center">
-            <a href="mailto:concierge@changemedia.studio" className="rounded-full border border-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-neutral-900">
-              Email concierge
+            <a href="mailto:partnerships@changemedia.studio" className="rounded-full border border-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-neutral-900">
+              Email partnerships
             </a>
             <a href="https://cal.com" target="_blank" rel="noreferrer" className="rounded-full bg-neutral-900 px-6 py-4 text-sm font-semibold uppercase tracking-[0.35em] text-white">
-              Schedule call
+              Schedule consult
             </a>
           </div>
         </div>
