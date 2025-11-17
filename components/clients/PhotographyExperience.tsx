@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import type { PhotographyContent, PortfolioItem } from "@/lib/photographySchema";
 import { buildCloudinaryUrl } from "@/lib/cloudinaryDelivery";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 export type PhotographyExperienceProps = {
   content: PhotographyContent;
 };
@@ -103,7 +105,7 @@ function PortfolioCard({ item, index, spanClass, imageSrc, onCursorChange }: Por
           <span className="text-sm text-white/70 uppercase tracking-[0.4em] mb-2 block">
             {item.category}
           </span>
-          <h3 className="text-3xl font-semibold mb-3" style={{ fontFamily: "var(--font-family-serif)" }}>
+          <h3 className="text-3xl font-semibold mb-3" style={{ fontFamily: serifFont }}>
             {item.title}
           </h3>
           {(item.summary ?? item.image.alt) && (
@@ -350,7 +352,7 @@ export function PhotographyExperience({ content }: PhotographyExperienceProps) {
             transition={{ duration: 0.8 }}
             className="mb-20 text-center"
           >
-            <h2 className="text-5xl md:text-7xl font-semibold tracking-tight mb-4 text-neutral-900" style={{ fontFamily: "var(--font-family-serif)" }}>
+            <h2 className="text-5xl md:text-7xl font-semibold tracking-tight mb-4 text-neutral-900" style={{ fontFamily: serifFont }}>
               Selected works & trusted partners
             </h2>
             <p className="text-neutral-600 text-xl font-light max-w-3xl mx-auto">
@@ -381,7 +383,7 @@ export function PhotographyExperience({ content }: PhotographyExperienceProps) {
         <div className="max-w-7xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-24 max-w-4xl">
             <p className="text-xs uppercase tracking-[0.4em] text-neutral-500">Offerings</p>
-            <h2 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6" style={{ fontFamily: "var(--font-family-serif)" }}>
+            <h2 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6" style={{ fontFamily: serifFont }}>
               Tailored commissions for discerning teams
             </h2>
             <p className="text-xl text-neutral-600 font-light leading-relaxed">
@@ -397,7 +399,7 @@ export function PhotographyExperience({ content }: PhotographyExperienceProps) {
                   style={{ borderColor: service.border, backgroundImage: service.surface }}
                 >
                   <div className="mb-8">
-                    <div className="text-7xl font-semibold text-neutral-300 group-hover:text-neutral-500 transition-colors mb-6" style={{ fontFamily: "var(--font-family-serif)" }}>
+                    <div className="text-7xl font-semibold text-neutral-300 group-hover:text-neutral-500 transition-colors mb-6" style={{ fontFamily: serifFont }}>
                       {service.numeral}
                     </div>
                     <h3 className="text-3xl font-semibold mb-4">{service.title}</h3>
@@ -457,7 +459,7 @@ export function PhotographyExperience({ content }: PhotographyExperienceProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-5xl md:text-7xl font-semibold tracking-tight mb-8 leading-tight"
-                style={{ fontFamily: "var(--font-family-serif)" }}
+                style={{ fontFamily: serifFont }}
               >
                 {cta.headline}
               </motion.h2>

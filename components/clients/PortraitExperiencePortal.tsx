@@ -5,6 +5,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { PhotographyContent } from "@/lib/photographySchema";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 interface PortraitUpdate {
   id: string;
   title: string;
@@ -189,7 +191,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mx-auto inline-flex items-center gap-3 rounded-full border border-neutral-200/60 bg-white/80 px-5 py-2 text-xs uppercase tracking-[0.4em] text-neutral-500">
             Portrait atelier • Denver
           </motion.span>
-          <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.05]" style={{ fontFamily: "var(--font-family-serif)" }}>
+          <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.05]" style={{ fontFamily: serifFont }}>
             Thoughtful portraits for people who value craft over convention.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mx-auto max-w-3xl text-lg text-neutral-600">
@@ -207,7 +209,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
             <p className={labelClass}>Recent work</p>
-            <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
+            <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: serifFont }}>
               A selection from the archive
             </h2>
             <p className="mt-3 text-base text-neutral-600">Each session is approached like an editorial commission—considered composition, intentional light, and imagery that feels both timeless and unmistakably you.</p>
@@ -220,7 +222,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                 </div>
                 <div className="space-y-2 px-6 py-5">
                   <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">{item.category}</p>
-                  <h3 className="text-2xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>{item.title}</h3>
+                  <h3 className="text-2xl font-semibold" style={{ fontFamily: serifFont }}>{item.title}</h3>
                   <p className="text-sm text-neutral-600">{item.summary ?? item.image.alt}</p>
                 </div>
               </motion.div>
@@ -234,7 +236,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className={labelClass}>Session types</p>
-              <h2 className="mt-3 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
+              <h2 className="mt-3 text-4xl font-semibold" style={{ fontFamily: serifFont }}>
                 How we work together
               </h2>
               <p className="mt-3 text-neutral-600">From focused headshot sessions to full creative collaborations with wardrobe, styling, and multiple locations—choose what feels right for your needs.</p>
@@ -246,7 +248,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="grid gap-8 md:grid-cols-3">
             {content.services.map((service) => (
               <div key={service.id} className={`relative rounded-[36px] border border-neutral-200 bg-gradient-to-br from-white via-white to-white/40 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)] ${form.packageId === service.id ? "ring-2 ring-neutral-900" : ""}`}>
-                <div className="text-6xl font-semibold text-neutral-200" style={{ fontFamily: "var(--font-family-serif)" }}>
+                <div className="text-6xl font-semibold text-neutral-200" style={{ fontFamily: serifFont }}>
                   {service.numeral}
                 </div>
                 <h3 className="mt-4 text-2xl font-semibold">{service.title}</h3>
@@ -284,7 +286,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className={labelClass}>Begin here</p>
-                <h2 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
+                <h2 className="text-3xl font-semibold" style={{ fontFamily: serifFont }}>
                   Share your vision
                 </h2>
               </div>
@@ -410,7 +412,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
           <div className="flex flex-col gap-6">
             <div className="rounded-[32px] border border-neutral-200 bg-white/85 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
               <p className={labelClass}>Your session</p>
-              <h3 className="mt-3 text-2xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
+              <h3 className="mt-3 text-2xl font-semibold" style={{ fontFamily: serifFont }}>
                 {selectedPackage?.title ?? "Portrait session"}
               </h3>
               <p className="mt-2 text-sm text-neutral-600">{selectedPackage?.description}</p>
@@ -467,7 +469,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-4 text-sm text-neutral-500">Session details, scheduling, and sneak peeks will appear here once I've reviewed your request.</p>
+                <p className="mt-4 text-sm text-neutral-500">Session details, scheduling, and sneak peeks will appear here once I&apos;ve reviewed your request.</p>
               )}
             </div>
           </div>
@@ -477,8 +479,8 @@ export default function PortraitExperiencePortal({ content }: Props) {
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-5xl rounded-[48px] border border-neutral-200 bg-white/90 p-12 text-center shadow-[0_40px_120px_rgba(15,23,42,0.1)]">
           <p className={labelClass}>Still deciding?</p>
-          <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
-            Let's talk through your ideas.
+          <h2 className="mt-4 text-4xl font-semibold" style={{ fontFamily: serifFont }}>
+            Let&apos;s talk through your ideas.
           </h2>
           <p className="mt-4 text-neutral-600">Send me a note, or check out my other creative work at Change Studios Media.</p>
           <div className="mt-6 flex flex-col gap-3 md:flex-row md:justify-center">

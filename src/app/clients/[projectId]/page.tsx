@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import ProjectWorkspace from "@/components/clients/ProjectWorkspace";
 import { getProjectById, sanitizeProject } from "@/lib/projectsStore";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 interface ClientPageProps {
   params: { projectId: string };
   searchParams?: { key?: string };
@@ -21,7 +23,7 @@ export default async function ClientProjectPage({ params, searchParams }: Client
         </div>
         <div className="relative z-10 w-full max-w-md rounded-[32px] border border-neutral-200 bg-white/90 p-8 text-center shadow-[0_30px_80px_rgba(15,23,42,0.08)]">
           <p className="text-xs uppercase tracking-[0.35em] text-neutral-500">Secure workspace</p>
-          <h1 className="mt-4 text-3xl font-semibold" style={{ fontFamily: "var(--font-family-serif)" }}>
+          <h1 className="mt-4 text-3xl font-semibold" style={{ fontFamily: serifFont }}>
             Access code required
           </h1>
           <p className="mt-3 text-sm text-neutral-600">

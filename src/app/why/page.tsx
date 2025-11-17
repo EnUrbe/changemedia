@@ -4,6 +4,8 @@ import Link from "next/link";
 import Counter from "@/components/ui/Counter";
 import SectionNav from "@/components/ui/SectionNav";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 export const metadata: Metadata = {
   title: "Why CHANGE Studios — Evidence with a heartbeat",
   description:
@@ -28,7 +30,7 @@ export default function WhyPage() {
             <span className="rounded-full border border-neutral-200 px-3 py-1">Evidence‑driven</span>
             <span className="rounded-full border border-neutral-200 px-3 py-1">Community‑authored</span>
           </div>
-          <h1 className="mt-6 text-4xl font-semibold leading-tight text-neutral-900 md:text-6xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+          <h1 className="mt-6 text-4xl font-semibold leading-tight text-neutral-900 md:text-6xl" style={{ fontFamily: serifFont }}>
             <span className="bg-gradient-to-br from-[#5ba5ff] via-[#8f60ff] to-[#ff909b] bg-clip-text text-transparent">Evidence with a heartbeat</span>
           </h1>
           <p className="mt-5 max-w-3xl text-lg text-neutral-600">Because stories don’t just describe the world—they draft it.</p>

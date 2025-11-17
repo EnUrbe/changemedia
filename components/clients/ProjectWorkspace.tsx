@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import type { ClientFacingProject } from "@/lib/projectsStore";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 interface FeedbackFormState {
   author: string;
   role: string;
@@ -78,7 +80,7 @@ export default function ProjectWorkspace({ project, accessKey }: Props) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className={labelClass}>{project.clientName}</p>
-              <h1 className="mt-3 text-4xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-family-serif)" }}>
+              <h1 className="mt-3 text-4xl font-semibold tracking-tight" style={{ fontFamily: serifFont }}>
                 {project.projectTitle}
               </h1>
               <p className="mt-3 text-base text-neutral-500">{project.summary}</p>

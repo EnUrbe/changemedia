@@ -8,6 +8,8 @@ import Script from "next/script";
 import SectionNav from "@/components/ui/SectionNav";
 import type { SiteContent } from "@/lib/contentSchema";
 
+const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
 const fadeUp = {
   initial: { opacity: 0, y: 32 },
   whileInView: { opacity: 1, y: 0 },
@@ -138,7 +140,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                   <span className="rounded-full border border-neutral-200 px-3 py-1 text-neutral-600">{hero.locationPill}</span>
                 </div>
                 <div className="mt-8 space-y-5">
-                  <h1 className="text-4xl leading-tight text-neutral-900 md:text-6xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                  <h1 className="text-4xl leading-tight text-neutral-900 md:text-6xl" style={{ fontFamily: serifFont }}>
                     <span className="bg-gradient-to-r from-[#5ba5ff] via-[#8f60ff] to-[#ff909b] bg-clip-text text-transparent">
                       {hero.titleGradient}
                     </span>
@@ -197,7 +199,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Work</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
                     Field-built stories, new muscle.
                   </h2>
                 </div>
@@ -246,7 +248,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
             <section id="studio" className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
               <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/90 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
                 <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Studio</p>
-                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
                   {studio.ethos}
                 </h2>
                 <ul className="mt-8 space-y-4 text-sm text-neutral-600">
@@ -276,7 +278,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Services</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
                     Modular packages, documentary rigor.
                   </h2>
                 </div>
@@ -348,7 +350,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">FAQ</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
                     Logistics, timelines, and care.
                   </h2>
                 </div>
@@ -366,7 +368,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
             <section id="contact" className="grid gap-8 md:grid-cols-[1fr_0.9fr]">
               <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/90 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
                 <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Contact</p>
-                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: "var(--font-family-serif)" }}>
+                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
                   Share the story, we’ll build the reel.
                 </h2>
                 <form onSubmit={handleSubmit} className="mt-8 space-y-5">
