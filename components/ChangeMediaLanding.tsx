@@ -22,8 +22,7 @@ type LandingProps = {
 };
 
 export default function ChangeMediaLanding({ content }: LandingProps) {
-    const [annual, setAnnual] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const formTsRef = useRef<number>(Date.now());
@@ -32,18 +31,21 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
     const heroSecondaryLine = hero.title.replace(hero.titleGradient, "").trim() || hero.title;
     const featured = content.featuredCases;
     const gallery = content.galleryCases;
-    const studio = content.studio;
-    const features = content.features;
-    const services = content.services;
-    const testimonials = content.testimonials;
-    const faqs = content.faqs;
-    const contact = content.contact;
-    const logoCloud = content.logoCloud;
+  const studio = content.studio;
+  const features = content.features;
+  const testimonials = content.testimonials;
+  const faqs = content.faqs;
+  const contact = content.contact;
+  const logoCloud = content.logoCloud;
+  const practices = content.practices;
+  const systems = content.systems;
+  const serviceStacks = content.serviceStacks;
 
     const sections = [
       { id: "hero", label: "Overview" },
+      { id: "practices", label: "Practices" },
       { id: "work", label: "Work" },
-      { id: "studio", label: "Studio" },
+      { id: "systems", label: "Systems" },
       { id: "services", label: "Services" },
       { id: "contact", label: "Contact" },
     ];
@@ -89,12 +91,6 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
         setSubmitting(false);
       }
     }
-
-    const servicePrice = (svc: (typeof services)[number]) => {
-      if (svc.price.onetime && !svc.price.monthly && !svc.price.annual) return svc.price.onetime;
-      if (annual) return svc.price.annual ?? svc.price.monthly ?? svc.price.onetime ?? "Contact for quote";
-      return svc.price.monthly ?? svc.price.annual ?? svc.price.onetime ?? "Contact for quote";
-    };
 
     return (
       <div className="relative min-h-screen bg-[#f6f3ee] text-neutral-900">
@@ -174,12 +170,65 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                     </div>
                   ))}
                 </div>
+                <div className="mt-8 flex flex-wrap gap-2 text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">
+                  {practices.map((practice) => (
+                    <span key={practice.id} className="rounded-full border border-neutral-200 px-3 py-1">
+                      {practice.label}
+                    </span>
+                  ))}
+                </div>
               </div>
               <div className="mt-10 flex flex-wrap items-center gap-3 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
                 {content.marquee.phrases.map((phrase) => (
                   <span key={phrase} className="rounded-full border border-neutral-200 px-3 py-1">
                     {phrase}
                   </span>
+                ))}
+              </div>
+            </section>
+
+            <section id="practices" className="space-y-8">
+              <div className="flex flex-col gap-3 text-center md:text-left">
+                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">The practice</p>
+                <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+                  One studio, different doors.
+                </h2>
+                <p className="mx-auto max-w-3xl text-sm text-neutral-600 md:mx-0">
+                  Change Studios handles the campaign fieldwork. The portrait atelier crafts the stills. Field Notes documents the care systems that hold it together.
+                </p>
+              </div>
+              <div className="grid gap-6 md:grid-cols-3">
+                {practices.map((practice, index) => (
+                  <motion.article
+                    key={practice.id}
+                    {...fadeUp}
+                    transition={{ ...fadeUp.transition, delay: index * 0.05 }}
+                    className="flex h-full flex-col rounded-[32px] border border-neutral-200 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.08)]"
+                  >
+                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
+                      <span>{practice.label}</span>
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: practice.accent }} />
+                    </div>
+                    <h3 className="mt-4 text-2xl font-semibold text-neutral-900" style={{ fontFamily: serifFont }}>
+                      {practice.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-neutral-600">{practice.description}</p>
+                    <div className="mt-6 flex flex-wrap gap-2 text-xs text-neutral-500">
+                      {practice.focus.map((focus) => (
+                        <span key={focus} className="rounded-full border border-neutral-200 px-3 py-1">
+                          {focus}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-auto pt-6">
+                      <Link
+                        href={practice.cta.href}
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:underline"
+                      >
+                        {practice.cta.label} <span>→</span>
+                      </Link>
+                    </div>
+                  </motion.article>
                 ))}
               </div>
             </section>
@@ -200,8 +249,11 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Work</p>
                   <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
-                    Field-built stories, new muscle.
+                    Film + stills from the practice.
                   </h2>
+                  <p className="mt-3 max-w-2xl text-sm text-neutral-600">
+                    Documentary retainers, portrait commissions, and campaign sprints all live in one archive—here’s a mix from both doors.
+                  </p>
                 </div>
                 <Link href="/clients" className="text-sm text-neutral-600 hover:text-neutral-900">
                   View client workspaces →
@@ -245,90 +297,119 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               </div>
             </section>
 
-            <section id="studio" className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
-              <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/90 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Studio</p>
-                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
-                  {studio.ethos}
-                </h2>
-                <ul className="mt-8 space-y-4 text-sm text-neutral-600">
-                  {studio.bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-start gap-3">
-                      <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-[#5ba5ff] to-[#ffa7c4]" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-10 grid gap-4 md:grid-cols-3">
-                  {features.map((feature) => (
-                    <div key={feature.title} className="rounded-2xl border border-neutral-200 bg-neutral-50/80 p-4">
-                      <div className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{feature.title}</div>
-                      <p className="mt-2 text-sm text-neutral-600">{feature.description}</p>
+            <section id="systems" className="space-y-10">
+              <div className="rounded-[40px] border border-neutral-200 bg-gradient-to-br from-[#fef6eb] via-[#f3ecff] to-[#e9f8ff] p-8 text-neutral-900 shadow-[0_30px_90px_rgba(15,23,42,0.15)]">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{systems.eyebrow}</p>
+                    <h2 className="mt-2 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+                      {systems.title}
+                    </h2>
+                    <p className="mt-3 max-w-3xl text-sm text-neutral-700">{systems.description}</p>
+                  </div>
+                  <div className="grid gap-3 text-sm text-neutral-700 sm:grid-cols-3 lg:max-w-xl">
+                    {systems.outcomes.map((outcome) => (
+                      <div key={outcome.label} className="rounded-2xl border border-white/60 bg-white/40 p-4 text-center">
+                        <div className="text-2xl font-semibold text-neutral-900">{outcome.value}</div>
+                        <div className="text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">{outcome.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-10 grid gap-4 md:grid-cols-2">
+                  {systems.steps.map((step) => (
+                    <div key={step.title} className="rounded-3xl border border-white/60 bg-white/70 p-5 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
+                      <p className="text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">{step.title}</p>
+                      <p className="mt-3 text-lg font-semibold text-neutral-900">{step.description}</p>
+                      <p className="mt-2 text-sm text-neutral-600">{step.detail}</p>
                     </div>
                   ))}
                 </div>
-              </motion.div>
-              <motion.blockquote {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-gradient-to-br from-white to-[#f7f3ff] p-8 text-neutral-700 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                <p className="text-xl leading-relaxed">“{studio.quote}”</p>
-                <footer className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{studio.attribution}</footer>
-              </motion.blockquote>
+              </div>
+              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+                <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/95 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
+                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Practice ethos</p>
+                  <h3 className="mt-4 text-3xl text-neutral-900 md:text-4xl" style={{ fontFamily: serifFont }}>
+                    {studio.ethos}
+                  </h3>
+                  <ul className="mt-6 space-y-4 text-sm text-neutral-600">
+                    {studio.bullets.map((bullet) => (
+                      <li key={bullet} className="flex items-start gap-3">
+                        <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-[#5ba5ff] to-[#ffa7c4]" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-8 grid gap-4 md:grid-cols-2">
+                    {features.map((feature) => (
+                      <div key={feature.title} className="rounded-2xl border border-neutral-200 bg-neutral-50/90 p-4">
+                        <div className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{feature.title}</div>
+                        <p className="mt-2 text-sm text-neutral-600">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+                <motion.blockquote {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-gradient-to-br from-white to-[#f7f3ff] p-8 text-neutral-700 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
+                  <p className="text-xl leading-relaxed">“{studio.quote}”</p>
+                  <footer className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{studio.attribution}</footer>
+                </motion.blockquote>
+              </div>
             </section>
 
             <section id="services" className="space-y-10">
-              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Services</p>
                   <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
-                    Modular packages, documentary rigor.
+                    One practice, two stacks.
                   </h2>
+                  <p className="mt-3 max-w-2xl text-sm text-neutral-600">
+                    Documentary crews and the portrait atelier share the same producers, care protocols, and asset systems—choose the door you need, keep the same team.
+                  </p>
                 </div>
-                <div className="inline-flex items-center rounded-full border border-neutral-300 bg-white/80 p-1 text-xs">
-                  <button
-                    onClick={() => setAnnual(false)}
-                    className={`rounded-full px-3 py-1 font-semibold transition ${!annual ? "bg-neutral-900 text-white" : "text-neutral-500"}`}
-                  >
-                    Monthly
-                  </button>
-                  <button
-                    onClick={() => setAnnual(true)}
-                    className={`rounded-full px-3 py-1 font-semibold transition ${annual ? "bg-neutral-900 text-white" : "text-neutral-500"}`}
-                  >
-                    Annual
-                  </button>
-                </div>
+                <Link
+                  href="#contact"
+                  className="inline-flex items-center justify-center rounded-full border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+                >
+                  Talk with the practice
+                </Link>
               </div>
-              <div className="grid gap-6 md:grid-cols-3">
-                {services.map((service, index) => (
+              <div className="grid gap-6 md:grid-cols-2">
+                {serviceStacks.map((stack, index) => (
                   <motion.div
-                    key={service.id}
+                    key={stack.id}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                    className="flex h-full flex-col rounded-[32px] border border-neutral-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]"
+                    className="flex h-full flex-col rounded-[36px] border border-neutral-200 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.08)]"
                   >
-                    <div>
-                      <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{service.title}</p>
-                      <div className="mt-6 text-4xl font-semibold text-neutral-900">{servicePrice(service)}</div>
-                      <p className="mt-2 text-xs text-neutral-500">{content.includedKit}</p>
+                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
+                      <span>{stack.label}</span>
+                      <span className="text-neutral-400">{stack.price}</span>
                     </div>
-                    <ul className="mt-6 space-y-3 text-sm text-neutral-600">
-                      {service.bullets.map((bullet) => (
-                        <li key={bullet} className="flex items-start gap-2">
+                    <h3 className="mt-4 text-3xl font-semibold text-neutral-900" style={{ fontFamily: serifFont }}>
+                      {stack.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-neutral-600">{stack.description}</p>
+                    <ul className="mt-6 space-y-3 text-sm text-neutral-700">
+                      {stack.includes.map((item) => (
+                        <li key={item} className="flex items-start gap-2">
                           <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                          {bullet}
+                          {item}
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-auto pt-6">
-                      <a
-                        href={service.ctaHref}
-                        className="inline-flex w-full items-center justify-center rounded-full border border-neutral-300 px-4 py-3 text-sm font-semibold text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+                    <div className="mt-auto pt-8">
+                      <Link
+                        href={stack.ctaHref}
+                        className="inline-flex w-full items-center justify-center rounded-full border border-neutral-300 px-4 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900/5"
                       >
-                        {service.ctaLabel}
-                      </a>
+                        {stack.ctaLabel}
+                      </Link>
                     </div>
                   </motion.div>
                 ))}
               </div>
+              <p className="text-sm text-neutral-500">{content.includedKit}</p>
             </section>
 
             <section id="testimonials" className="grid gap-8 md:grid-cols-3">

@@ -1,32 +1,32 @@
 {
   "hero": {
-    "eyebrow": "Cinematic • Documentary • Reels",
-    "locationPill": "Denver & Beyond",
-    "title": "Story is policy in a language everyone can read.",
-    "titleGradient": "Story is policy",
-    "subtitle": "Youth-led studio making micro-docs, reels, and campaign assets about health, community, and public imagination. Built like a studio, guided like a movement.",
+    "eyebrow": "The CHANGE Media Practice",
+    "locationPill": "Denver • traveling often",
+    "title": "Stories that turn care into motion.",
+    "titleGradient": "Film × Portrait × Systems",
+    "subtitle": "One studio for health orgs, coalitions, and families who need editorial-grade stories that feel human and act like strategy.",
     "ctas": [
-      { "label": "See work", "href": "#work", "variant": "primary" },
-      { "label": "Start a project", "href": "#contact", "variant": "secondary" },
-      { "label": "Play showreel", "href": "#reel", "variant": "ghost" }
+      { "label": "Enter Change Studios", "href": "/change-studios", "variant": "primary" },
+      { "label": "Portrait Atelier", "href": "/photography/portrait", "variant": "secondary" },
+      { "label": "Talk with the practice", "href": "#contact", "variant": "ghost" }
     ],
     "metrics": [
-      { "value": "200+", "label": "neighbors reached via direct care" },
-      { "value": "10+", "label": "policy efforts documented" },
-      { "value": "72 hr", "label": "typical event-to-edit" },
-      { "value": "6 mo", "label": "recommended retainer" }
+      { "value": "210+", "label": "field stories documented" },
+      { "value": "35+", "label": "movement partners" },
+      { "value": "72 hr", "label": "event-to-edit" },
+      { "value": "1 team", "label": "shared across practice" }
     ]
   },
   "marquee": {
     "phrases": [
-      "micro-docs",
-      "reels",
-      "community testing",
-      "health fairs",
-      "youth storytelling",
+      "documentary retainers",
+      "portrait atelier",
       "policy testimony",
-      "coalition work",
-      "editorial film"
+      "coalition comms",
+      "micro-docs",
+      "editorial stills",
+      "community listening",
+      "campaign systems"
     ]
   },
   "logoCloud": {
@@ -133,10 +133,10 @@
     }
   ],
   "studio": {
-    "ethos": "Editorial craft meets community practice. Fast field interviews, clean sound, mobile-first edits that keep a cinematic core. Consent-forward workflows and de-identification options where needed.",
+    "ethos": "One practice, two doors: documentary crews for campaigns and an editorial portrait atelier for the people powering them. Same consent-forward workflows, same systems, different outputs.",
     "bullets": [
-      "Formats: reels, shorts, 3–5 min anchors",
-      "Field kit: A7 IV, SM7 + lavs, dome light, gimbal",
+      "Formats: micro-docs, reels, still commissions",
+      "Field kit: cinema + medium format stills",
       "Data care: consent logs, secure storage"
     ],
     "quote": "The map should learn from the foot that walks it. Our job is to listen, film, and translate care into images that move people to act.",
@@ -156,7 +156,8 @@
         "Strategy + light analytics"
       ],
       "ctaLabel": "Book discovery",
-      "ctaHref": "#contact"
+      "ctaHref": "#contact",
+      "group": "studios"
     },
     {
       "id": "doc-short",
@@ -170,7 +171,8 @@
         "3 vertical cutdowns"
       ],
       "ctaLabel": "Book discovery",
-      "ctaHref": "#contact"
+      "ctaHref": "#contact",
+      "group": "studios"
     },
     {
       "id": "event-pack",
@@ -184,10 +186,86 @@
         "3 reels + 20 photos"
       ],
       "ctaLabel": "Book discovery",
-      "ctaHref": "#contact"
+      "ctaHref": "#contact",
+      "group": "studios"
     }
   ],
-  "includedKit": "Included kit: Sony A7 IV cinema setup • SM7 broadcast mics + lavs • dome lighting • gimbal option • pro edit & captions. Travel billed at IRS standard rate outside Denver metro.",
+  "practices": [
+    {
+      "id": "studios",
+      "label": "Change Studios",
+      "title": "Documentary & campaign production",
+      "description": "Micro-doc crews, reel systems, and policy testimony capture for public health and civic teams.",
+      "focus": ["Micro-docs & reels", "Campaign systems", "Policy testimony"],
+      "accent": "#5ba5ff",
+      "cta": { "label": "See Studios work", "href": "/change-studios" }
+    },
+    {
+      "id": "portrait-atelier",
+      "label": "Portrait Atelier",
+      "title": "Editorial portrait commissions",
+      "description": "Intentional still sessions for founders, families, and leadership teams who need artful imagery.",
+      "focus": ["Studio & on-location", "Art direction", "Print & digital deliverables"],
+      "accent": "#f6b1c0",
+      "cta": { "label": "Book a portrait", "href": "/photography/portrait" }
+    },
+    {
+      "id": "field-notes",
+      "label": "Field Notes",
+      "title": "Research & process experiments",
+      "description": "Working notes, toolkits, and studies about how story moves care into action.",
+      "focus": ["Care protocols", "Distribution tests", "Community co-creation"],
+      "accent": "#c5d7ff",
+      "cta": { "label": "Read why we build this way", "href": "/why" }
+    }
+  ],
+  "systems": {
+    "eyebrow": "How it works",
+    "title": "Listen → Field → Edit → Deliver",
+    "description": "Every engagement runs through the same care pipeline so strategy, film, and portrait work stay in sync.",
+    "steps": [
+      { "title": "Listen", "description": "Kitchen tables, clinics, and council halls.", "detail": "Briefs built with the people closest to the story." },
+      { "title": "Field", "description": "Lean crews, redundant audio, consent-forward workflows.", "detail": "Documentary teams + portrait atelier share kit + notes." },
+      { "title": "Edit", "description": "Micro-doc bench + still lab.", "detail": "Cutdowns, captions, proof galleries, and motion + still pairings." },
+      { "title": "Deliver", "description": "Distribution playbooks + enablement.", "detail": "Campaign toolkits, asset libraries, and insight memos." }
+    ],
+    "outcomes": [
+      { "label": "Pre-pro hours saved", "value": "40%" },
+      { "label": "Avg. approval rounds", "value": "1.6" },
+      { "label": "Shared asset libraries", "value": "24/7" }
+    ]
+  },
+  "serviceStacks": [
+    {
+      "id": "studios-stack",
+      "label": "Change Studios",
+      "title": "Documentary retainers & campaign spikes",
+      "description": "Monthly or seasonal film coverage with strategy, field crew, and edit bench.",
+      "price": "From $2,750/mo",
+      "includes": [
+        "4 reels or 1 docu-short per month",
+        "Field audio, captions, and vertical cutdowns",
+        "Quarterly insight memos + measurement"
+      ],
+      "ctaLabel": "Plan studios scope",
+      "ctaHref": "/change-studios"
+    },
+    {
+      "id": "portrait-stack",
+      "label": "Portrait Atelier",
+      "title": "Editorial portrait commissions",
+      "description": "Intentional still sessions for leaders, founders, and families who need artful imagery.",
+      "price": "Collections from $1,550",
+      "includes": [
+        "Moodboard + styling call",
+        "Studio or on-location production",
+        "Gallery delivery with print-ready selects"
+      ],
+      "ctaLabel": "Book a portrait",
+      "ctaHref": "/photography/portrait"
+    }
+  ],
+  "includedKit": "Included kit: Sony A7 IV cinema setup • Hasselblad + medium-format stills • SM7 + lav audio • dome + natural light kits • pro edit, captions, and print-ready files. Travel billed at IRS standard rate outside Denver metro.",
   "testimonials": [
     {
       "id": "t1",
@@ -236,8 +314,8 @@
     "calendlyUrl": "https://calendly.com/william-navarretemoreno-changemedia/30min?background_color=000000&text_color=ffffff&primary_color=87c8bf"
   },
   "seo": {
-    "title": "CHANGE Media — Story is policy",
-    "description": "Youth-led studio making micro-docs, reels, and story packs for health, policy, and community imagination.",
+    "title": "CHANGE Media — One practice, two doors",
+    "description": "Documentary crews, portrait atelier, and care systems helping campaigns, coalitions, and families move people to act.",
     "ogImage": "https://picsum.photos/seed/changemedia-og/1200/630"
   }
 }

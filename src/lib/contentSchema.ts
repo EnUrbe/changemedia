@@ -84,6 +84,52 @@ export const serviceCardSchema = z.object({
   bullets: z.array(z.string().min(1)).min(1),
   ctaLabel: z.string().min(1),
   ctaHref: z.string().min(1),
+  group: z.enum(["studios", "portraits"]).optional(),
+});
+
+const practiceCardSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  focus: z.array(z.string().min(1)).min(1),
+  accent: z.string().min(1),
+  cta: z.object({
+    label: z.string().min(1),
+    href: z.string().min(1),
+  }),
+});
+
+const systemStepSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  detail: z.string().min(1),
+});
+
+const systemsContentSchema = z.object({
+  eyebrow: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  steps: z.array(systemStepSchema).min(1),
+  outcomes: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        value: z.string().min(1),
+      })
+    )
+    .min(1),
+});
+
+const serviceStackSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  price: z.string().min(1),
+  includes: z.array(z.string().min(1)).min(1),
+  ctaLabel: z.string().min(1),
+  ctaHref: z.string().min(1),
 });
 
 export const testimonialSchema = z.object({
@@ -129,6 +175,9 @@ export const siteContentSchema = z.object({
   features: featureSchema.array().max(8),
   studio: studioSchema,
   services: serviceCardSchema.array().min(1).max(8),
+  practices: practiceCardSchema.array().min(1).max(6),
+  systems: systemsContentSchema,
+  serviceStacks: serviceStackSchema.array().min(1).max(6),
   includedKit: z.string().min(1),
   testimonials: testimonialSchema.array().max(12),
   faqs: faqSchema.array().max(20),
@@ -140,6 +189,9 @@ export type HeroContent = z.infer<typeof heroSchema>;
 export type SiteContent = z.infer<typeof siteContentSchema>;
 export type CaseStudy = z.infer<typeof caseStudySchema>;
 export type ServiceCard = z.infer<typeof serviceCardSchema>;
+export type PracticeContent = z.infer<typeof practiceCardSchema>;
+export type SystemsContent = z.infer<typeof systemsContentSchema>;
+export type ServiceStackContent = z.infer<typeof serviceStackSchema>;
 export type Testimonial = z.infer<typeof testimonialSchema>;
 export type FaqItem = z.infer<typeof faqSchema>;
 export type ContactContent = z.infer<typeof contactSchema>;
