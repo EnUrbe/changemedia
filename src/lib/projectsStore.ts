@@ -1,87 +1,165 @@
 import "server-only";
-import { promises as fs } from "fs";
-import path from "path";
 import crypto from "crypto";
+import { getSupabaseAdminClient } from "./supabaseAdmin";
 import {
   ClientProject,
   Deliverable,
   FeedbackNote,
   projectSchema,
-  projectsFileSchema,
 } from "./projectsSchema";
-
-const PROJECTS_PATH = path.join(process.cwd(), "content", "projects.json");
 
 export type ClientFacingProject = Omit<ClientProject, "accessCode">;
 
-interface ProjectsFile {
-  projects: ClientProject[];
+// Helper to map DB rows to our application schema
+function mapProjectFromDB(row: any): ClientProject {
+  return {
+    id: row.id,
+    clientName: row.client_name,
+    projectTitle: row.project_title,
+    status: row.status,
+    summary: row.summary || "",
+    dueDate: row.due_date,
+    pointOfContact: row.point_of_contact,
+    accessCode: row.access_code,
+    deliverables: row.deliverables?.map(mapDeliverableFromDB) || [],
+    feedback: row.feedback || [],
+    checklist: row.checklist || [],
+    aiNotes: row.ai_notes || undefined,
+  };
 }
 
-async function readProjectsFile(): Promise<ProjectsFile> {
-  const raw = await fs.readFile(PROJECTS_PATH, "utf-8");
-  const parsed = JSON.parse(raw);
-  return projectsFileSchema.parse(parsed);
-}
-
-async function writeProjectsFile(projects: ClientProject[]) {
-  const payload = { projects } satisfies ProjectsFile;
-  await fs.writeFile(PROJECTS_PATH, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
+function mapDeliverableFromDB(row: any): Deliverable {
+  return {
+    id: row.id,
+    type: row.type,
+    title: row.title,
+    description: row.description || "",
+    url: row.url,
+    thumbnail: row.thumbnail || undefined,
+    images: row.images || undefined,
+    status: row.status,
+  };
 }
 
 export async function getProjects(): Promise<ClientProject[]> {
-  const file = await readProjectsFile();
-  return file.projects;
+  const supabase = getSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*, deliverables(*)")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching projects:", error);
+    return [];
+  }
+
+  return data.map(mapProjectFromDB);
 }
 
 export async function getProjectById(id: string): Promise<ClientProject | undefined> {
-  const projects = await getProjects();
-  return projects.find((project) => project.id === id);
+  const supabase = getSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*, deliverables(*)")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) return undefined;
+  return mapProjectFromDB(data);
+}
+
+export async function getProjectByAccessCode(code: string): Promise<ClientProject | undefined> {
+  const supabase = getSupabaseAdminClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*, deliverables(*)")
+    .eq("access_code", code)
+    .single();
+
+  if (error || !data) return undefined;
+  return mapProjectFromDB(data);
 }
 
 export async function saveProject(project: ClientProject) {
-  const validated = projectSchema.parse(project);
-  const projects = await getProjects();
-  const existingIndex = projects.findIndex((p) => p.id === validated.id);
-  if (existingIndex === -1) {
-    projects.push(validated);
-  } else {
-    projects[existingIndex] = validated;
-  }
-  await writeProjectsFile(projects);
+  // This function was used for full document replacement in JSON.
+  // In SQL, we should prefer specific updates, but for compatibility:
+  const supabase = getSupabaseAdminClient();
+  
+  const { error } = await supabase
+    .from("projects")
+    .upsert({
+      id: project.id,
+      client_name: project.clientName,
+      project_title: project.projectTitle,
+      status: project.status,
+      summary: project.summary,
+      due_date: project.dueDate,
+      point_of_contact: project.pointOfContact,
+      access_code: project.accessCode,
+      checklist: project.checklist,
+      ai_notes: project.aiNotes,
+      feedback: project.feedback, // Storing feedback as JSONB for now
+    });
+
+  if (error) throw new Error(`Failed to save project: ${error.message}`);
 }
 
 export async function createProject(input: Omit<ClientProject, "id"> & { id?: string }) {
+  const id = input.id ?? crypto.randomUUID();
   const project: ClientProject = {
     ...input,
-    id: input.id ?? crypto.randomUUID(),
+    id,
   } as ClientProject;
+
   await saveProject(project);
   return project;
 }
 
 export async function appendDeliverable(projectId: string, deliverable: Deliverable) {
-  const project = await getProjectById(projectId);
-  if (!project) throw new Error("Project not found");
+  const supabase = getSupabaseAdminClient();
+  
   const nextDeliverable = {
     ...deliverable,
     id: deliverable.id || crypto.randomUUID(),
-  } as Deliverable;
-  project.deliverables = [...project.deliverables, nextDeliverable];
-  await saveProject(project);
+  };
+
+  const { error } = await supabase
+    .from("deliverables")
+    .insert({
+      id: nextDeliverable.id,
+      project_id: projectId,
+      type: nextDeliverable.type,
+      title: nextDeliverable.title,
+      description: nextDeliverable.description,
+      url: nextDeliverable.url,
+      thumbnail: nextDeliverable.thumbnail,
+      images: nextDeliverable.images,
+      status: nextDeliverable.status,
+    });
+
+  if (error) throw new Error(`Failed to add deliverable: ${error.message}`);
   return nextDeliverable;
 }
 
 export async function appendFeedback(projectId: string, feedback: Omit<FeedbackNote, "id" | "timestamp">) {
   const project = await getProjectById(projectId);
   if (!project) throw new Error("Project not found");
+  
   const nextFeedback: FeedbackNote = {
     ...feedback,
     id: crypto.randomUUID(),
     timestamp: new Date().toISOString(),
   };
-  project.feedback = [nextFeedback, ...project.feedback];
-  await saveProject(project);
+
+  const newFeedbackList = [nextFeedback, ...project.feedback];
+  
+  const supabase = getSupabaseAdminClient();
+  const { error } = await supabase
+    .from("projects")
+    .update({ feedback: newFeedbackList })
+    .eq("id", projectId);
+
+  if (error) throw new Error(`Failed to add feedback: ${error.message}`);
   return nextFeedback;
 }
 

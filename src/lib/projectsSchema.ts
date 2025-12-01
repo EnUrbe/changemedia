@@ -3,11 +3,12 @@ import { httpsUrlSchema } from "./contentSchema";
 
 export const deliverableSchema = z.object({
   id: z.string().min(1),
-  type: z.enum(["video", "gallery", "document", "audio", "link"]),
+  type: z.enum(["video", "gallery", "document", "audio", "link", "podcast", "portrait", "photoshoot"]),
   title: z.string().min(1),
   description: z.string().min(1),
   url: httpsUrlSchema,
   thumbnail: httpsUrlSchema.optional(),
+  images: z.array(httpsUrlSchema).optional(),
   status: z.enum(["ready", "needs-review", "in-progress", "archived"]),
 });
 

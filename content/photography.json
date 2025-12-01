@@ -1,16 +1,16 @@
 {
   "hero": {
-    "eyebrow": "Private Commissions • Editorial",
-    "availability": "Denver & Worldwide",
-    "title": "Photography",
-    "highlight": "That Moves",
-    "subtitle": "Crafting visual narratives for brands, campaigns, and leaders who need their stories to travel well beyond the room.",
-    "primaryCta": { "label": "Explore work", "href": "#portfolio", "variant": "primary" },
-    "secondaryCta": { "label": "Let's talk", "href": "#contact", "variant": "secondary" },
+    "eyebrow": "Still systems • Documentary fieldwork",
+    "availability": "Denver / Chicago / NYC — Worldwide",
+    "title": "Photography practice",
+    "highlight": "for ambitious teams",
+    "subtitle": "Portrait retainers, editorial fly-kits, and campaign field crews that sit inside the Change Studios care system.",
+    "primaryCta": { "label": "See the work", "href": "#portfolio", "variant": "primary" },
+    "secondaryCta": { "label": "Talk with the studio", "href": "#contact", "variant": "secondary" },
     "stats": [
-      { "value": "500+", "label": "Projects" },
-      { "value": "100+", "label": "Clients" },
-      { "value": "15", "label": "Awards" }
+      { "value": "08", "label": "Active retainers" },
+      { "value": "24", "label": "Executive portrait days" },
+      { "value": "04", "label": "Care protocols" }
     ]
   },
   "portfolio": [
@@ -138,66 +138,66 @@
   ],
   "services": [
     {
-      "id": "brand-product",
+      "id": "studio-retainer",
       "numeral": "I",
-      "title": "Brand & Product",
-      "description": "High-impact visual campaigns that sell.",
-      "price": "$3,500",
-      "periodLabel": "Retainers from",
+      "title": "Studio Retainer",
+      "description": "Campaign-aligned stills crews embedded with the Change Studios production calendar.",
+      "price": "$4,800",
+      "periodLabel": "Quarterly from",
       "features": [
-        "Full-day or half-day shoots",
-        "Studio & on-location",
-        "Professional retouching",
-        "Full commercial usage rights",
-        "Art direction included"
+        "Run-of-show alignment with film team",
+        "On-set producer + digital tech",
+        "Founder + product storylists",
+        "Asset delivery inside our DAM",
+        "Usage mapping + clearances"
       ],
-      "surface": "linear-gradient(135deg, rgba(87,126,243,0.08), rgba(255,193,149,0.08))",
+      "surface": "linear-gradient(135deg, rgba(87,126,243,0.09), rgba(255,193,149,0.12))",
       "border": "rgba(87,126,243,0.18)",
-      "buttonLabel": "Reserve time"
+      "buttonLabel": "Hold dates"
     },
     {
-      "id": "editorial-portraits",
+      "id": "portrait-atelier",
       "numeral": "II",
-      "title": "Editorial & Portraits",
-      "description": "Authentic stories, compelling moments.",
-      "price": "$2,200",
+      "title": "Portrait Atelier",
+      "description": "Executive sessions engineered for fast-moving leadership teams and policy partners.",
+      "price": "$2,900",
       "periodLabel": "Collections from",
       "features": [
-        "2-4 hour creative sessions",
-        "Mood board development",
-        "Creative direction",
-        "High-res deliverables",
-        "Social media assets"
+        "2-4 hour atelier bookings",
+        "Wardrobe + grooming coordination",
+        "Creative deck + shot math",
+        "Same-day selects for press",
+        "Full retouch suite"
       ],
-      "surface": "linear-gradient(135deg, rgba(240,165,176,0.12), rgba(241,206,164,0.12))",
-      "border": "rgba(241,165,176,0.25)",
-      "buttonLabel": "Reserve time"
+      "surface": "linear-gradient(135deg, rgba(240,165,176,0.14), rgba(241,206,164,0.12))",
+      "border": "rgba(241,165,176,0.3)",
+      "buttonLabel": "Book atelier"
     },
     {
-      "id": "events-coverage",
+      "id": "executive-fly-kit",
       "numeral": "III",
-      "title": "Events & Coverage",
-      "description": "Capture every moment that matters.",
-      "price": "$1,800",
+      "title": "Executive Fly-Kit",
+      "description": "Lean portrait coverage that ships with your team for offsite summits and roadshows.",
+      "price": "$1,950",
       "periodLabel": "Capsules from",
       "features": [
-        "Full event coverage",
-        "2 photographers available",
-        "Same-day highlights",
+        "Travel-ready lighting kit",
+        "Producer remote check-ins",
         "Curated online gallery",
-        "Fast turnaround"
+        "Share-ready asset packs",
+        "48-hour turnaround"
       ],
-      "surface": "linear-gradient(135deg, rgba(210,218,210,0.2), rgba(255,255,255,0.6))",
-      "border": "rgba(15,23,42,0.1)",
-      "buttonLabel": "Reserve time"
+      "surface": "linear-gradient(135deg, rgba(210,218,210,0.25), rgba(255,255,255,0.7))",
+      "border": "rgba(15,23,42,0.12)",
+      "buttonLabel": "Launch fly-kit"
     }
   ],
   "cta": {
     "eyebrow": "Private Commissions",
-    "headline": "Let’s build the stills system your leadership team can’t live without.",
-    "description": "High-frequency retainers, art-directed launches, and on-call portraiture for executives, founders, and senior partners across North America.",
+    "headline": "Let’s architect the stills layer inside your practice.",
+    "description": "We pair the Change Studios production team with a portrait atelier so your leadership always has ready-to-ship imagery.",
     "primaryCta": { "label": "Schedule a call", "href": "/contact", "variant": "primary" },
-    "secondaryCta": { "label": "Request deck", "href": "/deck", "variant": "secondary" }
+    "secondaryCta": { "label": "Download spec sheet", "href": "/deck", "variant": "secondary" }
   },
   "seo": {
     "title": "CHANGE Media Photography",

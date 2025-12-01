@@ -6,6 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import SectionNav from "@/components/ui/SectionNav";
+import Button from "@/components/ui/Button";
+import NavBar from "@/components/ui/NavBar";
+import Section from "@/components/ui/Section";
+import ShowcaseSlider from "@/components/ui/ShowcaseSlider";
+import GlassGrid from "@/components/ui/GlassGrid";
 import type { SiteContent } from "@/lib/contentSchema";
 
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
@@ -40,6 +45,18 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
   const practices = content.practices;
   const systems = content.systems;
   const serviceStacks = content.serviceStacks;
+
+    const gridImages = featured.map((f) => f.imageUrl);
+    // Use the first featured image as hero background, or a fallback
+    const heroBg = featured[0]?.imageUrl || "https://picsum.photos/seed/hero/1920/1080";
+
+    const showcaseItems = featured.map((item) => ({
+      id: item.id,
+      title: item.title,
+      category: item.subtitle,
+      image: item.imageUrl,
+      year: "2024",
+    }));
 
     const sections = [
       { id: "hero", label: "Overview" },
@@ -93,107 +110,72 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
     }
 
     return (
-      <div className="relative min-h-screen bg-[#f6f3ee] text-neutral-900">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-20 right-[5%] h-[28rem] w-[28rem] rounded-[999px] bg-gradient-to-br from-[#ffeecf] to-[#d6e7ff] blur-[120px]" />
-          <div className="absolute top-[40%] left-[-10%] h-[30rem] w-[30rem] rounded-[999px] bg-gradient-to-br from-[#f5d7ff] to-[#d2f5e9] blur-[150px]" />
-        </div>
+      <div className="relative min-h-screen bg-[#050505] text-white selection:bg-white selection:text-black">
+        <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
         <div className="relative z-10">
-          <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
-            <Link href="/" className="text-sm font-semibold text-neutral-900">
-              CHANGE<span className="text-[#577ef3]">®</span>
-            </Link>
-            <div className="hidden items-center gap-6 md:flex">
-              <Link href="/why" className="hover:text-neutral-900">
-                Why
-              </Link>
-              <Link href="/change-studios" className="hover:text-neutral-900">
-                Studios
-              </Link>
-              <Link href="/photography" className="hover:text-neutral-900">
-                Photography
-              </Link>
-              <Link href="/photography/portrait" className="hover:text-neutral-900">
-                Portraits
-              </Link>
-            </div>
-            <Link
-              href="#contact"
-              className="rounded-full border border-neutral-300 px-4 py-2 text-[0.65rem] text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
-            >
-              Start a project
-            </Link>
-          </header>
+          <NavBar
+            links={[
+              { href: "/why", label: "Why" },
+              { href: "/change-studios", label: "Studios" },
+              { href: "/photography", label: "Photography" },
+              { href: "/photography/portrait", label: "Executive" },
+              { href: "/portraits", label: "Portraits" },
+              { href: "/login", label: "Login" },
+            ]}
+            cta={{ href: "#contact", label: "Start a project" }}
+            tone="dark"
+          />
 
-          <SectionNav sections={sections} variant="light" />
+          <SectionNav sections={sections} variant="dark" />
 
-          <main className="mx-auto max-w-6xl space-y-24 px-6 pb-24">
-            <section id="hero" className="pt-20">
-              <div className="rounded-[40px] border border-neutral-200/70 bg-white/90 p-8 md:p-12 shadow-[0_30px_80px_rgba(15,23,42,0.08)]">
-                <div className="flex flex-wrap items-center gap-4 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
-                  <span>{hero.eyebrow}</span>
-                  <span className="rounded-full border border-neutral-200 px-3 py-1 text-neutral-600">{hero.locationPill}</span>
-                </div>
-                <div className="mt-8 space-y-5">
-                  <h1 className="text-4xl leading-tight text-neutral-900 md:text-6xl" style={{ fontFamily: serifFont }}>
-                    <span className="bg-gradient-to-r from-[#5ba5ff] via-[#8f60ff] to-[#ff909b] bg-clip-text text-transparent">
-                      {hero.titleGradient}
-                    </span>
-                    <br />
-                    {heroSecondaryLine}
-                  </h1>
-                  <p className="max-w-3xl text-lg text-neutral-600 md:text-xl">{hero.subtitle}</p>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  {hero.ctas.map((cta) => (
-                    <a
-                      key={cta.label}
-                      href={cta.href}
-                      className={`rounded-full px-5 py-3 text-sm font-semibold transition ${
-                        cta.variant === "primary"
-                          ? "bg-neutral-900 text-white hover:bg-neutral-700"
-                          : cta.variant === "secondary"
-                            ? "border border-neutral-300 text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
-                            : "bg-gradient-to-r from-[#ffe6d5] to-[#d3f4e6] text-neutral-900"
-                      }`}
-                    >
-                      {cta.label}
-                    </a>
-                  ))}
-                </div>
-                <div className="mt-10 grid gap-4 md:grid-cols-4">
-                  {hero.metrics.map((metric) => (
-                    <div key={metric.value} className="rounded-3xl border border-neutral-200 bg-neutral-50/80 p-5 text-center">
-                      <div className="text-3xl font-semibold text-neutral-900">{metric.value}</div>
-                      <div className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{metric.label}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-wrap gap-2 text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">
-                  {practices.map((practice) => (
-                    <span key={practice.id} className="rounded-full border border-neutral-200 px-3 py-1">
-                      {practice.label}
-                    </span>
-                  ))}
-                </div>
+          <main className="mx-auto max-w-[1400px] space-y-32 px-6 pb-32">
+            <Section id="hero" padTop={false} className="relative min-h-screen flex flex-col justify-center !px-0 overflow-hidden -mx-6 w-[calc(100%+3rem)]">
+              {/* Background */}
+              <div className="absolute inset-0 z-0">
+                 <Image
+                    src={heroBg}
+                    alt="Hero Background"
+                    fill
+                    className="object-cover blur-sm brightness-[0.6]"
+                    priority
+                 />
               </div>
-              <div className="mt-10 flex flex-wrap items-center gap-3 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
-                {content.marquee.phrases.map((phrase) => (
-                  <span key={phrase} className="rounded-full border border-neutral-200 px-3 py-1">
-                    {phrase}
-                  </span>
-                ))}
-              </div>
-            </section>
 
-            <section id="practices" className="space-y-8">
-              <div className="flex flex-col gap-3 text-center md:text-left">
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">The practice</p>
-                <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+              {/* Content */}
+              <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center h-full py-32">
+                  {/* Left: Glass Grid */}
+                  <div className="flex justify-center lg:justify-start">
+                     <GlassGrid images={gridImages} />
+                  </div>
+
+                  {/* Right: Text */}
+                  <div className="text-center lg:text-right space-y-10">
+                     <h1 className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.1] tracking-tight drop-shadow-lg" style={{ fontFamily: serifFont }}>
+                        Cinematic creative<br/>
+                        for movements<br/>
+                        that matter.
+                     </h1>
+                     <div className="flex justify-center lg:justify-end">
+                        <Button 
+                          href="#contact" 
+                          size="lg" 
+                          className="!bg-[#d4a373] !text-black !border-none !rounded-full !px-10 !py-6 !text-lg font-medium hover:!bg-[#c39262] hover:scale-105 transition-all shadow-xl shadow-black/20"
+                        >
+                           Book a project
+                        </Button>
+                     </div>
+                  </div>
+              </div>
+            </Section>
+
+            <section id="practices" className="space-y-12">
+              <div className="flex flex-col gap-6 text-center md:text-left">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">The practice</p>
+                <h2 className="text-5xl text-white md:text-7xl" style={{ fontFamily: serifFont }}>
                   One studio, different doors.
                 </h2>
-                <p className="mx-auto max-w-3xl text-sm text-neutral-600 md:mx-0">
+                <p className="mx-auto max-w-2xl text-lg text-white/60 md:mx-0 leading-relaxed">
                   Change Studios handles the campaign fieldwork. The portrait atelier crafts the stills. Field Notes documents the care systems that hold it together.
                 </p>
               </div>
@@ -202,28 +184,28 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                   <motion.article
                     key={practice.id}
                     {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.05 }}
-                    className="flex h-full flex-col rounded-[32px] border border-neutral-200 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.08)]"
+                    transition={{ ...fadeUp.transition, delay: index * 0.1 }}
+                    className="group flex h-full flex-col rounded-[40px] border border-white/10 bg-white/5 p-8 transition-all duration-500 hover:bg-white/10 hover:shadow-xl hover:shadow-black/20 backdrop-blur-sm"
                   >
-                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
+                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
                       <span>{practice.label}</span>
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: practice.accent }} />
+                      <span className="h-2 w-2 rounded-full bg-white opacity-20 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <h3 className="mt-4 text-2xl font-semibold text-neutral-900" style={{ fontFamily: serifFont }}>
+                    <h3 className="mt-8 text-3xl text-white" style={{ fontFamily: serifFont }}>
                       {practice.title}
                     </h3>
-                    <p className="mt-3 text-sm text-neutral-600">{practice.description}</p>
-                    <div className="mt-6 flex flex-wrap gap-2 text-xs text-neutral-500">
+                    <p className="mt-4 text-sm leading-relaxed text-white/60">{practice.description}</p>
+                    <div className="mt-8 flex flex-wrap gap-2 text-xs text-white/40">
                       {practice.focus.map((focus) => (
-                        <span key={focus} className="rounded-full border border-neutral-200 px-3 py-1">
+                        <span key={focus} className="rounded-full border border-white/10 bg-white/5 px-3 py-1">
                           {focus}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-auto pt-6">
+                    <div className="mt-auto pt-8">
                       <Link
                         href={practice.cta.href}
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:underline"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition-all group-hover:gap-4"
                       >
                         {practice.cta.label} <span>→</span>
                       </Link>
@@ -233,63 +215,46 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               </div>
             </section>
 
-            <section id="logos" className="space-y-6">
-              <p className="text-center text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{logoCloud.heading}</p>
-              <div className="grid grid-cols-2 gap-6 rounded-[32px] border border-neutral-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.05)] sm:grid-cols-3 md:grid-cols-6">
+            <section id="logos" className="space-y-8 border-y border-white/10 py-16">
+              <p className="text-center text-[0.65rem] uppercase tracking-[0.2em] text-white/40">{logoCloud.heading}</p>
+              <div className="grid grid-cols-2 gap-12 opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0 sm:grid-cols-3 md:grid-cols-6 invert">
                 {logoCloud.logos.map((logo) => (
-                  <div key={logo.alt} className="flex items-center justify-center opacity-70">
-                    <Image src={logo.src} alt={logo.alt} width={100} height={30} className="h-7 w-auto" />
+                  <div key={logo.alt} className="flex items-center justify-center">
+                    <Image src={logo.src} alt={logo.alt} width={120} height={40} className="h-8 w-auto object-contain" />
                   </div>
                 ))}
               </div>
             </section>
 
-            <section id="work" className="space-y-10">
-              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Work</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+            <section id="work" className="space-y-16">
+              <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+                <div className="space-y-4">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Work</p>
+                  <h2 className="text-5xl text-white md:text-7xl" style={{ fontFamily: serifFont }}>
                     Film + stills from the practice.
                   </h2>
-                  <p className="mt-3 max-w-2xl text-sm text-neutral-600">
-                    Documentary retainers, portrait commissions, and campaign sprints all live in one archive—here’s a mix from both doors.
+                  <p className="max-w-2xl text-lg text-white/60">
+                    Documentary retainers, portrait commissions, and campaign sprints all live in one archive.
                   </p>
                 </div>
-                <Link href="/clients" className="text-sm text-neutral-600 hover:text-neutral-900">
-                  View client workspaces →
+                <Link href="/clients" className="group flex items-center gap-2 text-sm font-medium text-white">
+                  View client workspaces <span className="transition-transform group-hover:translate-x-1">→</span>
                 </Link>
               </div>
-              <div className="grid gap-6 md:grid-cols-3">
-                {featured.map((item) => (
-                  <motion.article key={item.id} {...fadeUp} className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-                    <div className="relative aspect-[4/3]">
-                      <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-                    </div>
-                    <div className="space-y-2 p-5">
-                      <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{item.subtitle}</p>
-                      <h3 className="text-2xl font-semibold">{item.title}</h3>
-                      <div className="flex flex-wrap gap-2 text-xs text-neutral-500">
-                        {(item.tags ?? []).map((tag) => (
-                          <span key={tag} className="rounded-full border border-neutral-200 px-2 py-1">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-              <div className="overflow-x-auto rounded-[32px] border border-neutral-200 bg-white/80 p-6">
-                <div className="flex min-w-[640px] gap-4">
+              
+              <ShowcaseSlider items={showcaseItems} />
+              
+              {/* Gallery Strip */}
+              <div className="overflow-hidden rounded-[40px] border border-white/10 bg-white/5 p-8 backdrop-blur-md">
+                <div className="flex gap-8 overflow-x-auto pb-4 scrollbar-hide">
                   {gallery.map((item) => (
-                    <div key={item.id} className="w-56 shrink-0">
-                      <div className="relative h-40 w-full overflow-hidden rounded-2xl">
-                        <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
+                    <div key={item.id} className="w-72 shrink-0 space-y-4">
+                      <div className="relative aspect-[3/2] overflow-hidden rounded-2xl bg-white/5">
+                        <Image src={item.imageUrl} alt={item.title} fill className="object-cover grayscale transition-all hover:grayscale-0 opacity-80 hover:opacity-100" />
                       </div>
-                      <div className="mt-3">
-                        <p className="text-sm text-neutral-500">{item.subtitle}</p>
-                        <h4 className="text-lg font-semibold">{item.title}</h4>
-                        <p className="text-xs text-neutral-400">{(item.tags ?? []).join(" • ")}</p>
+                      <div>
+                        <h4 className="font-medium text-white">{item.title}</h4>
+                        <p className="text-xs text-white/40 mt-1">{item.subtitle}</p>
                       </div>
                     </div>
                   ))}
@@ -297,79 +262,86 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               </div>
             </section>
 
-            <section id="systems" className="space-y-10">
-              <div className="rounded-[40px] border border-neutral-200 bg-gradient-to-br from-[#fef6eb] via-[#f3ecff] to-[#e9f8ff] p-8 text-neutral-900 shadow-[0_30px_90px_rgba(15,23,42,0.15)]">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                  <div>
-                    <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{systems.eyebrow}</p>
-                    <h2 className="mt-2 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+            <section id="systems" className="space-y-12">
+              <div className="rounded-[48px] bg-white/5 border border-white/10 p-8 md:p-16 text-white shadow-2xl backdrop-blur-md">
+                <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="space-y-6 max-w-2xl">
+                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">{systems.eyebrow}</p>
+                    <h2 className="text-5xl md:text-7xl" style={{ fontFamily: serifFont }}>
                       {systems.title}
                     </h2>
-                    <p className="mt-3 max-w-3xl text-sm text-neutral-700">{systems.description}</p>
+                    <p className="text-lg text-white/40 leading-relaxed">{systems.description}</p>
                   </div>
-                  <div className="grid gap-3 text-sm text-neutral-700 sm:grid-cols-3 lg:max-w-xl">
+                  <div className="grid gap-4 sm:grid-cols-3 w-full lg:w-auto">
                     {systems.outcomes.map((outcome) => (
-                      <div key={outcome.label} className="rounded-2xl border border-white/60 bg-white/40 p-4 text-center">
-                        <div className="text-2xl font-semibold text-neutral-900">{outcome.value}</div>
-                        <div className="text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">{outcome.label}</div>
+                      <div key={outcome.label} className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
+                        <div className="text-3xl font-medium text-white" style={{ fontFamily: serifFont }}>{outcome.value}</div>
+                        <div className="mt-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/40">{outcome.label}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="mt-10 grid gap-4 md:grid-cols-2">
-                  {systems.steps.map((step) => (
-                    <div key={step.title} className="rounded-3xl border border-white/60 bg-white/70 p-5 shadow-[0_12px_40px_rgba(15,23,42,0.08)]">
-                      <p className="text-[0.6rem] uppercase tracking-[0.3em] text-neutral-500">{step.title}</p>
-                      <p className="mt-3 text-lg font-semibold text-neutral-900">{step.description}</p>
-                      <p className="mt-2 text-sm text-neutral-600">{step.detail}</p>
+                <div className="mt-16 grid gap-6 md:grid-cols-2">
+                  {systems.steps.map((step, i) => (
+                    <div key={step.title} className="group rounded-[32px] border border-white/10 bg-white/5 p-8 transition-colors hover:bg-white/10">
+                      <div className="flex items-start justify-between">
+                        <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">0{i + 1}</p>
+                        <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">{step.title}</p>
+                      </div>
+                      <p className="mt-6 text-2xl font-medium text-white" style={{ fontFamily: serifFont }}>{step.description}</p>
+                      <p className="mt-4 text-sm text-white/40 leading-relaxed">{step.detail}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/95 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Practice ethos</p>
-                  <h3 className="mt-4 text-3xl text-neutral-900 md:text-4xl" style={{ fontFamily: serifFont }}>
+
+              <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+                <motion.div {...fadeUp} className="rounded-[40px] border border-white/10 bg-white/5 p-10 backdrop-blur-md">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Practice ethos</p>
+                  <h3 className="mt-6 text-4xl text-white md:text-5xl" style={{ fontFamily: serifFont }}>
                     {studio.ethos}
                   </h3>
-                  <ul className="mt-6 space-y-4 text-sm text-neutral-600">
+                  <ul className="mt-8 space-y-4">
                     {studio.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-start gap-3">
-                        <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-[#5ba5ff] to-[#ffa7c4]" />
-                        {bullet}
+                      <li key={bullet} className="flex items-start gap-4 text-white/60">
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white" />
+                        <span className="text-lg">{bullet}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-8 grid gap-4 md:grid-cols-2">
+                  <div className="mt-10 grid gap-4 md:grid-cols-2">
                     {features.map((feature) => (
-                      <div key={feature.title} className="rounded-2xl border border-neutral-200 bg-neutral-50/90 p-4">
-                        <div className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{feature.title}</div>
-                        <p className="mt-2 text-sm text-neutral-600">{feature.description}</p>
+                      <div key={feature.title} className="rounded-3xl bg-white/5 border border-white/10 p-6">
+                        <div className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">{feature.title}</div>
+                        <p className="mt-3 text-sm text-white/60 leading-relaxed">{feature.description}</p>
                       </div>
                     ))}
                   </div>
                 </motion.div>
-                <motion.blockquote {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-gradient-to-br from-white to-[#f7f3ff] p-8 text-neutral-700 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                  <p className="text-xl leading-relaxed">“{studio.quote}”</p>
-                  <footer className="mt-4 text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{studio.attribution}</footer>
+                <motion.blockquote {...fadeUp} className="flex flex-col justify-between rounded-[40px] bg-white/10 p-10 text-white backdrop-blur-md border border-white/10">
+                  <p className="text-2xl leading-relaxed md:text-3xl" style={{ fontFamily: serifFont }}>“{studio.quote}”</p>
+                  <footer className="mt-8 flex items-center gap-4">
+                    <div className="h-px w-8 bg-white" />
+                    <span className="text-[0.65rem] uppercase tracking-[0.2em] text-white/60">{studio.attribution}</span>
+                  </footer>
                 </motion.blockquote>
               </div>
             </section>
 
-            <section id="services" className="space-y-10">
-              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Services</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+            <section id="services" className="space-y-12">
+              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div className="space-y-4">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Services</p>
+                  <h2 className="text-5xl text-white md:text-7xl" style={{ fontFamily: serifFont }}>
                     One practice, two stacks.
                   </h2>
-                  <p className="mt-3 max-w-2xl text-sm text-neutral-600">
-                    Documentary crews and the portrait atelier share the same producers, care protocols, and asset systems—choose the door you need, keep the same team.
+                  <p className="max-w-2xl text-lg text-white/60">
+                    Documentary crews and the portrait atelier share the same producers, care protocols, and asset systems.
                   </p>
                 </div>
                 <Link
                   href="#contact"
-                  className="inline-flex items-center justify-center rounded-full border border-neutral-300 px-5 py-3 text-sm font-semibold text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+                  className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition-transform hover:scale-105 hover:bg-neutral-200"
                 >
                   Talk with the practice
                 </Link>
@@ -379,187 +351,198 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                   <motion.div
                     key={stack.id}
                     {...fadeUp}
-                    transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-                    className="flex h-full flex-col rounded-[36px] border border-neutral-200 bg-white/95 p-6 shadow-[0_25px_70px_rgba(15,23,42,0.08)]"
+                    transition={{ ...fadeUp.transition, delay: index * 0.1 }}
+                    className="flex h-full flex-col rounded-[40px] border border-white/10 bg-white/5 p-10 shadow-sm backdrop-blur-md"
                   >
-                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">
+                    <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
                       <span>{stack.label}</span>
-                      <span className="text-neutral-400">{stack.price}</span>
+                      <span className="rounded-full border border-white/10 px-3 py-1">{stack.price}</span>
                     </div>
-                    <h3 className="mt-4 text-3xl font-semibold text-neutral-900" style={{ fontFamily: serifFont }}>
+                    <h3 className="mt-8 text-4xl text-white" style={{ fontFamily: serifFont }}>
                       {stack.title}
                     </h3>
-                    <p className="mt-3 text-sm text-neutral-600">{stack.description}</p>
-                    <ul className="mt-6 space-y-3 text-sm text-neutral-700">
+                    <p className="mt-4 text-lg text-white/60">{stack.description}</p>
+                    <div className="my-8 h-px w-full bg-white/10" />
+                    <ul className="space-y-4 text-white/80">
                       {stack.includes.map((item) => (
-                        <li key={item} className="flex items-start gap-2">
-                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                        <li key={item} className="flex items-start gap-3">
+                          <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/20" />
                           {item}
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-auto pt-8">
+                    <div className="mt-auto pt-10">
                       <Link
                         href={stack.ctaHref}
-                        className="inline-flex w-full items-center justify-center rounded-full border border-neutral-300 px-4 py-3 text-sm font-semibold text-neutral-900 hover:border-neutral-900 hover:bg-neutral-900/5"
+                        className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 py-4 text-sm font-medium text-white transition-all hover:border-white hover:bg-white hover:text-black"
                       >
-                        {stack.ctaLabel}
+                        {stack.ctaLabel} <span className="transition-transform group-hover:translate-x-1">→</span>
                       </Link>
                     </div>
                   </motion.div>
                 ))}
               </div>
-              <p className="text-sm text-neutral-500">{content.includedKit}</p>
+              <p className="text-center text-sm text-white/40">{content.includedKit}</p>
             </section>
 
-            <section id="testimonials" className="grid gap-8 md:grid-cols-3">
+            <section id="testimonials" className="grid gap-6 md:grid-cols-3">
               {testimonials.map((t) => (
-                <motion.article key={t.id} {...fadeUp} className="rounded-[32px] border border-neutral-200 bg-white/90 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
-                  <div className="flex items-center gap-3">
-                    <Image src={t.avatar} alt={t.name} width={56} height={56} className="h-14 w-14 rounded-full object-cover" />
+                <motion.article key={t.id} {...fadeUp} className="rounded-[32px] bg-white/10 border border-white/10 p-8 backdrop-blur-md">
+                  <div className="flex items-center gap-4">
+                    <Image src={t.avatar} alt={t.name} width={48} height={48} className="h-12 w-12 rounded-full object-cover grayscale opacity-80" />
                     <div>
-                      <p className="text-lg font-semibold">{t.name}</p>
-                      <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">{t.role}</p>
+                      <p className="font-medium text-white">{t.name}</p>
+                      <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">{t.role}</p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm text-neutral-600">“{t.quote}”</p>
+                  <p className="mt-6 text-sm leading-relaxed text-white/60">“{t.quote}”</p>
                 </motion.article>
               ))}
             </section>
 
-            <section id="faq" className="rounded-[32px] border border-neutral-200 bg-white/90 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
-              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">FAQ</p>
-                  <h2 className="text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+            <section id="faq" className="rounded-[48px] border border-white/10 bg-white/5 p-8 md:p-16 backdrop-blur-md">
+              <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+                <div className="max-w-md space-y-4">
+                  <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">FAQ</p>
+                  <h2 className="text-5xl text-white" style={{ fontFamily: serifFont }}>
                     Logistics, timelines, and care.
                   </h2>
                 </div>
-              </div>
-              <div className="mt-8 space-y-4">
-                {faqs.map((faq) => (
-                  <details key={faq.id} className="rounded-2xl border border-neutral-200 bg-white p-4">
-                    <summary className="cursor-pointer text-lg font-semibold text-neutral-900">{faq.question}</summary>
-                    <p className="mt-3 text-sm text-neutral-600">{faq.answer}</p>
-                  </details>
-                ))}
+                <div className="w-full max-w-2xl space-y-4">
+                  {faqs.map((faq) => (
+                    <details key={faq.id} className="group rounded-3xl bg-white/5 border border-white/5 p-6 open:bg-white/10 open:shadow-lg transition-all">
+                      <summary className="flex cursor-pointer items-center justify-between text-lg font-medium text-white list-none">
+                        {faq.question}
+                        <span className="ml-4 text-white/40 transition-transform group-open:rotate-45">+</span>
+                      </summary>
+                      <p className="mt-4 text-white/60 leading-relaxed">{faq.answer}</p>
+                    </details>
+                  ))}
+                </div>
               </div>
             </section>
 
-            <section id="contact" className="grid gap-8 md:grid-cols-[1fr_0.9fr]">
-              <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/90 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                <p className="text-[0.65rem] uppercase tracking-[0.3em] text-neutral-500">Contact</p>
-                <h2 className="mt-4 text-4xl text-neutral-900 md:text-5xl" style={{ fontFamily: serifFont }}>
+            <section id="contact" className="grid gap-8 md:grid-cols-[1fr_0.8fr]">
+              <motion.div {...fadeUp} className="rounded-[48px] bg-white/5 border border-white/10 p-10 text-white md:p-16 backdrop-blur-md">
+                <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Contact</p>
+                <h2 className="mt-6 text-5xl md:text-6xl" style={{ fontFamily: serifFont }}>
                   Share the story, we’ll build the reel.
                 </h2>
-                <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <form onSubmit={handleSubmit} className="mt-12 space-y-6">
                   <div className="hidden" aria-hidden>
                     <label className="text-sm text-neutral-500">Leave empty</label>
                     <input name="hp" autoComplete="off" tabIndex={-1} />
                   </div>
-                  <div>
-                    <label className="text-sm text-neutral-600">Full name</label>
-                    <input
-                      name="name"
-                      required
-                      autoComplete="name"
-                      className="mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-neutral-900"
-                    />
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-6">
                     <div>
-                      <label className="text-sm text-neutral-600">Email</label>
+                      <label className="text-xs uppercase tracking-[0.2em] text-white/40">Full name</label>
                       <input
-                        type="email"
-                        name="email"
+                        name="name"
                         required
-                        autoComplete="email"
-                        className="mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-neutral-900"
+                        autoComplete="name"
+                        className="mt-2 w-full border-b border-white/20 bg-transparent py-3 text-xl text-white placeholder-white/20 focus:border-white focus:outline-none"
+                        placeholder="Jane Doe"
+                      />
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label className="text-xs uppercase tracking-[0.2em] text-white/40">Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          required
+                          autoComplete="email"
+                          className="mt-2 w-full border-b border-white/20 bg-transparent py-3 text-xl text-white placeholder-white/20 focus:border-white focus:outline-none"
+                          placeholder="jane@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs uppercase tracking-[0.2em] text-white/40">Phone</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          autoComplete="tel"
+                          className="mt-2 w-full border-b border-white/20 bg-transparent py-3 text-xl text-white placeholder-white/20 focus:border-white focus:outline-none"
+                          placeholder="+1 (555) 000-0000"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs uppercase tracking-[0.2em] text-white/40">Organization</label>
+                      <input
+                        name="org"
+                        autoComplete="organization"
+                        className="mt-2 w-full border-b border-white/20 bg-transparent py-3 text-xl text-white placeholder-white/20 focus:border-white focus:outline-none"
+                        placeholder="Company Inc."
                       />
                     </div>
                     <div>
-                      <label className="text-sm text-neutral-600">Phone</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        autoComplete="tel"
-                        className="mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-neutral-900"
+                      <label className="text-xs uppercase tracking-[0.2em] text-white/40">Project details</label>
+                      <textarea
+                        name="details"
+                        rows={4}
+                        minLength={10}
+                        required
+                        className="mt-2 w-full border-b border-white/20 bg-transparent py-3 text-xl text-white placeholder-white/20 focus:border-white focus:outline-none resize-none"
+                        placeholder="Tell us about your project..."
                       />
                     </div>
                   </div>
-                  <div>
-                    <label className="text-sm text-neutral-600">Organization</label>
-                    <input
-                      name="org"
-                      autoComplete="organization"
-                      className="mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-neutral-900"
-                    />
+                  <div className="pt-8">
+                    <button
+                      disabled={submitting || submitted}
+                      className="inline-flex w-full items-center justify-center rounded-full bg-white px-8 py-4 text-sm font-bold text-black transition-transform hover:scale-[1.02] disabled:opacity-60 hover:bg-neutral-200"
+                    >
+                      {submitted ? "Sent — talk soon" : submitting ? "Sending…" : "Send inquiry"}
+                    </button>
                   </div>
-                  <div>
-                    <label className="text-sm text-neutral-600">Project details</label>
-                    <textarea
-                      name="details"
-                      rows={4}
-                      minLength={10}
-                      required
-                      className="mt-2 w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-neutral-900"
-                      placeholder="What are we documenting? Timeline, partners, goals?"
-                    />
-                  </div>
-                  <button
-                    disabled={submitting || submitted}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
-                  >
-                    {submitted ? "Sent — talk soon" : submitting ? "Sending…" : "Send inquiry"}
-                  </button>
-                  {error && <p className="text-sm text-red-500">{error}</p>}
-                  <p aria-live="polite" role="status" className="sr-only">
-                    {submitted ? "Inquiry sent successfully." : submitting ? "Sending your inquiry." : error ? `Error: ${error}` : ""}
-                  </p>
+                  {error && <p className="text-sm text-red-400">{error}</p>}
                 </form>
               </motion.div>
 
-              <motion.div {...fadeUp} className="rounded-[36px] border border-neutral-200 bg-white/90 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.08)]">
-                <div className="space-y-4 text-sm text-neutral-600">
-                  <div>
-                    <p className="uppercase tracking-[0.3em] text-neutral-400">Email</p>
-                    <a href={`mailto:${contact.email}`} className="text-lg font-semibold text-neutral-900">
-                      {contact.email}
-                    </a>
-                  </div>
-                  <div>
-                    <p className="uppercase tracking-[0.3em] text-neutral-400">City</p>
-                    <p className="text-lg text-neutral-900">{contact.city}</p>
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-2">
+              <motion.div {...fadeUp} className="flex flex-col gap-8">
+                <div className="rounded-[40px] border border-white/10 bg-white/5 p-10 backdrop-blur-md">
+                  <div className="space-y-8">
                     <div>
-                      <p className="uppercase tracking-[0.3em] text-neutral-400">Instagram</p>
-                      <a href={contact.instagram.url} target="_blank" rel="noreferrer" className="text-neutral-900 hover:underline">
-                        {contact.instagram.handle}
+                      <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Email</p>
+                      <a href={`mailto:${contact.email}`} className="mt-2 block text-2xl font-medium text-white hover:text-white/60">
+                        {contact.email}
                       </a>
                     </div>
                     <div>
-                      <p className="uppercase tracking-[0.3em] text-neutral-400">YouTube</p>
-                      <a href={contact.youtube.url} target="_blank" rel="noreferrer" className="text-neutral-900 hover:underline">
-                        {contact.youtube.label}
-                      </a>
+                      <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Studio</p>
+                      <p className="mt-2 text-xl text-white">{contact.city}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                      <div>
+                        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Instagram</p>
+                        <a href={contact.instagram.url} target="_blank" rel="noreferrer" className="mt-1 block text-white hover:underline">
+                          {contact.instagram.handle}
+                        </a>
+                      </div>
+                      <div>
+                        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">YouTube</p>
+                        <a href={contact.youtube.url} target="_blank" rel="noreferrer" className="mt-1 block text-white hover:underline">
+                          {contact.youtube.label}
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 rounded-2xl border border-neutral-200 bg-white">
-                  <div className="calendly-inline-widget h-[640px] w-full rounded-2xl" data-url={contact.calendlyUrl} />
+                <div className="flex-1 overflow-hidden rounded-[40px] border border-white/10 bg-white/5 backdrop-blur-md">
+                  <div className="calendly-inline-widget h-full w-full min-h-[600px]" data-url={contact.calendlyUrl} />
                   <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="afterInteractive" />
                 </div>
               </motion.div>
             </section>
 
-            <footer className="flex flex-col gap-4 border-t border-neutral-200 pt-10 text-sm text-neutral-500 md:flex-row md:items-center md:justify-between">
+            <footer className="flex flex-col gap-6 border-t border-white/10 pt-12 text-xs uppercase tracking-[0.1em] text-white/40 md:flex-row md:items-center md:justify-between">
               <p>© {new Date().getFullYear()} CHANGE Media Studios</p>
-              <div className="flex gap-4">
-                <Link href="/privacy" className="hover:text-neutral-900">
+              <div className="flex gap-8">
+                <Link href="/privacy" className="hover:text-white transition-colors">
                   Privacy
                 </Link>
-                <Link href="/terms" className="hover:text-neutral-900">
+                <Link href="/terms" className="hover:text-white transition-colors">
                   Terms
                 </Link>
               </div>

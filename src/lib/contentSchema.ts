@@ -166,23 +166,49 @@ export const seoSchema = z.object({
   ogImage: httpsUrl,
 });
 
+export const changeStudiosSchema = z.object({
+  hero: z.object({
+    titleLine1: z.string(),
+    titleLine2: z.string(),
+    mission: z.string(),
+    cta: z.string(),
+  }),
+  marquee: z.object({
+    text1: z.string(),
+    text2: z.string(),
+  }),
+  pillars: z.array(z.object({
+    title: z.string(),
+    desc: z.string(),
+    tags: z.array(z.string()),
+  })),
+  showcase: z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    category: z.string(),
+    year: z.string(),
+    image: z.string(),
+  })),
+});
+
 export const siteContentSchema = z.object({
   hero: heroSchema,
   marquee: marqueeSchema,
   logoCloud: logoCloudSchema,
-  featuredCases: caseStudySchema.array().max(8),
-  galleryCases: caseStudySchema.array().max(24),
-  features: featureSchema.array().max(8),
+  featuredCases: z.array(caseStudySchema),
+  galleryCases: z.array(caseStudySchema),
+  features: z.array(featureSchema),
   studio: studioSchema,
-  services: serviceCardSchema.array().min(1).max(8),
-  practices: practiceCardSchema.array().min(1).max(6),
-  systems: systemsContentSchema,
-  serviceStacks: serviceStackSchema.array().min(1).max(6),
-  includedKit: z.string().min(1),
-  testimonials: testimonialSchema.array().max(12),
-  faqs: faqSchema.array().max(20),
+  services: z.array(serviceCardSchema),
+  practices: z.array(practiceCardSchema),
+  testimonials: z.array(testimonialSchema),
+  faqs: z.array(faqSchema),
   contact: contactSchema,
+  systems: systemsContentSchema,
+  serviceStacks: z.array(serviceStackSchema),
   seo: seoSchema,
+  changeStudios: changeStudiosSchema.optional(),
+  includedKit: z.string().optional(),
 });
 
 export type HeroContent = z.infer<typeof heroSchema>;

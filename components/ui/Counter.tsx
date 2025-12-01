@@ -8,13 +8,14 @@ export type CounterProps = {
   suffix?: string;
   duration?: number; // ms
   className?: string;
+  style?: React.CSSProperties;
 };
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-export default function Counter({ value, suffix = '', duration = 1200, className }: CounterProps) {
+export default function Counter({ value, suffix = '', duration = 1200, className, style }: CounterProps) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const inView = useInView(ref, { margin: '-20% 0px -10% 0px', once: true });
   const [display, setDisplay] = useState(0);
@@ -42,7 +43,7 @@ export default function Counter({ value, suffix = '', duration = 1200, className
   }, [inView, value, duration]);
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={className} style={style}>
       {display}
       {suffix}
     </span>

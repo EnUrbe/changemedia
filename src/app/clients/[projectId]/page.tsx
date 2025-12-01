@@ -5,16 +5,19 @@ import { getProjectById, sanitizeProject } from "@/lib/projectsStore";
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
 
 interface ClientPageProps {
-  params: { projectId: string };
-  searchParams?: { key?: string };
+  params: Promise<{ projectId: string }>;
+  searchParams?: Promise<{ key?: string }>;
 }
 
 export default async function ClientProjectPage({ params, searchParams }: ClientPageProps) {
-  const project = await getProjectById(params.projectId);
+  const { projectId } = await params;
+  const { key: accessKey } = (await searchParams) || {};
+  
+  const project = await getProjectById(projectId);
   if (!project) {
     notFound();
   }
-  const accessKey = searchParams?.key;
+  
   if (project.accessCode && project.accessCode !== accessKey) {
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-center bg-[var(--background)] px-4 text-neutral-900">

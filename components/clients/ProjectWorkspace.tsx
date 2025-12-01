@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { ClientFacingProject } from "@/lib/projectsStore";
+import ProjectConcierge from "./ProjectConcierge";
 
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
 
@@ -155,6 +157,20 @@ export default function ProjectWorkspace({ project, accessKey }: Props) {
                           title={deliverable.title}
                         />
                       </div>
+                    ) : deliverable.type === "gallery" && deliverable.images && deliverable.images.length > 0 ? (
+                      <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+                        {deliverable.images.map((img, idx) => (
+                          <div key={idx} className="relative aspect-square overflow-hidden rounded-xl bg-neutral-100">
+                            <Image
+                              src={img}
+                              alt={`${deliverable.title} ${idx + 1}`}
+                              fill
+                              className="object-cover transition-transform duration-500 hover:scale-105"
+                              sizes="(max-width: 768px) 50vw, 33vw"
+                            />
+                          </div>
+                        ))}
+                      </div>
                     ) : (
                       <a href={deliverable.url} target="_blank" rel="noreferrer" className="inline-flex items-center text-sm font-medium text-neutral-900 hover:underline">
                         Open file ↗
@@ -216,6 +232,7 @@ export default function ProjectWorkspace({ project, accessKey }: Props) {
           </div>
         </section>
       </div>
+      <ProjectConcierge project={project} />
     </main>
   );
 }

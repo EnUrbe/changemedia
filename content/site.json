@@ -317,5 +317,45 @@
     "title": "CHANGE Media — One practice, two doors",
     "description": "Documentary crews, portrait atelier, and care systems helping campaigns, coalitions, and families move people to act.",
     "ogImage": "https://picsum.photos/seed/changemedia-og/1200/630"
+  },
+  "changeStudios": {
+    "hero": {
+      "titleLine1": "CHANGE",
+      "titleLine2": "STUDIOS",
+      "mission": "We bridge the gap between public health rigor and cinematic storytelling.",
+      "cta": "Start a Project"
+    },
+    "marquee": {
+      "text1": "Not a marketing agency.",
+      "text2": "A narrative engine."
+    },
+    "pillars": [
+      {
+        "title": "Cinematic Storytelling",
+        "desc": "Documentary-style films that honor the subject.",
+        "tags": ["Impact Films", "Docu-Series", "Editorial"]
+      },
+      {
+        "title": "Digital Media",
+        "desc": "Short-form content for the algorithmic age.",
+        "tags": ["Social Strategy", "Podcasts", "Explainers"]
+      },
+      {
+        "title": "Narrative Strategy",
+        "desc": "Messaging frameworks grounded in ethics.",
+        "tags": ["Brand Identity", "Campaigns", "Research"]
+      },
+      {
+        "title": "Creative Partnerships",
+        "desc": "Collaborating with visionaries for change.",
+        "tags": ["Co-Production", "Talent", "Events"]
+      }
+    ],
+    "showcase": [
+      { "id": "1", "title": "World Central Kitchen", "category": "Docu-Series", "year": "2024", "image": "/uploads/wck.jpg" },
+      { "id": "2", "title": "Planned Parenthood", "category": "Campaign", "year": "2023", "image": "/uploads/pp.jpg" },
+      { "id": "3", "title": "Harvard Public Health", "category": "Brand Strategy", "year": "2024", "image": "/uploads/harvard.jpg" },
+      { "id": "4", "title": "LA County Health", "category": "Narrative", "year": "2023", "image": "/uploads/lac.jpg" }
+    ]
   }
 }
