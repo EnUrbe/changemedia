@@ -4,6 +4,8 @@ import AddDeliverableForm from "./AddDeliverableForm";
 import ProjectActions from "@/components/admin/ProjectActions";
 import ProjectAiAssistant from "@/components/admin/ProjectAiAssistant";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const project = await getProjectById(id);

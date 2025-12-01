@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getProjects } from "@/lib/projectsStore";
 import Button from "@/components/ui/Button";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProjectsPage() {
   const projects = await getProjects();
 
