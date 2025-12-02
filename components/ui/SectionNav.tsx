@@ -50,7 +50,7 @@ export default function SectionNav({ sections, variant = 'dark', className = '' 
   const styles = variantStyles[variant];
 
   return (
-    <div className={`sticky top-0 z-30 ${styles.container} ${className}`}>
+    <div className={`sticky top-20 z-30 ${styles.container} ${className}`}>
       <div className="mx-auto max-w-6xl px-4 overflow-x-auto">
         <nav className={`flex gap-2 py-3 ${styles.nav}`}>
           {sections.map((s) => (
