@@ -127,8 +127,6 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
             tone="dark"
           />
 
-          <SectionNav sections={sections} variant="dark" />
-
           <main className="mx-auto max-w-[1400px] space-y-32 px-6 pb-32">
             <Section id="hero" padTop={false} className="relative min-h-screen flex flex-col justify-center !px-0 overflow-hidden -mx-6 w-[calc(100%+3rem)]">
               {/* Background */}
