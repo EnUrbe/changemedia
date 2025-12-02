@@ -26,7 +26,7 @@ export default function NavBar({ links, cta, tone = "light", fixed = true }: Nav
 
   return (
     <nav
-      className={`${fixed ? "fixed" : "relative"} inset-x-0 top-0 z-50 px-6 pt-6`}
+      className={`${fixed ? "fixed" : "relative"} inset-x-0 top-0 z-[100] px-6 pt-6`}
     >
       <div
         className={`mx-auto flex max-w-[1400px] items-center justify-between rounded-full ${surface} backdrop-blur-xl px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.12)]`}

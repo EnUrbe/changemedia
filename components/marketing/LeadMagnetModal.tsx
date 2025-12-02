@@ -44,13 +44,13 @@ export default function LeadMagnetModal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-[100] bg-neutral-900/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[110] bg-neutral-900/80 backdrop-blur-sm"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[101] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 px-6"
+            className="fixed left-1/2 top-1/2 z-[110] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 px-6"
           >
             <div className="relative overflow-hidden border-2 border-neutral-900 bg-white p-8 shadow-[16px_16px_0px_0px_#ccff00]">
               <button 
