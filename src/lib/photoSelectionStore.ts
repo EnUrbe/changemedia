@@ -69,20 +69,26 @@ export async function createPhotoSelectionGallery(
 }
 
 export async function getPhotoSelectionsByProject(projectId: string): Promise<PhotoSelectionGallery[]> {
-  const supabase = getSupabaseAdminClient();
-  
-  const { data, error } = await supabase
-    .from("photo_selections")
-    .select("*")
-    .eq("project_id", projectId)
-    .order("created_at", { ascending: false });
+  try {
+    const supabase = getSupabaseAdminClient();
+    
+    const { data, error } = await supabase
+      .from("photo_selections")
+      .select("*")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching photo selections:", error);
+    if (error) {
+      // Table might not exist yet
+      console.error("Error fetching photo selections:", error);
+      return [];
+    }
+
+    return data?.map(mapFromDB) || [];
+  } catch (e) {
+    console.error("getPhotoSelectionsByProject error:", e);
     return [];
   }
-
-  return data.map(mapFromDB);
 }
 
 export async function getPhotoSelectionById(id: string): Promise<PhotoSelectionGallery | null> {
@@ -161,20 +167,26 @@ export async function updateGalleryStatus(
 }
 
 export async function getAllPendingEdits(): Promise<PhotoSelectionGallery[]> {
-  const supabase = getSupabaseAdminClient();
-  
-  const { data, error } = await supabase
-    .from("photo_selections")
-    .select("*")
-    .eq("status", "submitted")
-    .order("submitted_at", { ascending: true });
+  try {
+    const supabase = getSupabaseAdminClient();
+    
+    const { data, error } = await supabase
+      .from("photo_selections")
+      .select("*")
+      .eq("status", "submitted")
+      .order("submitted_at", { ascending: true });
 
-  if (error) {
-    console.error("Error fetching pending edits:", error);
+    if (error) {
+      // Table might not exist yet
+      console.error("Error fetching pending edits:", error);
+      return [];
+    }
+
+    return data?.map(mapFromDB) || [];
+  } catch (e) {
+    console.error("getAllPendingEdits error:", e);
     return [];
   }
-
-  return data.map(mapFromDB);
 }
 
 function mapFromDB(row: any): PhotoSelectionGallery {
