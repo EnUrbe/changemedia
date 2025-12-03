@@ -4,8 +4,30 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { ClientFacingProject } from "@/lib/projectsStore";
 import ProjectConcierge from "./ProjectConcierge";
+import PhotoSelectionGallery from "./PhotoSelectionGallery";
 
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
+
+interface PhotoItem {
+  id: string;
+  url: string;
+  thumbnail?: string;
+  filename?: string;
+}
+
+interface PhotoSelection {
+  id: string;
+  projectId: string;
+  title: string;
+  description?: string;
+  photos: PhotoItem[];
+  maxSelections: number;
+  status: "pending" | "submitted" | "editing" | "delivered";
+  selectedPhotos: string[];
+  clientNotes?: string;
+  submittedAt?: string;
+  createdAt: string;
+}
 
 interface FeedbackFormState {
   author: string;
@@ -30,9 +52,10 @@ const labelClass = "text-[0.65rem] uppercase tracking-[0.35em] text-neutral-500"
 type Props = {
   project: ClientFacingProject;
   accessKey?: string | null;
+  photoSelections?: PhotoSelection[];
 };
 
-export default function ProjectWorkspace({ project, accessKey }: Props) {
+export default function ProjectWorkspace({ project, accessKey, photoSelections = [] }: Props) {
   const [feedback, setFeedback] = useState(project.feedback);
   const [form, setForm] = useState<FeedbackFormState>({ author: "", role: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -231,6 +254,26 @@ export default function ProjectWorkspace({ project, accessKey }: Props) {
             </div>
           </div>
         </section>
+
+        {/* Photo Selection Galleries */}
+        {photoSelections.length > 0 && (
+          <section className="space-y-8">
+            {photoSelections.map((gallery) => (
+              <div key={gallery.id} id={`photos-${gallery.id}`}>
+                <PhotoSelectionGallery
+                  galleryId={gallery.id}
+                  title={gallery.title}
+                  description={gallery.description}
+                  photos={gallery.photos}
+                  maxSelections={gallery.maxSelections}
+                  status={gallery.status}
+                  selectedPhotos={gallery.selectedPhotos}
+                  accessKey={accessKey || undefined}
+                />
+              </div>
+            ))}
+          </section>
+        )}
       </div>
       <ProjectConcierge project={project} />
     </main>

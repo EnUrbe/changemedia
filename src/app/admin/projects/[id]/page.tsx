@@ -1,14 +1,20 @@
 import { getProjectById } from "@/lib/projectsStore";
+import { getPhotoSelectionsByProject } from "@/lib/photoSelectionStore";
 import { notFound } from "next/navigation";
 import AddDeliverableForm from "./AddDeliverableForm";
 import ProjectActions from "@/components/admin/ProjectActions";
 import ProjectAiAssistant from "@/components/admin/ProjectAiAssistant";
+import CreateSelectionGalleryForm from "@/components/admin/CreateSelectionGalleryForm";
+import PhotoSelectionsAdmin from "./PhotoSelectionsAdmin";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const project = await getProjectById(id);
+  const [project, photoSelections] = await Promise.all([
+    getProjectById(id),
+    getPhotoSelectionsByProject(id),
+  ]);
 
   if (!project) {
     notFound();
@@ -116,10 +122,24 @@ export default async function AdminProjectDetail({ params }: { params: Promise<{
               </div>
             )}
           </div>
+
+          {/* Photo Selections Section */}
+          <PhotoSelectionsAdmin 
+            projectId={project.id} 
+            photoSelections={photoSelections} 
+            accessCode={project.accessCode}
+          />
         </div>
 
         <div className="space-y-6">
           <ProjectAiAssistant projectId={project.id} />
+
+          {/* Create Photo Selection Gallery */}
+          <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-lg font-semibold text-neutral-900">📸 Photo Selection</h2>
+            <p className="mb-4 text-sm text-neutral-500">Upload culled photos for client to select their favorites.</p>
+            <CreateSelectionGalleryForm projectId={project.id} />
+          </div>
 
           <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold text-neutral-900">Add Deliverable</h2>

@@ -59,3 +59,22 @@ create table if not exists calendar_feeds (
   url text not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Photo Selections Table (for client photo proofing workflow)
+create table if not exists photo_selections (
+  id uuid primary key default uuid_generate_v4(),
+  project_id uuid references projects(id) on delete cascade not null,
+  title text not null,
+  description text,
+  photos jsonb not null default '[]'::jsonb, -- Array of { id, url, thumbnail?, filename? }
+  max_selections integer not null default 15,
+  status text not null default 'pending' check (status in ('pending', 'submitted', 'editing', 'delivered')),
+  selected_photos jsonb default '[]'::jsonb, -- Array of photo IDs
+  client_notes text,
+  submitted_at timestamp with time zone,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Enable RLS for photo_selections
+alter table photo_selections enable row level security;
+

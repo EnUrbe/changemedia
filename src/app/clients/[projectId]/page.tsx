@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import ProjectWorkspace from "@/components/clients/ProjectWorkspace";
 import { getProjectById, sanitizeProject } from "@/lib/projectsStore";
+import { getPhotoSelectionsByProject } from "@/lib/photoSelectionStore";
 
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
 
@@ -39,6 +40,17 @@ export default async function ClientProjectPage({ params, searchParams }: Client
       </main>
     );
   }
-  const clientProject = sanitizeProject(project);
-  return <ProjectWorkspace project={clientProject} accessKey={accessKey} />;
+  
+  const [clientProject, photoSelections] = await Promise.all([
+    Promise.resolve(sanitizeProject(project)),
+    getPhotoSelectionsByProject(projectId),
+  ]);
+  
+  return (
+    <ProjectWorkspace 
+      project={clientProject} 
+      accessKey={accessKey} 
+      photoSelections={photoSelections}
+    />
+  );
 }
