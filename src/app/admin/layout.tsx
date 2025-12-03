@@ -7,11 +7,16 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data?.user;
+  } catch (error) {
+    console.error("Admin layout auth error:", error);
+    // Continue rendering without user - login page will still work
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
