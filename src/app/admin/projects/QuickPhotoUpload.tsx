@@ -83,75 +83,104 @@ export default function QuickPhotoUpload({ projects }: QuickPhotoUploadProps) {
     }
   };
 
+  if (projects.length === 0) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
+        <div className="mx-auto mb-3 text-3xl opacity-50">📸</div>
+        <p className="text-sm text-white/50">Create a project first to upload photos</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-      <div className="mb-4 flex items-center gap-3">
-        <span className="text-2xl">📸</span>
-        <div>
-          <h2 className="text-lg font-semibold text-white">Quick Photo Upload</h2>
-          <p className="text-sm text-white/60">Create selection gallery for client</p>
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.02]">
+      {/* Header */}
+      <div className="border-b border-white/10 bg-white/[0.03] px-5 py-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 text-xl">
+            📸
+          </div>
+          <div>
+            <h2 className="font-semibold text-white">Photo Selection</h2>
+            <p className="text-xs text-white/50">Upload culled photos for client</p>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4 p-5">
         <div>
-          <label className="mb-1 block text-sm text-white/70">Select Project</label>
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/50">
+            Project
+          </label>
           <select
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-colors focus:border-white/20 focus:outline-none"
             required
           >
-            <option value="" className="bg-neutral-900">Choose a project...</option>
+            <option value="" className="bg-neutral-900">Choose project...</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id} className="bg-neutral-900">
-                {p.clientName} - {p.projectTitle}
+                {p.clientName} — {p.projectTitle}
               </option>
             ))}
           </select>
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm text-white/70">Gallery Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g., Portrait Session Dec 2025"
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/30"
-          />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/50">
+              Gallery Title
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Dec 2025 Session"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/30 transition-colors focus:border-white/20 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/50">
+              Max Picks
+            </label>
+            <input
+              type="number"
+              min={1}
+              value={maxSelections}
+              onChange={(e) => setMaxSelections(parseInt(e.target.value) || 15)}
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-colors focus:border-white/20 focus:outline-none"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="mb-1 block text-sm text-white/70">Max Selections (based on package)</label>
-          <input
-            type="number"
-            min={1}
-            value={maxSelections}
-            onChange={(e) => setMaxSelections(parseInt(e.target.value) || 15)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm text-white/70">Upload Photos</label>
-          <CloudinaryUploadWidget onUpload={handleUpload} />
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/50">
+            Photos
+          </label>
+          <div className="mb-2">
+            <CloudinaryUploadWidget onUpload={handleUpload} />
+          </div>
           <textarea
             value={images}
             onChange={(e) => setImages(e.target.value)}
-            placeholder="Or paste URLs here (one per line)"
-            className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs text-white placeholder:text-white/30"
-            rows={4}
+            placeholder="Or paste URLs (one per line)"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-mono text-xs text-white placeholder:text-white/30 transition-colors focus:border-white/20 focus:outline-none"
+            rows={3}
           />
           {photoCount > 0 && (
-            <p className="mt-1 text-sm text-emerald-400">
-              ✓ {photoCount} photo{photoCount > 1 ? "s" : ""} ready
-            </p>
+            <div className="mt-2 flex items-center gap-2 text-sm">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-[10px] text-emerald-400">
+                ✓
+              </span>
+              <span className="text-emerald-400">{photoCount} photo{photoCount > 1 ? "s" : ""} ready</span>
+            </div>
           )}
         </div>
 
         {message && (
-          <div className={`rounded-lg p-3 text-sm ${
+          <div className={`rounded-xl p-3 text-sm ${
             message.type === "success" 
               ? "bg-emerald-500/20 text-emerald-300" 
               : "bg-red-500/20 text-red-300"
@@ -160,8 +189,13 @@ export default function QuickPhotoUpload({ projects }: QuickPhotoUploadProps) {
           </div>
         )}
 
-        <Button type="submit" fullWidth disabled={submitting || photoCount === 0}>
-          {submitting ? "Creating..." : `Create Gallery (${photoCount} photos)`}
+        <Button 
+          type="submit" 
+          fullWidth 
+          disabled={submitting || photoCount === 0}
+          className="!rounded-xl"
+        >
+          {submitting ? "Creating..." : photoCount > 0 ? `Create Gallery (${photoCount})` : "Add photos first"}
         </Button>
       </form>
     </div>
