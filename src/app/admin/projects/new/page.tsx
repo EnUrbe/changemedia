@@ -2,8 +2,12 @@
 
 import Button from "@/components/ui/Button";
 import { createNewProject } from "../actions";
+import { useState } from "react";
 
 export default function NewProjectPage() {
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
   return (
     <div className="min-h-screen bg-neutral-50 p-8">
       <div className="mx-auto max-w-2xl">
@@ -11,7 +15,13 @@ export default function NewProjectPage() {
         
         <form 
           action={async (formData) => {
-            await createNewProject(formData);
+            setError(null);
+            setSubmitting(true);
+            const res = await createNewProject(formData);
+            if (res?.error) {
+              setError(res.error);
+              setSubmitting(false);
+            }
           }} 
           className="space-y-6 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm"
         >
@@ -56,8 +66,12 @@ export default function NewProjectPage() {
             <p className="text-xs text-neutral-500">This is the password the client will use to log in.</p>
           </div>
 
+          {error && <p className="text-sm text-red-600">{error}</p>}
+
           <div className="pt-4">
-            <Button type="submit" fullWidth>Create Project</Button>
+            <Button type="submit" fullWidth disabled={submitting}>
+              {submitting ? "Creating…" : "Create Project"}
+            </Button>
           </div>
         </form>
       </div>

@@ -16,25 +16,33 @@ export async function createNewProject(formData: FormData) {
   if (!clientName || !projectTitle || !accessCode) {
     return { error: "Missing required fields" };
   }
+  try {
+    const newProject = await createProject({
+      clientName,
+      projectTitle,
+      status: "planning",
+      summary: "Project initialized.",
+      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString().split("T")[0], // +30 days
+      pointOfContact: {
+        name: clientName,
+        email: email || "",
+      },
+      accessCode,
+      deliverables: [],
+      feedback: [],
+      checklist: ["Initial briefing", "Shoot planning"],
+    });
 
-  const newProject = await createProject({
-    clientName,
-    projectTitle,
-    status: "planning",
-    summary: "Project initialized.",
-    dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString().split("T")[0], // +30 days
-    pointOfContact: {
-      name: clientName,
-      email: email || "",
-    },
-    accessCode,
-    deliverables: [],
-    feedback: [],
-    checklist: ["Initial briefing", "Shoot planning"],
-  });
-
-  revalidatePath("/admin/projects");
-  redirect(`/admin/projects/${newProject.id}`);
+    revalidatePath("/admin/projects");
+    redirect(`/admin/projects/${newProject.id}`);
+  } catch (error: any) {
+    // Handle duplicate access code or general creation failures gracefully
+    const message = error?.message || "Failed to create project";
+    if (message.toLowerCase().includes("duplicate") || message.includes("23505")) {
+      return { error: "Access code already in use. Choose another code." };
+    }
+    return { error: message };
+  }
 }
 
 export async function addDeliverable(projectId: string, formData: FormData) {
