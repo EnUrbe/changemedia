@@ -60,6 +60,8 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
   const [form, setForm] = useState<FeedbackFormState>({ author: "", role: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [downloadingAll, setDownloadingAll] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const deliverablesByStatus = useMemo(() => {
     return project.deliverables.reduce<Record<string, number>>((acc, deliverable) => {
@@ -67,6 +69,70 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
       return acc;
     }, {});
   }, [project.deliverables]);
+
+  const finalImages = useMemo(() => {
+    return project.deliverables
+      .filter((d) => d.status === "ready")
+      .flatMap((d) =>
+        (d.images || []).map((url, idx) => ({
+          id: `${d.id}-${idx}`,
+          url,
+          title: d.title,
+        }))
+      );
+  }, [project.deliverables]);
+
+  function buildCloudinaryUrlWithTransformation(url: string, transformation: string) {
+    try {
+      const parsed = new URL(url);
+      if (!parsed.hostname.includes("res.cloudinary.com")) return url;
+      const parts = parsed.pathname.split("/").filter(Boolean);
+      const uploadIndex = parts.findIndex((p) => p === "upload");
+      if (uploadIndex === -1) return url;
+      const before = parts.slice(0, uploadIndex + 1);
+      const after = parts.slice(uploadIndex + 1);
+      const withTransform = [...before, transformation, ...after].join("/");
+      return `${parsed.origin}/${withTransform}${parsed.search}`;
+    } catch (error) {
+      console.error("buildCloudinaryUrlWithTransformation error", error);
+      return url;
+    }
+  }
+
+  function buildPreviewUrl(url: string) {
+    // Gentle watermark for previews
+    const watermark = "q_auto,f_auto,w_1600/l_text:Arial_60:bold:CHANGE%20MEDIA,co_white,g_south,y_40,opacity_50";
+    return buildCloudinaryUrlWithTransformation(url, watermark);
+  }
+
+  function buildDownloadUrl(url: string) {
+    // Force download without watermark
+    return buildCloudinaryUrlWithTransformation(url, "fl_attachment");
+  }
+
+  async function handleDownloadAll() {
+    if (downloadingAll) return;
+    setDownloadingAll(true);
+    setDownloadError(null);
+    try {
+      const res = await fetch(`/api/projects/${project.id}/delivery/archive${accessKey ? `?key=${accessKey}` : ""}`, {
+        method: "POST",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Download failed");
+      }
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error: any) {
+      console.error(error);
+      setDownloadError(error?.message || "Could not start download");
+    } finally {
+      setDownloadingAll(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -272,6 +338,53 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
                 />
               </div>
             ))}
+          </section>
+        )}
+
+        {/* Delivery section */}
+        {finalImages.length > 0 && (
+          <section className={panelClass + " p-6 space-y-6"}>
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className={labelClass}>Delivery</p>
+                <h2 className="text-2xl font-semibold">Final photos</h2>
+                <p className="text-sm text-neutral-600">Watermarked previews; download links are clean and expiring.</p>
+              </div>
+              <button
+                onClick={handleDownloadAll}
+                disabled={downloadingAll}
+                className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+              >
+                {downloadingAll ? "Preparing…" : "Download all"}
+              </button>
+            </div>
+
+            {downloadError && <p className="text-sm text-red-500">{downloadError}</p>}
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {finalImages.map((photo) => (
+                <div key={photo.id} className="overflow-hidden rounded-2xl border border-neutral-200 bg-white/80 shadow-[0_15px_45px_rgba(15,23,42,0.07)]">
+                  <div className="relative aspect-square overflow-hidden">
+                    <Image
+                      src={buildPreviewUrl(photo.url)}
+                      alt={photo.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-3 text-sm">
+                    <span className="text-neutral-700">{photo.title}</span>
+                    <a
+                      href={buildDownloadUrl(photo.url)}
+                      className="text-neutral-900 underline-offset-4 hover:underline"
+                    >
+                      Download
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
         )}
       </div>
