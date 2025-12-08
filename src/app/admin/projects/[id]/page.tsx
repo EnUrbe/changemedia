@@ -6,6 +6,7 @@ import ProjectActions from "@/components/admin/ProjectActions";
 import ProjectAiAssistant from "@/components/admin/ProjectAiAssistant";
 import CreateSelectionGalleryForm from "@/components/admin/CreateSelectionGalleryForm";
 import PhotoSelectionsAdmin from "./PhotoSelectionsAdmin";
+import AccessCodeActions from "@/components/admin/AccessCodeActions";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,9 @@ export default async function AdminProjectDetail({ params }: { params: Promise<{
               <span className="font-mono">Code: {project.accessCode}</span>
               <span>•</span>
               <span>Due: {new Date(project.dueDate).toLocaleDateString()}</span>
+            </div>
+            <div className="mt-3">
+              <AccessCodeActions accessCode={project.accessCode} projectId={project.id} />
             </div>
           </div>
           <ProjectActions 
