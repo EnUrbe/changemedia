@@ -21,7 +21,15 @@ function extractCloudinaryPublicId(url: string) {
   }
 }
 
-async function buildArchiveUrl(publicIds: string[]) {
+type DownloadSize = "full" | "large" | "medium";
+
+function mapSizeToTransformation(size: DownloadSize) {
+  if (size === "large") return [{ width: 3000, crop: "limit" }];
+  if (size === "medium") return [{ width: 2000, crop: "limit" }];
+  return undefined; // full resolution
+}
+
+async function buildArchiveUrl(publicIds: string[], size: DownloadSize) {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
@@ -33,6 +41,8 @@ async function buildArchiveUrl(publicIds: string[]) {
   const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/generate_archive`;
   const expiresAt = Math.floor(Date.now() / 1000) + 60 * 60; // 1 hour
 
+   const transformations = mapSizeToTransformation(size);
+
   const body = new URLSearchParams({
     public_ids: publicIds.join(","),
     target_format: "zip",
@@ -40,6 +50,10 @@ async function buildArchiveUrl(publicIds: string[]) {
     flatten_folders: "true",
     use_original_filename: "true",
   });
+
+  if (transformations) {
+    body.set("transformations", JSON.stringify(transformations));
+  }
 
   const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
 
@@ -82,6 +96,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const sizeParam = (req.nextUrl.searchParams.get("size") as DownloadSize | null) || "full";
+    const size: DownloadSize = ["full", "large", "medium"].includes(sizeParam) ? sizeParam : "full";
+
     const deliverables = project.deliverables || [];
 
     const publicIds = deliverables
@@ -105,7 +122,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "No deliverable assets found" }, { status: 400 });
     }
 
-    const archiveUrl = await buildArchiveUrl(publicIds);
+    const archiveUrl = await buildArchiveUrl(publicIds, size);
     return NextResponse.json({ url: archiveUrl });
   } catch (error) {
     console.error("delivery archive error", error);

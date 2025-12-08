@@ -62,6 +62,7 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
   const [toast, setToast] = useState<string | null>(null);
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [downloadSize, setDownloadSize] = useState<"full" | "large" | "medium">("full");
 
   const deliverablesByStatus = useMemo(() => {
     return project.deliverables.reduce<Record<string, number>>((acc, deliverable) => {
@@ -105,9 +106,10 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
     return buildCloudinaryUrlWithTransformation(url, watermark);
   }
 
-  function buildDownloadUrl(url: string) {
-    // Force download without watermark
-    return buildCloudinaryUrlWithTransformation(url, "fl_attachment");
+  function buildDownloadUrl(url: string, size: "full" | "large" | "medium") {
+    const sizeTransform = size === "large" ? "c_limit,w_3000" : size === "medium" ? "c_limit,w_2000" : undefined;
+    const transforms = ["fl_attachment", sizeTransform].filter(Boolean).join(",");
+    return buildCloudinaryUrlWithTransformation(url, transforms || "fl_attachment");
   }
 
   async function handleDownloadAll() {
@@ -115,7 +117,10 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
     setDownloadingAll(true);
     setDownloadError(null);
     try {
-      const res = await fetch(`/api/projects/${project.id}/delivery/archive${accessKey ? `?key=${accessKey}` : ""}`, {
+      const params = new URLSearchParams();
+      if (accessKey) params.set("key", accessKey);
+      params.set("size", downloadSize);
+      const res = await fetch(`/api/projects/${project.id}/delivery/archive?${params.toString()}`, {
         method: "POST",
       });
       if (!res.ok) {
@@ -350,13 +355,24 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
                 <h2 className="text-2xl font-semibold">Final photos</h2>
                 <p className="text-sm text-neutral-600">Watermarked previews; download links are clean and expiring.</p>
               </div>
-              <button
-                onClick={handleDownloadAll}
-                disabled={downloadingAll}
-                className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
-              >
-                {downloadingAll ? "Preparing…" : "Download all"}
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <select
+                  value={downloadSize}
+                  onChange={(e) => setDownloadSize(e.target.value as typeof downloadSize)}
+                  className="rounded-full border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-800"
+                >
+                  <option value="full">Full resolution</option>
+                  <option value="large">Large (max 3000px)</option>
+                  <option value="medium">Medium (max 2000px)</option>
+                </select>
+                <button
+                  onClick={handleDownloadAll}
+                  disabled={downloadingAll}
+                  className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
+                >
+                  {downloadingAll ? "Preparing…" : "Download all"}
+                </button>
+              </div>
             </div>
 
             {downloadError && <p className="text-sm text-red-500">{downloadError}</p>}
@@ -376,7 +392,7 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
                   <div className="flex items-center justify-between px-4 py-3 text-sm">
                     <span className="text-neutral-700">{photo.title}</span>
                     <a
-                      href={buildDownloadUrl(photo.url)}
+                      href={buildDownloadUrl(photo.url, downloadSize)}
                       className="text-neutral-900 underline-offset-4 hover:underline"
                     >
                       Download
