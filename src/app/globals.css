@@ -4,33 +4,36 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Palette inspired by the CHANGE STUDIOS mark: warm ochre + teal */
 :root {
-  --background: #f6f3ee;
+  --background: #f7f1e7;
   --surface: #ffffff;
-  --surface-muted: rgba(255, 255, 255, 0.85);
-  --surface-strong: #fefbf5;
-  --border-soft: rgba(15, 23, 42, 0.08);
-  --border-strong: rgba(15, 23, 42, 0.16);
+  --surface-muted: rgba(255, 255, 255, 0.9);
+  --surface-strong: #f1e6d7;
+  --border-soft: rgba(17, 24, 39, 0.08);
+  --border-strong: rgba(17, 24, 39, 0.16);
   --foreground: #0f172a;
-  --muted: #5f6472;
+  --muted: #5a5f6b;
   --brand: #0f172a;
-  --brand-accent: #5c7cfa;
-  --brand-accent-soft: #dfe7ff;
+  --brand-accent: #4f8c99; /* teal */
+  --brand-accent-soft: #dce8eb; /* soft teal wash */
+  --brand-ochre: #c7a26a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #050607;
-    --surface: #0b0c0f;
-    --surface-muted: rgba(5, 6, 7, 0.85);
-    --surface-strong: #11131a;
+    --background: #081015;
+    --surface: #0e1a20;
+    --surface-muted: rgba(8, 16, 21, 0.9);
+    --surface-strong: #0c171c;
     --border-soft: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.18);
-    --foreground: #f8fafc;
-    --muted: #c3cad9;
-    --brand: #f8fafc;
-    --brand-accent: #a3baff;
-    --brand-accent-soft: #1f2937;
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --foreground: #e9f2f4;
+    --muted: #9eb0b8;
+    --brand: #e9f2f4;
+    --brand-accent: #7cb7c4;
+    --brand-accent-soft: #0f1e26;
+    --brand-ochre: #c7a26a;
   }
 }
 
