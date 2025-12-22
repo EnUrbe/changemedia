@@ -23,9 +23,9 @@ export default function Section({
   maxWidth = "xl",
   padTop = true,
 }: SectionProps) {
-  const text = tone === "dark" ? "text-white" : "text-neutral-900";
-  const muted = tone === "dark" ? "text-neutral-400" : "text-neutral-500";
-  const surface = tone === "dark" ? "bg-[#0a0a0a]" : "bg-[#171717]";
+  const text = tone === "dark" ? "text-white" : "text-[var(--foreground)]";
+  const muted = tone === "dark" ? "text-white/60" : "text-[var(--muted)]";
+  const surface = tone === "dark" ? "bg-[var(--brand)]" : "bg-[var(--background)]";
 
   const widthClass = maxWidth === "xl" ? "max-w-7xl" : "max-w-5xl";
 

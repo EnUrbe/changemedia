@@ -19,10 +19,10 @@ const variantStyles = {
   },
   light: {
     container:
-      'border-b border-neutral-200/80 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75 shadow-[0_12px_30px_rgba(15,23,42,0.04)]',
+      'border-b border-neutral-100 bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60',
     nav: 'text-sm text-neutral-500',
-    active: 'border-neutral-900 text-neutral-900 bg-neutral-100',
-    inactive: 'border-neutral-200 bg-white text-neutral-500 hover:border-neutral-900/50 hover:text-neutral-900',
+    active: 'text-neutral-900 bg-neutral-100 font-medium',
+    inactive: 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50',
   },
 };
 
@@ -50,14 +50,14 @@ export default function SectionNav({ sections, variant = 'dark', className = '' 
   const styles = variantStyles[variant];
 
   return (
-    <div className={`sticky top-20 z-30 ${styles.container} ${className}`}>
-      <div className="mx-auto max-w-6xl px-4 overflow-x-auto">
-        <nav className={`flex gap-2 py-3 ${styles.nav}`}>
+    <div className={`sticky top-0 z-30 ${styles.container} ${className}`}>
+      <div className="mx-auto max-w-6xl px-4 overflow-x-auto no-scrollbar">
+        <nav className={`flex gap-1 py-4 ${styles.nav}`}>
           {sections.map((s) => (
             <a
               key={s.id}
               href={`#${s.id}`}
-              className={`inline-flex items-center rounded-xl px-3 py-1.5 border transition-colors ${
+              className={`inline-flex items-center rounded-full px-4 py-2 transition-all duration-300 text-xs uppercase tracking-widest ${
                 active === s.id ? styles.active : styles.inactive
               }`}
             >

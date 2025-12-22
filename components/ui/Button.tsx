@@ -27,11 +27,11 @@ type ButtonProps = BaseProps &
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-white text-black shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:bg-neutral-200 hover:shadow-[0_0_25px_-5px_rgba(255,255,255,0.4)] focus-visible:ring-white",
+    "bg-white text-black border border-transparent hover:bg-neutral-200 hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-black/5",
   ghost:
-    "border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white focus-visible:ring-white/50",
+    "bg-transparent text-current hover:opacity-60",
   soft:
-    "bg-white/10 text-white border border-white/20 hover:bg-white/20 focus-visible:ring-white/50",
+    "bg-white/10 text-white border border-white/10 hover:bg-white/20 hover:border-white/30",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

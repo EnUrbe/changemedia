@@ -5,12 +5,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
-import SectionNav from "@/components/ui/SectionNav";
 import Button from "@/components/ui/Button";
 import NavBar from "@/components/ui/NavBar";
 import Section from "@/components/ui/Section";
 import ShowcaseSlider from "@/components/ui/ShowcaseSlider";
-import GlassGrid from "@/components/ui/GlassGrid";
 import type { SiteContent } from "@/lib/contentSchema";
 
 const serifFont = "var(--font-family-serif, 'Instrument Serif', Georgia, serif)";
@@ -57,15 +55,6 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
       image: item.imageUrl,
       year: "2024",
     }));
-
-    const sections = [
-      { id: "hero", label: "Overview" },
-      { id: "practices", label: "Practices" },
-      { id: "work", label: "Work" },
-      { id: "systems", label: "Systems" },
-      { id: "services", label: "Services" },
-      { id: "contact", label: "Contact" },
-    ];
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault();
@@ -141,24 +130,18 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               </div>
 
               {/* Content */}
-              <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center h-full py-32">
-                  {/* Left: Glass Grid */}
-                  <div className="flex justify-center lg:justify-start">
-                     <GlassGrid images={gridImages} />
-                  </div>
-
-                  {/* Right: Text */}
-                  <div className="text-center lg:text-right space-y-10">
-                     <h1 className="text-5xl md:text-7xl lg:text-8xl text-white leading-[1.1] tracking-tight drop-shadow-lg" style={{ fontFamily: serifFont }}>
+              <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 flex flex-col items-center justify-center h-full py-32 text-center">
+                  <div className="space-y-10 max-w-5xl">
+                     <h1 className="text-6xl md:text-8xl lg:text-9xl text-white leading-[1] tracking-tight drop-shadow-2xl" style={{ fontFamily: serifFont }}>
                         Cinematic creative<br/>
                         for movements<br/>
                         that matter.
                      </h1>
-                     <div className="flex justify-center lg:justify-end">
+                     <div className="flex justify-center pt-8">
                         <Button 
                           href="#contact" 
                           size="lg" 
-                          className="!bg-[#d4a373] !text-black !border-none !rounded-full !px-10 !py-6 !text-lg font-medium hover:!bg-[#c39262] hover:scale-105 transition-all shadow-xl shadow-black/20"
+                          className="!bg-white !text-black !border-none !rounded-full !px-12 !py-8 !text-xl font-medium hover:!bg-neutral-200 hover:scale-105 transition-all shadow-2xl"
                         >
                            Book a project
                         </Button>
@@ -183,7 +166,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                     key={practice.id}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.1 }}
-                    className="group flex h-full flex-col rounded-[40px] border border-white/10 bg-white/5 p-8 transition-all duration-500 hover:bg-white/10 hover:shadow-xl hover:shadow-black/20 backdrop-blur-sm"
+                    className="group flex h-full flex-col rounded-[40px] border border-white/10 bg-transparent p-8 transition-all duration-500 hover:bg-white/5 hover:border-white/20 backdrop-blur-sm"
                   >
                     <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
                       <span>{practice.label}</span>
@@ -241,23 +224,6 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
               </div>
               
               <ShowcaseSlider items={showcaseItems} />
-              
-              {/* Gallery Strip */}
-              <div className="overflow-hidden rounded-[40px] border border-white/10 bg-white/5 p-8 backdrop-blur-md">
-                <div className="flex gap-8 overflow-x-auto pb-4 scrollbar-hide">
-                  {gallery.map((item) => (
-                    <div key={item.id} className="w-72 shrink-0 space-y-4">
-                      <div className="relative aspect-[3/2] overflow-hidden rounded-2xl bg-white/5">
-                        <Image src={item.imageUrl} alt={item.title} fill className="object-cover grayscale transition-all hover:grayscale-0 opacity-80 hover:opacity-100" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-white">{item.title}</h4>
-                        <p className="text-xs text-white/40 mt-1">{item.subtitle}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </section>
 
             <section id="systems" className="space-y-12">
@@ -270,10 +236,10 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                     </h2>
                     <p className="text-lg text-white/40 leading-relaxed">{systems.description}</p>
                   </div>
-                  <div className="grid gap-4 sm:grid-cols-3 w-full lg:w-auto">
+                  <div className="grid gap-4 sm:grid-cols-3 w-full lg:w-auto divide-y sm:divide-y-0 sm:divide-x divide-white/10">
                     {systems.outcomes.map((outcome) => (
-                      <div key={outcome.label} className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm">
-                        <div className="text-3xl font-medium text-white" style={{ fontFamily: serifFont }}>{outcome.value}</div>
+                      <div key={outcome.label} className="p-6 text-center">
+                        <div className="text-4xl font-medium text-white" style={{ fontFamily: serifFont }}>{outcome.value}</div>
                         <div className="mt-2 text-[0.6rem] uppercase tracking-[0.2em] text-white/40">{outcome.label}</div>
                       </div>
                     ))}
@@ -281,7 +247,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                 </div>
                 <div className="mt-16 grid gap-6 md:grid-cols-2">
                   {systems.steps.map((step, i) => (
-                    <div key={step.title} className="group rounded-[32px] border border-white/10 bg-white/5 p-8 transition-colors hover:bg-white/10">
+                    <div key={step.title} className="group rounded-[32px] border border-white/10 bg-transparent p-8 transition-colors hover:bg-white/5 hover:border-white/20">
                       <div className="flex items-start justify-between">
                         <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">0{i + 1}</p>
                         <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/40">{step.title}</p>
@@ -350,7 +316,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
                     key={stack.id}
                     {...fadeUp}
                     transition={{ ...fadeUp.transition, delay: index * 0.1 }}
-                    className="flex h-full flex-col rounded-[40px] border border-white/10 bg-white/5 p-10 shadow-sm backdrop-blur-md"
+                    className="flex h-full flex-col rounded-[40px] border border-white/10 bg-transparent p-10 shadow-sm backdrop-blur-md transition-colors hover:bg-white/5 hover:border-white/20"
                   >
                     <div className="flex items-center justify-between text-[0.65rem] uppercase tracking-[0.2em] text-white/40">
                       <span>{stack.label}</span>
@@ -385,7 +351,7 @@ export default function ChangeMediaLanding({ content }: LandingProps) {
 
             <section id="testimonials" className="grid gap-6 md:grid-cols-3">
               {testimonials.map((t) => (
-                <motion.article key={t.id} {...fadeUp} className="rounded-[32px] bg-white/10 border border-white/10 p-8 backdrop-blur-md">
+                <motion.article key={t.id} {...fadeUp} className="rounded-[32px] bg-transparent border border-white/10 p-8 backdrop-blur-md hover:bg-white/5 transition-colors">
                   <div className="flex items-center gap-4">
                     <Image src={t.avatar} alt={t.name} width={48} height={48} className="h-12 w-12 rounded-full object-cover grayscale opacity-80" />
                     <div>

@@ -29,22 +29,22 @@ export default function NavBar({ links, cta, tone = "light", fixed = true }: Nav
       className={`${fixed ? "fixed" : "relative"} inset-x-0 top-0 z-[100] px-6 pt-6`}
     >
       <div
-        className={`mx-auto flex max-w-[1400px] items-center justify-between rounded-full ${surface} backdrop-blur-xl px-4 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.12)]`}
+        className={`mx-auto flex max-w-[1400px] items-center justify-between rounded-full ${surface} backdrop-blur-xl px-6 py-4 shadow-sm transition-all duration-300`}
       >
-        <Link href="/" className={`text-sm font-semibold uppercase tracking-[0.24em] ${textColor}`}>
-          CHANGE<span className="opacity-60">®</span>
+        <Link href="/" className={`text-sm font-bold uppercase tracking-[0.2em] ${textColor} hover:opacity-70 transition-opacity`}>
+          CHANGE<span className="opacity-40">®</span>
         </Link>
-        <div className="hidden items-center gap-6 text-[11px] font-semibold uppercase tracking-[0.24em] md:flex">
+        <div className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.2em] md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`${textColor} opacity-80 transition hover:opacity-100`}
+              className={`${textColor} opacity-60 transition hover:opacity-100`}
             >
               {link.label}
             </Link>
           ))}
-          {cta && <Button href={cta.href} size="md" variant="soft" className="ml-2">{cta.label}</Button>}
+          {cta && <Button href={cta.href} size="md" variant="primary" className="ml-4 !px-6">{cta.label}</Button>}
         </div>
 
         <button
