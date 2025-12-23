@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import Button from "@/components/ui/Button";
 
 interface CloudinaryUploadWidgetProps {
@@ -16,8 +16,19 @@ declare global {
 
 export default function CloudinaryUploadWidget({ onUpload, children }: CloudinaryUploadWidgetProps) {
   const widgetRef = useRef<any>(null);
+  const onUploadRef = useRef(onUpload);
 
-  const openWidget = useCallback(() => {
+  // Keep the callback ref up to date so we don't need to recreate the widget
+  useEffect(() => {
+    onUploadRef.current = onUpload;
+  }, [onUpload]);
+
+  const openWidget = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     if (widgetRef.current) {
       widgetRef.current.open();
       return;
@@ -36,7 +47,7 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
         (error: any, result: any) => {
           if (!error && result && result.event === "success") {
             console.log("Upload success:", result.info.secure_url);
-            onUpload(result.info.secure_url);
+            onUploadRef.current(result.info.secure_url);
           }
         }
       );
@@ -45,7 +56,19 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
       console.error("Cloudinary script not loaded yet");
       alert("Upload widget is still loading, please try again in a moment.");
     }
-  }, [onUpload]);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (widgetRef.current) {
+        // Some widget implementations might have a destroy method, 
+        // but Cloudinary's widget usually just needs to be let go.
+        // We can set it to null to be safe.
+        widgetRef.current = null;
+      }
+    };
+  }, []);
 
   return (
     <>
