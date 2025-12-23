@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import Script from "next/script";
 import AdminSignOut from "@/components/admin/AdminSignOut";
 
 export default async function AdminLayout({
@@ -20,6 +21,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
+      <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="afterInteractive" />
       {user && (
         <nav className="border-b border-white/10 bg-[#050505] px-6 py-4">
           <div className="mx-auto flex max-w-7xl items-center justify-between">

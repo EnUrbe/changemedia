@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import Script from "next/script";
 import Button from "@/components/ui/Button";
 
 interface CloudinaryUploadWidgetProps {
@@ -19,6 +18,11 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
   const widgetRef = useRef<any>(null);
 
   const openWidget = useCallback(() => {
+    if (widgetRef.current) {
+      widgetRef.current.open();
+      return;
+    }
+
     if (window.cloudinary) {
       widgetRef.current = window.cloudinary.createUploadWidget(
         {
@@ -37,12 +41,14 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
         }
       );
       widgetRef.current.open();
+    } else {
+      console.error("Cloudinary script not loaded yet");
+      alert("Upload widget is still loading, please try again in a moment.");
     }
   }, [onUpload]);
 
   return (
     <>
-      <Script src="https://upload-widget.cloudinary.com/global/all.js" onLoad={() => {}} />
       {children ? (
         <div onClick={openWidget} className="cursor-pointer">
           {children}
