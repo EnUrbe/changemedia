@@ -22,10 +22,19 @@ export async function PUT(request: NextRequest) {
   }
 
   const body = await request.json();
-  const parsed = siteContentSchema.parse(body.data ?? body);
   
-  const editor = user ? user.email : (request.headers.get("x-editor") ?? "admin");
-  
-  await saveContent(parsed, editor ?? "system", body.note);
-  return NextResponse.json({ data: parsed });
+  try {
+    const parsed = siteContentSchema.parse(body.data ?? body);
+    
+    const editor = user ? user.email : (request.headers.get("x-editor") ?? "admin");
+    
+    await saveContent(parsed, editor ?? "system", body.note);
+    return NextResponse.json({ data: parsed });
+  } catch (error: any) {
+    console.error("Content save error:", error);
+    return NextResponse.json(
+      { error: "Validation failed", details: error.errors || error.message }, 
+      { status: 400 }
+    );
+  }
 }

@@ -69,11 +69,18 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: content, note: "Updated Change Studios content" }),
       });
-      if (!res.ok) throw new Error("Failed to save");
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Save error:", errorData);
+        throw new Error(errorData.details ? JSON.stringify(errorData.details) : "Failed to save");
+      }
+      
       setMessage("Saved successfully!");
       router.refresh();
-    } catch (e) {
-      setMessage("Error saving content");
+    } catch (e: any) {
+      console.error("Save exception:", e);
+      setMessage(`Error saving content: ${e.message}`);
     } finally {
       setSaving(false);
     }

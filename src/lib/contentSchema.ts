@@ -2,10 +2,10 @@ import { z } from "zod";
 
 const httpsUrl = z
   .string()
-  .url()
-  .refine((value: string) => value.startsWith("https://"), {
-    message: "URL must use https://",
-  });
+  .url();
+  // .refine((value: string) => value.startsWith("https://"), {
+  //   message: "URL must use https://",
+  // });
 
 export const httpsUrlSchema = httpsUrl;
 
