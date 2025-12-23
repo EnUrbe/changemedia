@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 
 interface CloudinaryUploadWidgetProps {
   onUpload: (url: string) => void;
+  children?: React.ReactNode;
 }
 
 declare global {
@@ -14,7 +15,7 @@ declare global {
   }
 }
 
-export default function CloudinaryUploadWidget({ onUpload }: CloudinaryUploadWidgetProps) {
+export default function CloudinaryUploadWidget({ onUpload, children }: CloudinaryUploadWidgetProps) {
   const widgetRef = useRef<any>(null);
 
   const openWidget = useCallback(() => {
@@ -24,7 +25,7 @@ export default function CloudinaryUploadWidget({ onUpload }: CloudinaryUploadWid
           cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
           uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
           sources: ["local", "url", "camera", "google_drive"],
-          multiple: true,
+          multiple: false,
           clientAllowedFormats: ["image", "video"],
           maxImageFileSize: 10000000, // 10MB
         },
@@ -42,9 +43,15 @@ export default function CloudinaryUploadWidget({ onUpload }: CloudinaryUploadWid
   return (
     <>
       <Script src="https://upload-widget.cloudinary.com/global/all.js" onLoad={() => {}} />
-      <Button type="button" variant="soft" onClick={openWidget} className="w-full">
-        Upload Photos via Cloudinary
-      </Button>
+      {children ? (
+        <div onClick={openWidget} className="cursor-pointer">
+          {children}
+        </div>
+      ) : (
+        <Button type="button" variant="soft" onClick={openWidget} className="w-full">
+          Upload Photos via Cloudinary
+        </Button>
+      )}
     </>
   );
 }

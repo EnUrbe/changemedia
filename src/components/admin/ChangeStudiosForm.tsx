@@ -216,18 +216,33 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
                   onChange={(e) => handleShowcaseChange(i, "year", e.target.value)}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-white/60">Image URL</label>
-                <div className="space-y-2">
-                  <input
-                    className="w-full p-2 border border-white/10 rounded bg-white/5 text-white focus:outline-none focus:border-white/20"
-                    value={item.image}
-                    onChange={(e) => handleShowcaseChange(i, "image", e.target.value)}
-                  />
-                  <CloudinaryUploadWidget 
-                    onUpload={(url) => handleShowcaseChange(i, "image", url)} 
-                  />
-                </div>
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-1 text-white/60">Image</label>
+                <CloudinaryUploadWidget 
+                  onUpload={(url) => handleShowcaseChange(i, "image", url)} 
+                >
+                  <div className="relative aspect-video bg-white/5 rounded border border-white/10 overflow-hidden cursor-pointer hover:border-white/30 transition-all group">
+                    {item.image ? (
+                      <>
+                        <img 
+                          src={item.image} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                          <span className="text-white opacity-0 group-hover:opacity-100 font-medium bg-black/50 px-3 py-1 rounded text-sm backdrop-blur-sm border border-white/20">
+                            Click to Change
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-white/40 text-sm gap-2">
+                        <span>No image</span>
+                        <span className="text-xs text-white/30 bg-white/10 px-2 py-1 rounded">Click to Upload</span>
+                      </div>
+                    )}
+                  </div>
+                </CloudinaryUploadWidget>
               </div>
             </div>
           </div>

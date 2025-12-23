@@ -135,27 +135,37 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
                       />
                     </div>
                     <div className="mt-2">
-                      <CloudinaryUploadWidget 
-                        onUpload={(url) => handleFeaturedChange(index, "imageUrl", url)} 
-                      />
+                      <p className="text-xs text-neutral-400">
+                        Click the image preview to upload/change.
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200">
-                  {item.imageUrl ? (
-                    <Image 
-                      src={item.imageUrl} 
-                      alt={item.title} 
-                      fill 
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-neutral-400 text-sm">
-                      No image
-                    </div>
-                  )}
-                </div>
+                <CloudinaryUploadWidget onUpload={(url) => handleFeaturedChange(index, "imageUrl", url)}>
+                  <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 group cursor-pointer hover:border-neutral-400 transition-all">
+                    {item.imageUrl ? (
+                      <>
+                        <Image 
+                          src={item.imageUrl} 
+                          alt={item.title} 
+                          fill 
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                          <span className="text-white opacity-0 group-hover:opacity-100 font-medium bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                            Click to Change
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-neutral-400 text-sm gap-2">
+                        <span>No image</span>
+                        <span className="text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded">Click to Upload</span>
+                      </div>
+                    )}
+                  </div>
+                </CloudinaryUploadWidget>
               </div>
             </div>
           ))}
@@ -244,31 +254,43 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
                       />
                     </div>
                     <div className="mt-2">
-                      <CloudinaryUploadWidget 
-                        onUpload={(url) => {
-                          const newGallery = [...content.galleryCases];
-                          newGallery[index] = { ...newGallery[index], imageUrl: url };
-                          setContent(prev => ({ ...prev, galleryCases: newGallery }));
-                        }} 
-                      />
+                      <p className="text-xs text-neutral-400">
+                        Click the image preview to upload/change.
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200">
-                  {item.imageUrl ? (
-                    <Image 
-                      src={item.imageUrl} 
-                      alt={item.title} 
-                      fill 
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-neutral-400 text-sm">
-                      No image
-                    </div>
-                  )}
-                </div>
+                <CloudinaryUploadWidget 
+                  onUpload={(url) => {
+                    const newGallery = [...content.galleryCases];
+                    newGallery[index] = { ...newGallery[index], imageUrl: url };
+                    setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                  }}
+                >
+                  <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 group cursor-pointer hover:border-neutral-400 transition-all">
+                    {item.imageUrl ? (
+                      <>
+                        <Image 
+                          src={item.imageUrl} 
+                          alt={item.title} 
+                          fill 
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                          <span className="text-white opacity-0 group-hover:opacity-100 font-medium bg-black/50 px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                            Click to Change
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-neutral-400 text-sm gap-2">
+                        <span>No image</span>
+                        <span className="text-xs text-neutral-500 bg-neutral-200 px-2 py-1 rounded">Click to Upload</span>
+                      </div>
+                    )}
+                  </div>
+                </CloudinaryUploadWidget>
               </div>
             </div>
           ))}
@@ -316,27 +338,34 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
                       className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
                     />
                   </div>
-                  <CloudinaryUploadWidget 
-                    onUpload={(url) => {
-                      const newLogos = [...content.logoCloud.logos];
-                      newLogos[index] = { ...newLogos[index], src: url };
-                      setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
-                    }} 
-                  />
+                  <p className="text-xs text-neutral-400">Click logo to upload</p>
                 </div>
-                <div className="relative w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0 flex items-center justify-center">
-                  {logo.src ? (
-                    <Image 
-                      src={logo.src} 
-                      alt={logo.alt} 
-                      width={80}
-                      height={80}
-                      className="object-contain max-h-full max-w-full p-2"
-                    />
-                  ) : (
-                    <span className="text-xs text-neutral-400">No Logo</span>
-                  )}
-                </div>
+                <CloudinaryUploadWidget 
+                  onUpload={(url) => {
+                    const newLogos = [...content.logoCloud.logos];
+                    newLogos[index] = { ...newLogos[index], src: url };
+                    setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
+                  }}
+                >
+                  <div className="relative w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0 flex items-center justify-center cursor-pointer hover:border-neutral-400 transition-all group">
+                    {logo.src ? (
+                      <>
+                        <Image 
+                          src={logo.src} 
+                          alt={logo.alt} 
+                          width={80}
+                          height={80}
+                          className="object-contain max-h-full max-w-full p-2"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                          <span className="text-xs text-white opacity-0 group-hover:opacity-100 bg-black/50 px-1 rounded">Edit</span>
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-xs text-neutral-400">No Logo</span>
+                    )}
+                  </div>
+                </CloudinaryUploadWidget>
                 <button 
                   onClick={() => {
                     const newLogos = [...content.logoCloud.logos];
@@ -438,24 +467,33 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
                         }}
                         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
                       />
-                      <CloudinaryUploadWidget 
-                        onUpload={(url) => {
-                          const newTestimonials = [...content.testimonials];
-                          newTestimonials[index] = { ...newTestimonials[index], avatar: url };
-                          setContent(prev => ({ ...prev, testimonials: newTestimonials }));
-                        }} 
-                      />
+                      <p className="text-xs text-neutral-400">Click avatar to upload</p>
                     </div>
-                    <div className="relative w-20 h-20 bg-neutral-100 rounded-full overflow-hidden border border-neutral-200 shrink-0">
-                      {t.avatar && (
-                        <Image 
-                          src={t.avatar} 
-                          alt={t.name} 
-                          fill 
-                          className="object-cover"
-                        />
-                      )}
-                    </div>
+                    <CloudinaryUploadWidget 
+                      onUpload={(url) => {
+                        const newTestimonials = [...content.testimonials];
+                        newTestimonials[index] = { ...newTestimonials[index], avatar: url };
+                        setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                      }}
+                    >
+                      <div className="relative w-20 h-20 bg-neutral-100 rounded-full overflow-hidden border border-neutral-200 shrink-0 cursor-pointer hover:border-neutral-400 transition-all group">
+                        {t.avatar ? (
+                          <>
+                            <Image 
+                              src={t.avatar} 
+                              alt={t.name} 
+                              fill 
+                              className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                              <span className="text-xs text-white opacity-0 group-hover:opacity-100 bg-black/50 px-1 rounded">Edit</span>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center justify-center h-full text-neutral-400 text-xs">No Avatar</div>
+                        )}
+                      </div>
+                    </CloudinaryUploadWidget>
                   </div>
                 </div>
               </div>
@@ -512,20 +550,29 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
                   onChange={(e) => setContent(prev => ({ ...prev, seo: { ...prev.seo, ogImage: e.target.value } }))}
                   className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
                 />
-                <CloudinaryUploadWidget 
-                  onUpload={(url) => setContent(prev => ({ ...prev, seo: { ...prev.seo, ogImage: url } }))} 
-                />
+                <p className="text-xs text-neutral-400">Click preview to upload</p>
               </div>
-              <div className="relative w-40 aspect-[1.91/1] bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0">
-                {content.seo.ogImage && (
-                  <Image 
-                    src={content.seo.ogImage} 
-                    alt="OG Image" 
-                    fill 
-                    className="object-cover"
-                  />
-                )}
-              </div>
+              <CloudinaryUploadWidget 
+                onUpload={(url) => setContent(prev => ({ ...prev, seo: { ...prev.seo, ogImage: url } }))} 
+              >
+                <div className="relative w-40 aspect-[1.91/1] bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0 cursor-pointer hover:border-neutral-400 transition-all group">
+                  {content.seo.ogImage ? (
+                    <>
+                      <Image 
+                        src={content.seo.ogImage} 
+                        alt="OG Image" 
+                        fill 
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                        <span className="text-xs text-white opacity-0 group-hover:opacity-100 bg-black/50 px-1 rounded">Edit</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-neutral-400 text-xs">No Image</div>
+                  )}
+                </div>
+              </CloudinaryUploadWidget>
             </div>
           </div>
         </div>
