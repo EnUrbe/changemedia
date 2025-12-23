@@ -42,37 +42,52 @@ function mapDeliverableFromDB(row: any): Deliverable {
 }
 
 export async function getProjects(): Promise<ClientProject[]> {
-  const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*, deliverables(*)")
-    .order("created_at", { ascending: false });
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*, deliverables(*)")
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching projects:", error);
+    if (error) {
+      console.error("Error fetching projects:", error);
+      return [];
+    }
+
+    return data.map(mapProjectFromDB);
+  } catch (error) {
+    console.error("Failed to get projects (check env vars):", error);
     return [];
   }
-
-  return data.map(mapProjectFromDB);
 }
 
 export async function getProjectById(id: string): Promise<ClientProject | undefined> {
-  const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*, deliverables(*)")
-    .eq("id", id)
-    .single();
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*, deliverables(*)")
+      .eq("id", id)
+      .single();
 
-  if (error || !data) return undefined;
-  return mapProjectFromDB(data);
-}
+    if (error || !data) return undefined;
+    return mapProjectFromDB(data);
+  } catch (error) {
+    console.error("Failed to get project by id:", error);
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*, deliverables(*)")
+      .eq("access_code", code)
+      .single();
 
-export async function getProjectByAccessCode(code: string): Promise<ClientProject | undefined> {
-  const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*, deliverables(*)")
+    if (error || !data) return undefined;
+    return mapProjectFromDB(data);
+  } catch (error) {
+    console.error("Failed to get project by access code:", error);
+    return undefined;
+  })
     .eq("access_code", code)
     .single();
 

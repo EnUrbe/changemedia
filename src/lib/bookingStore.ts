@@ -57,25 +57,33 @@ export async function getBookingsForDateRange(start: Date, end: Date) {
 }
 
 export async function getAllUpcomingBookings() {
-  const supabase = getSupabaseAdminClient();
-  const now = new Date().toISOString();
-  
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("*")
-    .gte("start_time", now)
-    .order("start_time", { ascending: true });
+  try {
+    const supabase = getSupabaseAdminClient();
+    const now = new Date().toISOString();
+    
+    const { data, error } = await supabase
+      .from("bookings")
+      .select("*")
+      .gte("start_time", now)
+      .order("start_time", { ascending: true });
 
-  if (error) throw new Error(`Failed to fetch bookings: ${error.message}`);
-  
-  return data.map((row: any) => ({
-    id: row.id,
-    clientName: row.client_name,
-    clientEmail: row.client_email,
-    serviceType: row.service_type,
-    startTime: row.start_time,
-    endTime: row.end_time,
-    status: row.status,
-    notes: row.notes,
-  })) as Booking[];
+    if (error) {
+      console.error("Error fetching bookings:", error);
+      return [];
+    }
+    
+    return data.map((row: any) => ({
+      id: row.id,
+      clientName: row.client_name,
+      clientEmail: row.client_email,
+      serviceType: row.service_type,
+      startTime: row.start_time,
+      endTime: row.end_time,
+      status: row.status,
+      notes: row.notes,
+    })) as Booking[];
+  } catch (error) {
+    console.error("Failed to fetch bookings (check env vars):", error);
+    return [];
+  }
 }

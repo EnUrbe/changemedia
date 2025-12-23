@@ -5,19 +5,25 @@ import { SERVICE_DEPOSITS } from "@/lib/portraitServices";
 export const dynamic = "force-dynamic";
 
 export default async function PortraitAdminPage() {
-  const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
-    .from("portrait_inquiries")
-    .select(
-      "id, full_name, email, phone, school, session_type, service_type, source, status, created_at, mercury_payment_id"
-    )
-    .order("created_at", { ascending: false });
+  let inquiries: PortraitInquiry[] = [];
+  
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from("portrait_inquiries")
+      .select(
+        "id, full_name, email, phone, school, session_type, service_type, source, status, created_at, mercury_payment_id"
+      )
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Failed to load portrait inquiries", error);
+    if (error) {
+      console.error("Failed to load portrait inquiries", error);
+    } else {
+      inquiries = (data as PortraitInquiry[]) || [];
+    }
+  } catch (error) {
+    console.error("Failed to initialize Supabase admin client:", error);
   }
-
-  const inquiries: PortraitInquiry[] = (data as PortraitInquiry[]) || [];
 
   return (
     <main className="min-h-screen bg-[#050505] px-4 py-10 text-white">
