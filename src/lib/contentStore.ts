@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { revalidatePath } from "next/cache";
 import { siteContentSchema, SiteContent } from "./contentSchema";
+import { getSupabaseAdminClient } from "./supabaseAdmin";
 
 const CONTENT_PATH = path.join(process.cwd(), "content", "site.json");
 const HISTORY_DIR = path.join(process.cwd(), "content", "history");
@@ -15,13 +16,41 @@ interface RevisionRecord {
 }
 
 async function ensureHistoryDir() {
-  await fs.mkdir(HISTORY_DIR, { recursive: true });
+  try {
+    await fs.mkdir(HISTORY_DIR, { recursive: true });
+  } catch (e) {
+    // Ignore errors in read-only environments (like Vercel)
+    console.warn("Could not create history directory (likely read-only fs)", e);
+  }
 }
 
 export async function getContent(): Promise<SiteContent> {
-  const data = await fs.readFile(CONTENT_PATH, "utf-8");
-  const json = JSON.parse(data);
-  return siteContentSchema.parse(json);
+  // 1. Try Supabase first
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data } = await supabase
+      .from('site_content')
+      .select('content')
+      .eq('key', 'main')
+      .single();
+
+    if (data?.content) {
+      return siteContentSchema.parse(data.content);
+    }
+  } catch (e) {
+    console.warn("Supabase content fetch failed, falling back to file", e);
+  }
+
+  // 2. Fallback to local file
+  try {
+    const data = await fs.readFile(CONTENT_PATH, "utf-8");
+    const json = JSON.parse(data);
+    return siteContentSchema.parse(json);
+  } catch (e) {
+    console.error("Failed to read local content file", e);
+    // Return a default empty structure if absolutely necessary, or throw
+    throw e;
+  }
 }
 
 function slugify(value: string) {
@@ -34,49 +63,98 @@ function slugify(value: string) {
 
 export async function saveContent(data: SiteContent, editor = "system", note?: string) {
   const parsed = siteContentSchema.parse(data);
-  await ensureHistoryDir();
   const timestamp = new Date().toISOString();
-  const filename = `${timestamp.replace(/[:.]/g, "-")}-${slugify(editor)}.json`;
-  const payload = JSON.stringify(parsed, null, 2);
-  await fs.writeFile(CONTENT_PATH, `${payload}\n`, "utf-8");
-  const historyEntry = {
-    savedAt: timestamp,
-    editor,
-    note,
-    data: parsed,
-  };
-  await fs.writeFile(path.join(HISTORY_DIR, filename), `${JSON.stringify(historyEntry, null, 2)}\n`, "utf-8");
+  
+  // 1. Save to Supabase (Primary)
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { error } = await supabase
+      .from('site_content')
+      .upsert({ 
+        key: 'main', 
+        content: parsed, 
+        updated_at: timestamp,
+        updated_by: editor,
+        last_note: note
+      }, { onConflict: 'key' });
+
+    if (error) throw error;
+  } catch (e) {
+    console.error("Failed to save content to Supabase", e);
+    // If we are in production (Vercel), this is critical.
+    // If we are local, we might want to fall back to file.
+    // But we'll try file save anyway as a backup/dev sync.
+  }
+
+  // 2. Save to File (Backup / Local Dev)
+  // In Vercel, this will fail, so we catch and ignore the error
+  try {
+    await ensureHistoryDir();
+    const filename = `${timestamp.replace(/[:.]/g, "-")}-${slugify(editor)}.json`;
+    const payload = JSON.stringify(parsed, null, 2);
+    
+    // Try writing main file
+    try {
+      await fs.writeFile(CONTENT_PATH, `${payload}\n`, "utf-8");
+    } catch (e) {
+      console.warn("Could not write to CONTENT_PATH (likely read-only fs)");
+    }
+
+    // Try writing history
+    try {
+      await fs.writeFile(path.join(HISTORY_DIR, filename), `${JSON.stringify({
+        savedAt: timestamp,
+        editor,
+        note,
+        data: parsed,
+      }, null, 2)}\n`, "utf-8");
+    } catch (e) {
+      console.warn("Could not write to HISTORY_DIR (likely read-only fs)");
+    }
+  } catch (e) {
+    console.warn("File system operations failed (ignoring)", e);
+  }
+
   revalidatePath("/");
 }
 
 export async function listRevisions(limit = 20): Promise<RevisionRecord[]> {
-  await ensureHistoryDir();
-  const files = await fs.readdir(HISTORY_DIR);
-  const entries: RevisionRecord[] = [];
-  for (const file of files) {
-    const fullPath = path.join(HISTORY_DIR, file);
-    try {
-      const contents = await fs.readFile(fullPath, "utf-8");
-      const parsed = JSON.parse(contents);
-      entries.push({
-        filename: file,
-        savedAt: parsed.savedAt,
-        editor: parsed.editor,
-        note: parsed.note,
-      });
-    } catch (error) {
-      console.error("Failed to parse revision", file, error);
+  try {
+    await ensureHistoryDir();
+    const files = await fs.readdir(HISTORY_DIR);
+    const entries: RevisionRecord[] = [];
+    for (const file of files) {
+      const fullPath = path.join(HISTORY_DIR, file);
+      try {
+        const contents = await fs.readFile(fullPath, "utf-8");
+        const parsed = JSON.parse(contents);
+        entries.push({
+          filename: file,
+          savedAt: parsed.savedAt,
+          editor: parsed.editor,
+          note: parsed.note,
+        });
+      } catch (error) {
+        console.error("Failed to parse revision", file, error);
+      }
     }
+    return entries
+      .sort((a, b) => (a.savedAt > b.savedAt ? -1 : 1))
+      .slice(0, limit);
+  } catch (e) {
+    return [];
   }
-  return entries
-    .sort((a, b) => (a.savedAt > b.savedAt ? -1 : 1))
-    .slice(0, limit);
 }
 
 export async function restoreRevision(filename: string) {
-  await ensureHistoryDir();
-  const fullPath = path.join(HISTORY_DIR, filename);
-  const contents = await fs.readFile(fullPath, "utf-8");
-  const parsed = JSON.parse(contents);
-  await saveContent(parsed.data, `${parsed.editor}-restore`, parsed.note);
+  try {
+    await ensureHistoryDir();
+    const fullPath = path.join(HISTORY_DIR, filename);
+    const contents = await fs.readFile(fullPath, "utf-8");
+    const parsed = JSON.parse(contents);
+    await saveContent(parsed.data, `${parsed.editor}-restore`, parsed.note);
+  } catch (e) {
+    console.error("Failed to restore revision", e);
+    throw e;
+  }
 }
