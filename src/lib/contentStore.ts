@@ -78,12 +78,16 @@ export async function saveContent(data: SiteContent, editor = "system", note?: s
         last_note: note
       }, { onConflict: 'key' });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase upsert error:", error);
+      throw new Error(`Database save failed: ${error.message}`);
+    }
   } catch (e) {
     console.error("Failed to save content to Supabase", e);
     // If we are in production (Vercel), this is critical.
-    // If we are local, we might want to fall back to file.
-    // But we'll try file save anyway as a backup/dev sync.
+    // We MUST throw here if we want the user to know it failed.
+    // Only catch if we have a reliable fallback, which we don't on Vercel.
+    throw e; 
   }
 
   // 2. Save to File (Backup / Local Dev)
