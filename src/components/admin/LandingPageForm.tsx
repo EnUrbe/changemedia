@@ -161,6 +161,375 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
           ))}
         </div>
       </section>
+
+      <section className="space-y-6 border-t pt-8">
+        <div className="flex justify-between items-center border-b pb-2">
+          <h3 className="text-lg font-semibold">Gallery Strip</h3>
+          <Button onClick={() => {
+            setContent(prev => ({
+              ...prev,
+              galleryCases: [
+                ...prev.galleryCases,
+                {
+                  id: `gallery-${Date.now()}`,
+                  title: "New Gallery Item",
+                  subtitle: "Category",
+                  imageUrl: "https://picsum.photos/seed/gallery/600/400",
+                  tags: [],
+                }
+              ]
+            }))
+          }} variant="soft" size="md">
+            + Add Item
+          </Button>
+        </div>
+        
+        <div className="grid gap-8">
+          {content.galleryCases.map((item, index) => (
+            <div key={item.id} className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm space-y-4">
+              <div className="flex justify-between items-start">
+                <h4 className="font-medium text-neutral-900">Gallery Item #{index + 1}</h4>
+                <button 
+                  onClick={() => {
+                    const newGallery = [...content.galleryCases];
+                    newGallery.splice(index, 1);
+                    setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                  }}
+                  className="text-red-500 text-xs hover:underline"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={item.title}
+                      onChange={(e) => {
+                        const newGallery = [...content.galleryCases];
+                        newGallery[index] = { ...newGallery[index], title: e.target.value };
+                        setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                      }}
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={item.subtitle}
+                      onChange={(e) => {
+                        const newGallery = [...content.galleryCases];
+                        newGallery[index] = { ...newGallery[index], subtitle: e.target.value };
+                        setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                      }}
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Image URL</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={item.imageUrl}
+                        onChange={(e) => {
+                          const newGallery = [...content.galleryCases];
+                          newGallery[index] = { ...newGallery[index], imageUrl: e.target.value };
+                          setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                        }}
+                        className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <CloudinaryUploadWidget 
+                        onUpload={(url) => {
+                          const newGallery = [...content.galleryCases];
+                          newGallery[index] = { ...newGallery[index], imageUrl: url };
+                          setContent(prev => ({ ...prev, galleryCases: newGallery }));
+                        }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative aspect-video bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200">
+                  {item.imageUrl ? (
+                    <Image 
+                      src={item.imageUrl} 
+                      alt={item.title} 
+                      fill 
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-neutral-400 text-sm">
+                      No image
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-6 border-t pt-8">
+        <h3 className="text-lg font-semibold">Logo Cloud</h3>
+        <div className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm space-y-4">
+          <div>
+            <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Heading</label>
+            <input
+              type="text"
+              value={content.logoCloud.heading}
+              onChange={(e) => setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, heading: e.target.value } }))}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+            />
+          </div>
+          <div className="space-y-4">
+            <label className="block text-xs font-medium uppercase text-neutral-500">Logos</label>
+            {content.logoCloud.logos.map((logo, index) => (
+              <div key={index} className="flex gap-4 items-start border p-4 rounded-lg">
+                <div className="flex-1 space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Alt Text"
+                    value={logo.alt}
+                    onChange={(e) => {
+                      const newLogos = [...content.logoCloud.logos];
+                      newLogos[index] = { ...newLogos[index], alt: e.target.value };
+                      setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
+                    }}
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Image URL"
+                      value={logo.src}
+                      onChange={(e) => {
+                        const newLogos = [...content.logoCloud.logos];
+                        newLogos[index] = { ...newLogos[index], src: e.target.value };
+                        setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
+                      }}
+                      className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <CloudinaryUploadWidget 
+                    onUpload={(url) => {
+                      const newLogos = [...content.logoCloud.logos];
+                      newLogos[index] = { ...newLogos[index], src: url };
+                      setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
+                    }} 
+                  />
+                </div>
+                <div className="relative w-20 h-20 bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0 flex items-center justify-center">
+                  {logo.src ? (
+                    <Image 
+                      src={logo.src} 
+                      alt={logo.alt} 
+                      width={80}
+                      height={80}
+                      className="object-contain max-h-full max-w-full p-2"
+                    />
+                  ) : (
+                    <span className="text-xs text-neutral-400">No Logo</span>
+                  )}
+                </div>
+                <button 
+                  onClick={() => {
+                    const newLogos = [...content.logoCloud.logos];
+                    newLogos.splice(index, 1);
+                    setContent(prev => ({ ...prev, logoCloud: { ...prev.logoCloud, logos: newLogos } }));
+                  }}
+                  className="text-red-500 text-xs hover:underline"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <Button onClick={() => {
+              setContent(prev => ({
+                ...prev,
+                logoCloud: {
+                  ...prev.logoCloud,
+                  logos: [...prev.logoCloud.logos, { src: "", alt: "New Logo" }]
+                }
+              }))
+            }} variant="soft" size="md">
+              + Add Logo
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-6 border-t pt-8">
+        <h3 className="text-lg font-semibold">Testimonials</h3>
+        <div className="grid gap-6">
+          {content.testimonials.map((t, index) => (
+            <div key={t.id} className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm space-y-4">
+              <div className="flex justify-between items-start">
+                <h4 className="font-medium text-neutral-900">Testimonial #{index + 1}</h4>
+                <button 
+                  onClick={() => {
+                    const newTestimonials = [...content.testimonials];
+                    newTestimonials.splice(index, 1);
+                    setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                  }}
+                  className="text-red-500 text-xs hover:underline"
+                >
+                  Remove
+                </button>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Name</label>
+                    <input
+                      type="text"
+                      value={t.name}
+                      onChange={(e) => {
+                        const newTestimonials = [...content.testimonials];
+                        newTestimonials[index] = { ...newTestimonials[index], name: e.target.value };
+                        setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                      }}
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Role</label>
+                    <input
+                      type="text"
+                      value={t.role}
+                      onChange={(e) => {
+                        const newTestimonials = [...content.testimonials];
+                        newTestimonials[index] = { ...newTestimonials[index], role: e.target.value };
+                        setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                      }}
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Quote</label>
+                    <textarea
+                      value={t.quote}
+                      onChange={(e) => {
+                        const newTestimonials = [...content.testimonials];
+                        newTestimonials[index] = { ...newTestimonials[index], quote: e.target.value };
+                        setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                      }}
+                      className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Avatar</label>
+                  <div className="flex gap-4 items-start">
+                    <div className="flex-1 space-y-2">
+                      <input
+                        type="text"
+                        value={t.avatar}
+                        onChange={(e) => {
+                          const newTestimonials = [...content.testimonials];
+                          newTestimonials[index] = { ...newTestimonials[index], avatar: e.target.value };
+                          setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                        }}
+                        className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                      />
+                      <CloudinaryUploadWidget 
+                        onUpload={(url) => {
+                          const newTestimonials = [...content.testimonials];
+                          newTestimonials[index] = { ...newTestimonials[index], avatar: url };
+                          setContent(prev => ({ ...prev, testimonials: newTestimonials }));
+                        }} 
+                      />
+                    </div>
+                    <div className="relative w-20 h-20 bg-neutral-100 rounded-full overflow-hidden border border-neutral-200 shrink-0">
+                      {t.avatar && (
+                        <Image 
+                          src={t.avatar} 
+                          alt={t.name} 
+                          fill 
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <Button onClick={() => {
+            setContent(prev => ({
+              ...prev,
+              testimonials: [
+                ...prev.testimonials,
+                {
+                  id: `testimonial-${Date.now()}`,
+                  name: "New Testimonial",
+                  role: "Role",
+                  quote: "Quote",
+                  avatar: "https://picsum.photos/seed/avatar/200",
+                }
+              ]
+            }))
+          }} variant="soft" size="md">
+            + Add Testimonial
+          </Button>
+        </div>
+      </section>
+
+      <section className="space-y-6 border-t pt-8">
+        <h3 className="text-lg font-semibold">SEO Settings</h3>
+        <div className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm space-y-4">
+          <div>
+            <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Site Title</label>
+            <input
+              type="text"
+              value={content.seo.title}
+              onChange={(e) => setContent(prev => ({ ...prev, seo: { ...prev.seo, title: e.target.value } }))}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">Description</label>
+            <textarea
+              value={content.seo.description}
+              onChange={(e) => setContent(prev => ({ ...prev, seo: { ...prev.seo, description: e.target.value } }))}
+              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+              rows={3}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium uppercase text-neutral-500 mb-1">OG Image (Social Share)</label>
+            <div className="flex gap-4 items-start">
+              <div className="flex-1 space-y-2">
+                <input
+                  type="text"
+                  value={content.seo.ogImage}
+                  onChange={(e) => setContent(prev => ({ ...prev, seo: { ...prev.seo, ogImage: e.target.value } }))}
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                />
+                <CloudinaryUploadWidget 
+                  onUpload={(url) => setContent(prev => ({ ...prev, seo: { ...prev.seo, ogImage: url } }))} 
+                />
+              </div>
+              <div className="relative w-40 aspect-[1.91/1] bg-neutral-100 rounded-lg overflow-hidden border border-neutral-200 shrink-0">
+                {content.seo.ogImage && (
+                  <Image 
+                    src={content.seo.ogImage} 
+                    alt="OG Image" 
+                    fill 
+                    className="object-cover"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

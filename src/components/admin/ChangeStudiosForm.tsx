@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
+import CloudinaryUploadWidget from "@/components/admin/CloudinaryUploadWidget";
 import type { SiteContent } from "@/lib/contentSchema";
 
 export default function ChangeStudiosForm({ initialContent }: { initialContent: SiteContent }) {
@@ -217,11 +218,16 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 text-white/60">Image URL</label>
-                <input
-                  className="w-full p-2 border border-white/10 rounded bg-white/5 text-white focus:outline-none focus:border-white/20"
-                  value={item.image}
-                  onChange={(e) => handleShowcaseChange(i, "image", e.target.value)}
-                />
+                <div className="space-y-2">
+                  <input
+                    className="w-full p-2 border border-white/10 rounded bg-white/5 text-white focus:outline-none focus:border-white/20"
+                    value={item.image}
+                    onChange={(e) => handleShowcaseChange(i, "image", e.target.value)}
+                  />
+                  <CloudinaryUploadWidget 
+                    onUpload={(url) => handleShowcaseChange(i, "image", url)} 
+                  />
+                </div>
               </div>
             </div>
           </div>
