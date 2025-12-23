@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
+import Script from "next/script";
 import Button from "@/components/ui/Button";
 
 interface CloudinaryUploadWidgetProps {
@@ -15,70 +16,78 @@ declare global {
 }
 
 export default function CloudinaryUploadWidget({ onUpload, children }: CloudinaryUploadWidgetProps) {
+  const [loaded, setLoaded] = useState(false);
   const widgetRef = useRef<any>(null);
   const onUploadRef = useRef(onUpload);
 
-  // Keep the callback ref up to date so we don't need to recreate the widget
   useEffect(() => {
     onUploadRef.current = onUpload;
   }, [onUpload]);
 
-  const openWidget = useCallback((e?: React.MouseEvent) => {
+  useEffect(() => {
+    if (window.cloudinary) {
+      setLoaded(true);
+    }
+  }, []);
+
+  const openWidget = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
-    if (widgetRef.current) {
-      widgetRef.current.open();
+    if (!loaded || !window.cloudinary) {
+      console.warn("Cloudinary script not loaded yet");
       return;
     }
 
-    if (window.cloudinary) {
-      widgetRef.current = window.cloudinary.createUploadWidget(
-        {
-          cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-          uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-          sources: ["local", "url", "camera", "google_drive"],
-          multiple: false,
-          clientAllowedFormats: ["image", "video"],
-          maxImageFileSize: 10000000, // 10MB
-        },
-        (error: any, result: any) => {
-          if (!error && result && result.event === "success") {
-            console.log("Upload success:", result.info.secure_url);
-            onUploadRef.current(result.info.secure_url);
-          }
-        }
-      );
-      widgetRef.current.open();
-    } else {
-      console.error("Cloudinary script not loaded yet");
-      alert("Upload widget is still loading, please try again in a moment.");
-    }
-  }, []);
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (widgetRef.current) {
-        // Some widget implementations might have a destroy method, 
-        // but Cloudinary's widget usually just needs to be let go.
-        // We can set it to null to be safe.
-        widgetRef.current = null;
+    if (!cloudName || !uploadPreset) {
+      console.error("Missing Cloudinary configuration", { cloudName, uploadPreset });
+      alert("Cloudinary configuration missing. Check console for details.");
+      return;
+    }
+
+    // Create a new widget instance each time to avoid state issues
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName,
+        uploadPreset,
+        sources: ["local", "url", "camera"], // Removed google_drive to reduce complexity/potential hangs
+        multiple: false,
+        clientAllowedFormats: ["image", "video"],
+        maxImageFileSize: 10000000, // 10MB
+      },
+      (error: any, result: any) => {
+        if (!error && result && result.event === "success") {
+          console.log("Upload success:", result.info.secure_url);
+          onUploadRef.current(result.info.secure_url);
+        }
+        if (error) {
+          console.error("Cloudinary widget error:", error);
+        }
       }
-    };
-  }, []);
+    );
+    
+    widget.open();
+  };
 
   return (
     <>
+      <Script 
+        src="https://upload-widget.cloudinary.com/global/all.js" 
+        onLoad={() => setLoaded(true)}
+        onError={(e) => console.error("Cloudinary script failed to load", e)}
+      />
       {children ? (
         <div onClick={openWidget} className="cursor-pointer">
           {children}
         </div>
       ) : (
-        <Button type="button" variant="soft" onClick={openWidget} className="w-full">
-          Upload Photos via Cloudinary
+        <Button type="button" variant="soft" onClick={openWidget} className="w-full" disabled={!loaded}>
+          {loaded ? "Upload Photos via Cloudinary" : "Loading Uploader..."}
         </Button>
       )}
     </>
