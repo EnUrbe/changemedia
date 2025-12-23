@@ -74,6 +74,11 @@ export async function getProjectById(id: string): Promise<ClientProject | undefi
     return mapProjectFromDB(data);
   } catch (error) {
     console.error("Failed to get project by id:", error);
+    return undefined;
+  }
+}
+
+export async function getProjectByAccessCode(code: string): Promise<ClientProject | undefined> {
   try {
     const supabase = getSupabaseAdminClient();
     const { data, error } = await supabase
@@ -87,12 +92,7 @@ export async function getProjectById(id: string): Promise<ClientProject | undefi
   } catch (error) {
     console.error("Failed to get project by access code:", error);
     return undefined;
-  })
-    .eq("access_code", code)
-    .single();
-
-  if (error || !data) return undefined;
-  return mapProjectFromDB(data);
+  }
 }
 
 export async function saveProject(project: ClientProject) {
