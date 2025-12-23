@@ -41,8 +41,8 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
       return;
     }
 
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "da5gme9tv";
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default";
 
     if (!cloudName || !uploadPreset) {
       console.error("Missing Cloudinary configuration", { cloudName, uploadPreset });
