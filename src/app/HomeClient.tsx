@@ -171,28 +171,6 @@ export default function HomeClient({ content }: HomeClientProps) {
         <motion.div style={{ scale: heroScale }} className="container-wide relative z-10 pt-28 pb-14 md:pt-36 md:pb-24">
           <div className="grid gap-12 xl:grid-cols-[minmax(0,1.2fr)_420px] xl:items-end">
             <div className="max-w-5xl">
-              <div className="flex flex-wrap items-center gap-3">
-                <motion.span
-                  initial="hidden"
-                  animate="visible"
-                  custom={0}
-                  variants={fadeUp}
-                  className="eyebrow-pill"
-                >
-                  <span className="dot-pulse" />
-                  Denver based
-                </motion.span>
-                <motion.span
-                  initial="hidden"
-                  animate="visible"
-                  custom={1}
-                  variants={fadeUp}
-                  className="label text-[var(--text-secondary)]"
-                >
-                  Documentary films, portraits, and campaign-ready content
-                </motion.span>
-              </div>
-
               <motion.h1
                 initial="hidden"
                 animate="visible"
