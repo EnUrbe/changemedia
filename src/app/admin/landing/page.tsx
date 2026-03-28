@@ -14,7 +14,7 @@ export default async function LandingAdminPage() {
           <h1 className="text-4xl font-serif">
             Landing Page Content
           </h1>
-          <p className="text-sm text-neutral-600">Edit the featured work and hero images.</p>
+          <p className="text-sm text-neutral-600">Edit the homepage scroll deck, featured work, gallery images, testimonials, and SEO.</p>
         </header>
         
         <LandingPageForm initialContent={content} />

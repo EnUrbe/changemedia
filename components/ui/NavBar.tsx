@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import Button from "./Button";
+import { motion, AnimatePresence } from "framer-motion";
 
 type NavLink = { label: string; href: string };
 
@@ -14,82 +13,85 @@ type NavBarProps = {
   fixed?: boolean;
 };
 
-export default function NavBar({ links, cta, tone = "light", fixed = true }: NavBarProps) {
+export default function NavBar({ links, cta, fixed = true }: NavBarProps) {
   const [open, setOpen] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
 
-  const textColor = tone === "dark" ? "text-white" : "text-neutral-900";
-  const surface =
-    tone === "dark"
-      ? "bg-black/20 backdrop-blur-md border border-white/10 shadow-lg"
-      : "bg-white/80 backdrop-blur-md border border-neutral-200 shadow-sm";
+  // V3: Ultra-Minimal Text Only
+  const containerClass = `w-full flex justify-between items-start text-foreground mix-blend-exclusion`;
+  const linkClass = "font-mono text-xs uppercase tracking-widest hover:opacity-50 transition-opacity";
 
   return (
+    <>
     <nav
-      className={`${fixed ? "fixed" : "relative"} inset-x-0 top-0 z-[100] px-6 pt-6`}
+      className={`${fixed ? "fixed" : "relative"} inset-x-0 top-0 z-[100] p-6 md:p-12 pointer-events-none`}
     >
-      <div
-        className={`mx-auto flex max-w-[1400px] items-center justify-between rounded-full ${surface} backdrop-blur-xl px-6 py-4 shadow-sm transition-all duration-300`}
-      >
-        <Link href="/" className={`text-sm font-bold uppercase tracking-[0.2em] ${textColor} hover:opacity-70 transition-opacity`}>
-          CHANGE<span className="opacity-40">®</span>
+      <div className={`${containerClass} pointer-events-auto`}>
+        {/* LOGO - Minimal Stacked Text */}
+        <Link href="/" className="font-semibold tracking-tight text-lg uppercase leading-none hover:opacity-50 transition-opacity">
+           Change<br/>Media
         </Link>
-        <div className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.2em] md:flex">
+
+        {/* DESKTOP MENU - Simple List */}
+        <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`${textColor} opacity-60 transition hover:opacity-100`}
+              className={linkClass}
             >
               {link.label}
             </Link>
           ))}
-          {cta && <Button href={cta.href} size="md" variant="primary" className="ml-4 !px-6">{cta.label}</Button>}
+          {cta && (
+             <Link href={cta.href} className={`${linkClass} underline decoration-1 underline-offset-4`}>
+                {cta.label}
+             </Link>
+          )}
         </div>
 
+        {/* MOBILE TOGGLE - Text */}
         <button
           aria-expanded={open}
-          aria-label="Toggle navigation"
           onClick={() => setOpen((prev) => !prev)}
-          className={`flex h-10 w-10 items-center justify-center rounded-full border border-white/40 ${textColor} md:hidden`}
+          className="md:hidden font-mono text-xs uppercase tracking-widest"
         >
-          <div className="space-y-1.5">
-            <span className="block h-[2px] w-5 bg-current" />
-            <span className="block h-[2px] w-4 bg-current" />
-            <span className="block h-[2px] w-5 bg-current" />
-          </div>
+          {open ? "Close" : "Menu"}
         </button>
       </div>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2 }}
-            className={`mx-auto mt-3 max-w-[1400px] rounded-3xl border border-white/40 bg-white/90 p-5 shadow-lg backdrop-blur-xl md:hidden`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-background flex flex-col justify-center items-center md:hidden pointer-events-auto"
           >
-            <div className="flex flex-col gap-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-neutral-900">
+            <div className="flex flex-col items-center gap-8">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-xl px-3 py-2 hover:bg-neutral-100"
+                  className="text-2xl font-serif tracking-tight hover:opacity-50 transition-opacity"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
               {cta && (
-                <Button href={cta.href} size="md" variant="primary" fullWidth className="mt-2">
-                  {cta.label}
-                </Button>
+                <Link
+                   href={cta.href}
+                   className="mt-8 text-xs font-mono uppercase tracking-widest border-b border-foreground pb-1"
+                   onClick={() => setOpen(false)}
+                >
+                   {cta.label}
+                </Link>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
+    </>
   );
 }

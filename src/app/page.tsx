@@ -1,34 +1,79 @@
 import type { Metadata } from "next";
-import ChangeMediaLanding from "@/components/ChangeMediaLanding";
+import JsonLd from "@/components/seo/JsonLd";
 import { getContent } from "@/lib/contentStore";
+import { SITE } from "@/lib/data";
+import HomeClient from "./HomeClient";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await getContent();
-  return {
-    title: content.seo.title,
-    description: content.seo.description,
-    openGraph: {
+  try {
+    const content = await getContent();
+    return {
       title: content.seo.title,
       description: content.seo.description,
-      images: [
-        {
-          url: content.seo.ogImage,
-          width: 1200,
-          height: 630,
-        },
+      alternates: { canonical: "/" },
+      openGraph: {
+        title: content.seo.title,
+        description: content.seo.description,
+        url: SITE.url,
+        siteName: SITE.name,
+        type: "website",
+        images: [{ url: content.seo.ogImage }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: content.seo.title,
+        description: content.seo.description,
+        images: [content.seo.ogImage],
+      },
+      keywords: [
+        "Denver documentary filmmaker",
+        "Denver brand videographer",
+        "executive portraits Denver",
+        "team headshots Denver",
+        "content retainer video production",
       ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: content.seo.title,
-      description: content.seo.description,
-      images: [content.seo.ogImage],
-    },
-  };
+    };
+  } catch {
+    return {
+      title: `${SITE.name} — ${SITE.tagline}`,
+      description: SITE.description,
+    };
+  }
 }
 
 export default async function Page() {
   const content = await getContent();
-  return <ChangeMediaLanding content={content} />;
-}
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: SITE.name,
+    description: content.seo.description,
+    url: SITE.url,
+    image: [content.seo.ogImage, ...content.featuredCases.slice(0, 3).map((item) => item.imageUrl)],
+    email: SITE.email,
+    areaServed: "Denver, Colorado, United States",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Denver",
+      addressRegion: "CO",
+      addressCountry: "US",
+    },
+    sameAs: Object.values(SITE.socials).filter(Boolean),
+    serviceType: [
+      "Documentary film production",
+      "Campaign video production",
+      "Executive portraits",
+      "Team headshots",
+      "Event coverage",
+      "Content retainers",
+    ],
+  };
+
+  return (
+    <>
+      <JsonLd data={jsonLd} />
+      <HomeClient content={content} />
+    </>
+  );
+}

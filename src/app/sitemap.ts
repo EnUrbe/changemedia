@@ -1,11 +1,25 @@
 import type { MetadataRoute } from "next";
+import { FIELD_NOTES, SITE } from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const base = SITE.url;
   const now = new Date();
-  const routes = [
-    { url: `${base}/`, lastModified: now, changeFrequency: "weekly" as const, priority: 1 },
-    { url: `${base}/why`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 },
+
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/studios`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/portraits`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
+    { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/field-notes`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${base}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
   ];
-  return routes;
+
+  const articleRoutes: MetadataRoute.Sitemap = FIELD_NOTES.map((post) => ({
+    url: `${base}/field-notes/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly",
+    priority: 0.72,
+  }));
+
+  return [...staticRoutes, ...articleRoutes];
 }

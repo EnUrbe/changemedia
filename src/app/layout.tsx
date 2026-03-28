@@ -1,19 +1,66 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Instrument_Serif, Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import JsonLd from "@/components/seo/JsonLd";
+import { SITE } from "@/lib/data";
 
-const sans = Inter({
+const sans = localFont({
   variable: "--font-family-sans",
-  subsets: ["latin"],
+  src: [
+    {
+      path: "./fonts/Switzer-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Switzer-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Switzer-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Switzer-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Switzer-Extrabold.woff2",
+      weight: "800",
+      style: "normal",
+    },
+  ],
   display: "swap",
 });
 
-const serif = Instrument_Serif({
+const display = localFont({
   variable: "--font-family-serif",
-  subsets: ["latin"],
-  weight: "400",
+  src: [
+    {
+      path: "./fonts/ClashDisplay-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/ClashDisplay-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/ClashDisplay-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/ClashDisplay-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   display: "swap",
 });
 
@@ -23,55 +70,32 @@ const mono = Geist_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-const siteName = "CHANGE Media Studios";
-
 export const metadata: Metadata = {
   title: {
-    default: "CHANGE Media — Short, cinematic stories",
-    template: "%s | CHANGE Media",
+    default: `${SITE.name} — ${SITE.tagline}`,
+    template: `%s | ${SITE.name}`,
   },
-  description:
-    "Youth-led studio making micro-docs, reels, and campaign assets about health, community, and policy.",
-  keywords: [
-    "social impact media studio",
-    "health equity storytelling",
-    "documentary production for nonprofits",
-    "creative studio",
-    "public health media",
-    "storytelling for social change",
-  ],
-  metadataBase: new URL(siteUrl),
-  alternates: {
-    canonical: "/",
-  },
+  description: SITE.description,
+  metadataBase: new URL(SITE.url),
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: siteUrl,
-    siteName,
-    title: "CHANGE Media — Short, cinematic stories",
-    description:
-      "Youth-led studio making micro-docs, reels, and campaign assets about health, community, and policy.",
-    images: [
-      { url: "/opengraph-image", width: 1200, height: 630, alt: "CHANGE Media" },
-    ],
+    url: SITE.url,
+    siteName: SITE.name,
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: SITE.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CHANGE Media — Short, cinematic stories",
-    description:
-      "Youth-led studio making micro-docs, reels, and campaign assets about health, community, and policy.",
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
     images: ["/opengraph-image"],
-    creator: "@changemedia", // update if applicable
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
-    shortcut: "/favicon.ico",
   },
 };
 
@@ -80,34 +104,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const org = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteName,
-    url: siteUrl,
-    logo: `${siteUrl}/og-default.jpg`,
-    sameAs: [
-      // add social URLs when available
-    ],
-  };
-
-  const website = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteName,
-    url: siteUrl,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${siteUrl}/search?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
-  };
-
   return (
-    <html lang="en">
-  <body className={`${sans.variable} ${serif.variable} ${mono.variable} antialiased`}>
-        <JsonLd data={org} />
-        <JsonLd data={website} />
+    <html
+      lang="en"
+      className={`${sans.variable} ${display.variable} ${mono.variable}`}
+    >
+      <body>
+        {/* Film grain overlay */}
+        <div className="grain" aria-hidden="true" />
         {children}
         <Analytics />
       </body>

@@ -94,6 +94,10 @@ function sanitizeString(input: unknown, max = 500) {
   return input.trim().slice(0, max);
 }
 
+function buildInquiryNotes(parts: Array<string | null>) {
+  return parts.filter(Boolean).join("\n").slice(0, 600) || null;
+}
+
 export async function POST(req: Request) {
   try {
     const ip = getClientIp(req);
@@ -127,13 +131,28 @@ export async function POST(req: Request) {
     const fullName = sanitizeString(data.full_name ?? data.name, 160);
     const email = sanitizeString(data.email, 200);
     const phone = sanitizeString(data.phone, 60);
-    const school = sanitizeString(data.school ?? data.org, 160) || null;
+    const organization = sanitizeString(data.organization ?? data.school ?? data.org, 160) || null;
     const sessionType = sanitizeString(data.session_type, 60) || null;
-    const preferredDates = sanitizeString(data.preferred_dates ?? data.details, 600) || null;
-    const preferredWindow = sanitizeString(data.preferred_time_window, 120) || null;
+    const location = sanitizeString(data.location, 160) || null;
+    const timeline = sanitizeString(data.timeline, 120) || null;
+    const budgetRange = sanitizeString(data.budget_range, 120) || null;
+    const message = sanitizeString(data.message, 1200) || null;
+    const preferredDates =
+      sanitizeString(data.preferred_dates ?? data.details, 600) ||
+      buildInquiryNotes([
+        message,
+        location ? `Location: ${location}` : null,
+        timeline ? `Timeline: ${timeline}` : null,
+        budgetRange ? `Budget: ${budgetRange}` : null,
+      ]);
+    const preferredWindow =
+      sanitizeString(data.preferred_time_window, 120) ||
+      [timeline, budgetRange].filter(Boolean).join(" · ").slice(0, 120) ||
+      null;
     const howHeard = sanitizeString(data.how_heard, 160) || null;
-    const requestedService = sanitizeString(data.service_type, 60) || "portrait_general";
-    const source = sanitizeString(data.source, 120) || "direct";
+    const requestedService =
+      sanitizeString(data.service_type ?? data.service, 60) || "general_inquiry";
+    const source = sanitizeString(data.source, 120) || "website_contact";
     const referralFromInput = sanitizeString(data.referral_from, 160);
     const referralFrom = referralFromInput || (source.startsWith("referral_") ? source : "") || null;
     const status = selectStatus(sanitizeString(data.status, 32));
@@ -145,7 +164,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Please enter a valid email." }, { status: 400 });
     }
 
-    const requiresPhone = Boolean(data.service_type || data.session_type || data.full_name);
+    const requiresPhone = [
+      "grad_portraits",
+      "branding",
+      "portrait_general",
+      "family",
+      "couples",
+      "org",
+    ].includes(requestedService);
     if (requiresPhone && !phone) {
       return NextResponse.json({ error: "Phone number is required for portrait bookings." }, { status: 400 });
     }
@@ -157,12 +183,12 @@ export async function POST(req: Request) {
         full_name: fullName,
         email,
         phone: phone || null,
-        school,
+        school: organization,
         session_type: sessionType,
         preferred_dates: preferredDates,
         preferred_time_window: preferredWindow,
         how_heard: howHeard,
-        service_type: requestedService || "portrait_general",
+        service_type: requestedService || "general_inquiry",
         source,
         status,
         referral_from: referralFrom,
@@ -176,15 +202,19 @@ export async function POST(req: Request) {
     }
 
     postToSlack(
-      `New portrait inquiry` +
+      `New website inquiry` +
         `\nName: ${fullName}` +
         `\nEmail: ${email}` +
         (phone ? `\nPhone: ${phone}` : "") +
-        (school ? `\nSchool/Org: ${school}` : "") +
+        (organization ? `\nOrganization: ${organization}` : "") +
         `\nService: ${requestedService}` +
         `\nSource: ${source}` +
         (sessionType ? `\nSession type: ${sessionType}` : "") +
-        (preferredDates ? `\nDates: ${preferredDates}` : "") +
+        (location ? `\nLocation: ${location}` : "") +
+        (timeline ? `\nTimeline: ${timeline}` : "") +
+        (budgetRange ? `\nBudget: ${budgetRange}` : "") +
+        (howHeard ? `\nHow heard: ${howHeard}` : "") +
+        (preferredDates ? `\nDetails: ${preferredDates}` : "") +
         (referralFrom ? `\nReferral: ${referralFrom}` : "")
     );
 
