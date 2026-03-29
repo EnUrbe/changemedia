@@ -42,7 +42,7 @@ export default function Footer() {
             >
               {SITE.email}
             </a>
-            <p className="text-sm text-[var(--text-muted)]">{SITE.city}</p>
+            {SITE.city && <p className="text-sm text-[var(--text-muted)]">{SITE.city}</p>}
             <div className="flex gap-4 mt-2">
               {SITE.socials.instagram && (
                 <a

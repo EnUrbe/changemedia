@@ -78,7 +78,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="text-right hidden md:block">
                   <p className="text-[0.65rem] uppercase tracking-[0.2em] text-white/40">Location</p>
-                  <p className="text-white mt-1">Change Atelier, Denver</p>
+                  <p className="text-white mt-1">Change Atelier</p>
                 </div>
               </div>
               

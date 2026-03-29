@@ -31,7 +31,7 @@ const practiceNotes = [
     id: "portrait-atelier",
     label: "Portrait atelier",
     title: "Executive sessions",
-    description: "Founder-forward portrait programming that runs out of the Denver atelier with a travel-ready kit.",
+    description: "Founder-forward portrait programming with a travel-ready kit and studio availability.",
     focus: ["Wardrobe & grooming", "Same-day selects", "Retouch rituals"],
     accent: "#f7a36c",
   },

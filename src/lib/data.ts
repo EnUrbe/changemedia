@@ -7,11 +7,11 @@ export const SITE = {
   name: "CHANGE Media",
   tagline: "Documentary films and portraits that build trust.",
   description:
-    "Denver documentary filmmaker and portrait studio for nonprofits, founders, schools, and mission-driven brands. Campaign films, headshots, event coverage, and fast-turnaround content.",
+    "Documentary films and portrait studio for nonprofits, founders, schools, and mission-driven brands. Campaign films, headshots, event coverage, and fast-turnaround content.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://changemedia.org",
   email: "hello@changemedia.org",
   phone: "",
-  city: "Denver, CO",
+  city: "",
   calendlyUrl:
     "https://calendly.com/william-navarretemoreno-changemedia/30min?background_color=000000&text_color=ffffff&primary_color=c8a97e",
   socials: {
@@ -361,9 +361,9 @@ export const PORTRAITS = {
 /* ── ABOUT PAGE ── */
 
 export const ABOUT = {
-  headline: "A Denver studio for teams\nthat need trust,\nnot just content.",
+  headline: "A studio for teams\nthat need trust,\nnot just content.",
   intro:
-    "CHANGE Media helps nonprofits, founders, schools, and mission-driven brands show up with more clarity. We make documentary films, portraits, and campaign assets that feel human, polished, and useful in the real world, whether you are launching something new, rebuilding trust, or trying to communicate your value more clearly.",
+    "CHANGE Media helps nonprofits, founders, schools, and mission-driven brands show up with more clarity. We make documentary films, portraits, and campaign assets that feel human, polished, and useful in the real world — whether you are launching something new, rebuilding trust, or trying to communicate your value more clearly.",
   values: [
     {
       title: "Clarity before production",
@@ -405,9 +405,9 @@ export const FAQS = [
       "Event recaps can often be delivered within 72 hours. Most films and campaign edits land within 2 to 4 weeks depending on scope, interviews, and revision rounds.",
   },
   {
-    question: "Do you work outside Denver?",
+    question: "Do you travel for projects?",
     answer:
-      "Yes. We are based in Denver, Colorado and regularly travel for projects. If travel is involved, it is scoped and quoted up front.",
+      "Yes. We regularly travel for productions across the country. If travel is involved, it is scoped and quoted up front.",
   },
   {
     question: "What if we only need one project, not an ongoing retainer?",

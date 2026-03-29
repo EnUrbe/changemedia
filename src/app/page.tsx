@@ -26,11 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
         images: [content.seo.ogImage],
       },
       keywords: [
-        "Denver documentary filmmaker",
-        "Denver brand videographer",
-        "executive portraits Denver",
-        "team headshots Denver",
+        "documentary filmmaker",
+        "brand videographer",
+        "executive portraits",
+        "team headshots",
         "content retainer video production",
+        "nonprofit video production",
+        "mission-driven brand content",
       ],
     };
   } catch {
@@ -52,11 +54,9 @@ export default async function Page() {
     url: SITE.url,
     image: [content.seo.ogImage, ...content.featuredCases.slice(0, 3).map((item) => item.imageUrl)],
     email: SITE.email,
-    areaServed: "Denver, Colorado, United States",
+    areaServed: "United States",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Denver",
-      addressRegion: "CO",
       addressCountry: "US",
     },
     sameAs: Object.values(SITE.socials).filter(Boolean),

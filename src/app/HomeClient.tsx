@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
@@ -78,7 +78,6 @@ type HomeClientProps = {
 export default function HomeClient({ content }: HomeClientProps) {
   const heroRef = useRef<HTMLElement>(null);
   const storyRef = useRef<HTMLElement>(null);
-  const [denverTime, setDenverTime] = useState("--:--");
   const [activeStoryIndex, setActiveStoryIndex] = useState(0);
 
   const { scrollYProgress } = useScroll({
@@ -127,21 +126,6 @@ export default function HomeClient({ content }: HomeClientProps) {
           quote: item.quote,
           avatar: "",
         }));
-
-  useEffect(() => {
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: "America/Denver",
-    });
-
-    const updateTime = () => setDenverTime(formatter.format(new Date()));
-    updateTime();
-
-    const interval = window.setInterval(updateTime, 60_000);
-    return () => window.clearInterval(interval);
-  }, []);
 
   useMotionValueEvent(storyProgress, "change", (latest) => {
     const nextIndex = Math.min(
@@ -235,15 +219,15 @@ export default function HomeClient({ content }: HomeClientProps) {
               <div className="editorial-card glow-border p-6 md:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="label-accent">Current timezone</p>
-                    <p className="mt-3 text-4xl font-serif tracking-tight tabular-nums">{denverTime}</p>
+                    <p className="label-accent">Available now</p>
+                    <p className="mt-3 text-2xl font-serif tracking-tight">Films, portraits &amp; campaigns</p>
                   </div>
-                  <span className="eyebrow-pill">GMT-6 / Denver</span>
+                  <span className="eyebrow-pill">Booking</span>
                 </div>
                 <div className="divider-glow mt-6 mb-6" />
                 <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-                  Based in {SITE.city}. Available for campaign films, team portraits, event
-                  coverage, and ongoing content partnerships across Colorado and beyond.
+                  Available for campaign films, team portraits, event
+                  coverage, and ongoing content partnerships nationwide.
                 </p>
               </div>
 

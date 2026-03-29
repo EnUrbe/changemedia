@@ -301,10 +301,12 @@ export default function ContactClient() {
                     {SITE.email}
                   </a>
                 </div>
+                {SITE.city && (
                 <div>
                   <span className="label">Location</span>
                   <p className="mt-1 text-[var(--text-secondary)]">{SITE.city}</p>
                 </div>
+                )}
               </div>
             </div>
           </motion.div>

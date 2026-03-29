@@ -55,7 +55,7 @@ export default function StudiosClient() {
           {Array.from({ length: 4 }).map((_, i) => (
             <span key={i} className="inline-flex items-center gap-3 mx-8 text-sm font-mono uppercase tracking-[0.2em] text-[var(--text-muted)]">
               <span className="dot-pulse" />
-              Denver documentary filmmaker &nbsp;·&nbsp; Campaign films that build trust &nbsp;·&nbsp;
+              Documentary film production &nbsp;·&nbsp; Campaign films that build trust &nbsp;·&nbsp;
             </span>
           ))}
         </div>

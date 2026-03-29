@@ -216,7 +216,7 @@ export default function PortraitExperiencePortal({ content }: Props) {
                  <div className="flex gap-4 text-[0.65rem] uppercase tracking-[0.2em] text-neutral-400">
                    <span>Est. 2024</span>
                    <span className="text-neutral-200">|</span>
-                   <span>Denver / Boulder</span>
+                   <span>Nationwide</span>
                  </div>
                </div>
              </div>
