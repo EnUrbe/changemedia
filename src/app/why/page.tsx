@@ -138,7 +138,7 @@ export default function WhyPage() {
           { href: "/change-studios", label: "Studios" },
           { href: "/photography", label: "Photography" },
           { href: "/photography/portrait", label: "Executive" },
-          { href: "/portraits", label: "Portraits" },
+          { href: "/photography/portrait", label: "Portraits" },
           { href: "/login", label: "Login" },
         ]}
         cta={{ href: "/#contact", label: "Start a project" }}

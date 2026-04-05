@@ -35,9 +35,9 @@ export async function createNewProject(formData: FormData) {
 
     revalidatePath("/admin/projects");
     redirect(`/admin/projects/${newProject.id}`);
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Handle duplicate access code or general creation failures gracefully
-    const message = error?.message || "Failed to create project";
+    const message = error instanceof Error ? error.message : "Failed to create project";
     if (message.toLowerCase().includes("duplicate") || message.includes("23505")) {
       return { error: "Access code already in use. Choose another code." };
     }
@@ -47,7 +47,7 @@ export async function createNewProject(formData: FormData) {
 
 export async function addDeliverable(projectId: string, formData: FormData) {
   const title = formData.get("title") as string;
-  const type = formData.get("type") as any;
+  const type = formData.get("type") as Deliverable["type"];
   const url = formData.get("url") as string;
   const imagesStr = formData.get("images") as string;
 
@@ -78,7 +78,7 @@ export async function updateProjectStatus(projectId: string, status: string) {
   const project = await getProjectById(projectId);
   if (!project) return { error: "Project not found" };
 
-  await saveProject({ ...project, status: status as any });
+  await saveProject({ ...project, status: status as ClientProject["status"] });
   revalidatePath(`/admin/projects/${projectId}`);
   revalidatePath("/admin/projects");
 }

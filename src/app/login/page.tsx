@@ -37,7 +37,7 @@ export default function LoginPage() {
           { href: "/change-studios", label: "Studios" },
           { href: "/photography", label: "Photography" },
           { href: "/photography/portrait", label: "Executive" },
-          { href: "/portraits", label: "Portraits" },
+          { href: "/photography/portrait", label: "Portraits" },
         ]}
         cta={{ href: "/#contact", label: "Start" }}
         tone="dark"

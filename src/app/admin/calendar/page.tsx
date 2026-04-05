@@ -70,7 +70,7 @@ export default async function AdminCalendarPage() {
 
                       {booking.notes && (
                         <div className="max-w-xs rounded-lg bg-black/20 p-3 text-xs text-white/60 border border-white/5">
-                          "{booking.notes}"
+                          &ldquo;{booking.notes}&rdquo;
                         </div>
                       )}
                     </div>

@@ -30,10 +30,14 @@ export async function PUT(request: NextRequest) {
     
     await saveContent(parsed, editor ?? "system", body.note);
     return NextResponse.json({ data: parsed });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Content save error:", error);
+    const details =
+      error instanceof Error
+        ? error.message
+        : "Unknown validation error";
     return NextResponse.json(
-      { error: "Validation failed", details: error.errors || error.message }, 
+      { error: "Validation failed", details }, 
       { status: 400 }
     );
   }

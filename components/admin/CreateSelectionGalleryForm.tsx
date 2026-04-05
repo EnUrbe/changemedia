@@ -111,7 +111,7 @@ export default function CreateSelectionGalleryForm({ projectId }: CreateSelectio
           onChange={(e) => setMaxSelections(parseInt(e.target.value) || 15)}
           className="mt-1 w-full rounded-lg border border-neutral-200 px-3 py-2"
         />
-        <p className="mt-1 text-xs text-neutral-500">Based on the client's package</p>
+        <p className="mt-1 text-xs text-neutral-500">Based on the client&apos;s package</p>
       </div>
 
       <div>

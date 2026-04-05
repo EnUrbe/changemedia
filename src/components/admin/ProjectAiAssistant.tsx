@@ -5,10 +5,16 @@ import Button from "@/components/ui/Button";
 import { generateProjectInsightsAction } from "@/src/app/admin/projects/actions";
 import { AiGenerationType } from "@/lib/aiAssistant";
 
+type AiAssistantResult = {
+  summary?: string;
+  content?: string;
+  nextSteps?: string[];
+};
+
 export default function ProjectAiAssistant({ projectId }: { projectId: string }) {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AiGenerationType>("insights");
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AiAssistantResult | null>(null);
 
   const handleAnalyze = async () => {
     setLoading(true);

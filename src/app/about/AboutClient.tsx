@@ -177,7 +177,7 @@ export default function AboutClient() {
             <Button href="/contact" variant="primary" size="lg">
               Start a project
             </Button>
-            <Button href="/studios" variant="outline" size="lg">
+            <Button href="/change-studios" variant="outline" size="lg">
               See our work
             </Button>
           </div>

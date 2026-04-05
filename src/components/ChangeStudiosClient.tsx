@@ -128,6 +128,7 @@ export default function ChangeStudiosClient({ content }: { content: SiteContent 
               src={heroBg}
               alt="Studio Background"
               fill
+              sizes="100vw"
               className="object-cover opacity-40 blur-sm scale-105"
               priority
            />
@@ -241,7 +242,7 @@ export default function ChangeStudiosClient({ content }: { content: SiteContent 
       <section className="py-40 px-4 md:px-8 text-center">
         <FadeIn>
           <h2 className="font-serif text-6xl md:text-9xl mb-12 tracking-tight">
-            Let's make<br/>
+            Let&apos;s make<br/>
             <span className="italic text-white/40">history.</span>
           </h2>
           <Button variant="primary" className="text-xl px-10 py-6 rounded-full bg-white text-black hover:bg-neutral-200">

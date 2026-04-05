@@ -59,7 +59,7 @@ export const BookingConfirmationEmail = ({
             </Heading>
             
             <Text className="text-muted text-[14px] leading-[24px] text-center">
-              Hi {clientName}, your session has been successfully scheduled. We're
+              Hi {clientName}, your session has been successfully scheduled. We&apos;re
               looking forward to collaborating with you.
             </Text>
 

@@ -10,13 +10,44 @@ const marketingPlatforms = ["Instagram", "LinkedIn", "Blog Post", "Newsletter", 
 const salesPlatforms = ["Cold Email", "Discovery Call Script", "Follow-up Email", "Proposal Intro"];
 const tones = ["Professional", "Cinematic", "Casual", "Excited", "Educational", "Persuasive", "Empathetic"];
 
+type SequenceItem = {
+  type: string;
+  subject: string;
+  body: string;
+};
+
+type AutonomousResearchResult = {
+  companyName: string;
+  industry: string;
+  keyPainPoints: string[];
+  suggestedHook: string;
+  sequence: SequenceItem[];
+};
+
+type MarketingContentResult = {
+  title: string;
+  content: string;
+  hashtags?: string[];
+  imagePrompt?: string;
+};
+
+type AgentResult = AutonomousResearchResult | MarketingContentResult;
+
+function isAutonomousResearchResult(value: AgentResult | null): value is AutonomousResearchResult {
+  return !!value && "sequence" in value && Array.isArray(value.sequence);
+}
+
+function isMarketingContentResult(value: AgentResult | null): value is MarketingContentResult {
+  return !!value && "content" in value && typeof value.content === "string";
+}
+
 export default function MarketingAgent() {
   const [mode, setMode] = useState<"marketing" | "sales" | "autonomous">("marketing");
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState(marketingPlatforms[0]);
   const [tone, setTone] = useState(tones[0]);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AgentResult | null>(null);
 
   const currentPlatforms = mode === "marketing" ? marketingPlatforms : salesPlatforms;
 
@@ -134,7 +165,7 @@ export default function MarketingAgent() {
 
       <div className="space-y-6">
         {result ? (
-          mode === "autonomous" ? (
+          mode === "autonomous" && isAutonomousResearchResult(result) ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
                 <div className="mb-4 flex items-center gap-3">
@@ -154,13 +185,13 @@ export default function MarketingAgent() {
                   </div>
                   <div>
                     <span className="text-white/40 uppercase text-xs tracking-wider">Strategic Hook:</span>
-                    <p className="mt-1 italic text-emerald-200/80">"{result.suggestedHook}"</p>
+                    <p className="mt-1 italic text-emerald-200/80">&ldquo;{result.suggestedHook}&rdquo;</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                {result.sequence.map((email: any, i: number) => (
+                {result.sequence.map((email, i) => (
                   <div key={i} className="rounded-2xl border border-white/5 bg-black/20 p-6">
                     <div className="mb-3 flex items-center justify-between">
                       <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/60 uppercase tracking-wider">
@@ -181,7 +212,7 @@ export default function MarketingAgent() {
                 ))}
               </div>
             </div>
-          ) : (
+          ) : isMarketingContentResult(result) ? (
             <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="mb-6 flex items-center justify-between border-b border-white/5 pb-4">
                 <h3 className="font-serif text-2xl text-white">{result.title}</h3>
@@ -207,7 +238,7 @@ export default function MarketingAgent() {
                 </div>
               )}
             </div>
-          )
+          ) : null
         ) : (
           <div className="flex h-full items-center justify-center rounded-3xl border border-dashed border-white/10 bg-white/5 p-12 text-center">
             <div className="max-w-xs">

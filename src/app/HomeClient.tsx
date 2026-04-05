@@ -44,7 +44,7 @@ const EXPERTISE = [
   },
 ] as const;
 
-const PRINCIPLES = [
+const DEFAULT_PRINCIPLES = [
   "Built for nonprofits, founders, schools, and mission-driven brands.",
   "One shoot can support your website, campaign, deck, social, and press assets.",
   "Fast turnarounds without losing taste, rigor, or human presence.",
@@ -127,6 +127,29 @@ export default function HomeClient({ content }: HomeClientProps) {
           avatar: "",
         }));
 
+  const primaryHeroCta =
+    content.hero.ctas[0] ?? { label: HOME.hero.ctas[0].label, href: HOME.hero.ctas[0].href, variant: "primary" as const };
+  const secondaryHeroCta =
+    content.hero.ctas[1] ?? { label: "Book discovery call", href: SITE.calendlyUrl, variant: "secondary" as const };
+
+  const principleCards =
+    content.features.length > 0
+      ? content.features
+      : DEFAULT_PRINCIPLES.map((description, index) => ({
+          title: `Approach ${index + 1}`,
+          description,
+        }));
+
+  const heroMetrics =
+    content.hero.metrics.length > 0
+      ? content.hero.metrics
+      : HOME.metrics.map((metric) => ({ value: metric.value, label: metric.label }));
+
+  const faqItems =
+    content.faqs.length > 0
+      ? content.faqs
+      : FAQS.map((faq, index) => ({ id: `faq-${index + 1}`, question: faq.question, answer: faq.answer }));
+
   useMotionValueEvent(storyProgress, "change", (latest) => {
     const nextIndex = Math.min(
       featuredCases.length - 1,
@@ -162,7 +185,7 @@ export default function HomeClient({ content }: HomeClientProps) {
                 variants={fadeUp}
                 className="mt-8 max-w-5xl text-[clamp(4rem,11vw,8.8rem)] leading-[0.84] headline-kern text-balance text-shimmer"
               >
-                Story-led films and portraits that make people stop, feel, and remember.
+                {content.hero.title}
               </motion.h1>
 
               <motion.p
@@ -172,9 +195,7 @@ export default function HomeClient({ content }: HomeClientProps) {
                 variants={fadeUp}
                 className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] md:text-xl"
               >
-                CHANGE Media helps nonprofits, founders, schools, and mission-driven teams show
-                up clearly with documentary storytelling, executive portraits, event coverage, and
-                launch-ready visual assets shaped with an editorial eye and a documentary spine.
+                {content.hero.subtitle}
               </motion.p>
 
               <motion.div
@@ -184,11 +205,11 @@ export default function HomeClient({ content }: HomeClientProps) {
                 variants={fadeUp}
                 className="mt-9 flex flex-wrap gap-4"
               >
-                <Button href={HOME.hero.ctas[0].href} variant="primary" size="lg">
-                  {HOME.hero.ctas[0].label}
+                <Button href={primaryHeroCta.href} variant="primary" size="lg">
+                  {primaryHeroCta.label}
                 </Button>
-                <Button href={SITE.calendlyUrl} variant="outline" size="lg">
-                  Talk through a project
+                <Button href={secondaryHeroCta.href} variant="outline" size="lg">
+                  {secondaryHeroCta.label}
                 </Button>
               </motion.div>
 
@@ -199,11 +220,11 @@ export default function HomeClient({ content }: HomeClientProps) {
                 variants={fadeUp}
                 className="mt-12 grid gap-4 md:grid-cols-3"
               >
-                {PRINCIPLES.map((principle) => (
-                  <div key={principle} className="editorial-card glow-border p-5 md:p-6">
-                    <span className="label-accent">Approach</span>
+                {principleCards.map((principle) => (
+                  <div key={principle.title} className="editorial-card glow-border p-5 md:p-6">
+                    <span className="label-accent">{principle.title}</span>
                     <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)] md:text-[0.95rem]">
-                      {principle}
+                      {principle.description}
                     </p>
                   </div>
                 ))}
@@ -219,15 +240,14 @@ export default function HomeClient({ content }: HomeClientProps) {
               <div className="editorial-card glow-border p-6 md:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="label-accent">Available now</p>
-                    <p className="mt-3 text-2xl font-serif tracking-tight">Films, portraits &amp; campaigns</p>
+                    <p className="label-accent">{content.hero.eyebrow}</p>
+                    <p className="mt-3 text-2xl font-serif tracking-tight">{content.hero.titleGradient}</p>
                   </div>
                   <span className="eyebrow-pill">Booking</span>
                 </div>
                 <div className="divider-glow mt-6 mb-6" />
                 <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-                  Available for campaign films, team portraits, event
-                  coverage, and ongoing content partnerships nationwide.
+                  {content.hero.locationPill}
                 </p>
               </div>
 
@@ -272,7 +292,7 @@ export default function HomeClient({ content }: HomeClientProps) {
       <section className="border-b border-[var(--border)] bg-[var(--bg-elevated)]">
         <div className="container-wide overflow-hidden py-5">
           <div className="inline-flex animate-[marquee_24s_linear_infinite] gap-12 whitespace-nowrap pr-12">
-            {[...HOME.metrics, ...HOME.metrics, ...HOME.metrics].map((metric, index) => (
+            {[...heroMetrics, ...heroMetrics, ...heroMetrics].map((metric, index) => (
               <span
                 key={`${metric.label}-${index}`}
                 className="inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--text-secondary)]"
@@ -293,14 +313,13 @@ export default function HomeClient({ content }: HomeClientProps) {
         <div className="sticky top-20 min-h-[calc(100vh-5rem)]">
           <div className="container-wide grid min-h-[calc(100vh-5rem)] gap-10 py-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
             <div className="max-w-xl">
-              <p className="eyebrow">Interactive story deck</p>
+              <p className="eyebrow">Featured stories</p>
               <h2 className="mt-4 text-4xl md:text-6xl">
-                The hero can now become a scroll-led story about the work itself.
+                Scroll through the stories behind the work.
               </h2>
               <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">
-                As visitors scroll, the featured projects shift in focus. These cards now pull from
-                editable homepage case studies, so you can update the imagery and story direction
-                from the admin without touching code.
+                As you move through this section, each project comes forward to show the people,
+                moments, and outcomes at the center of the work.
               </p>
 
               <div className="mt-10 space-y-4">
@@ -451,7 +470,7 @@ export default function HomeClient({ content }: HomeClientProps) {
                     shaped from one organized production.
                   </p>
                   <div className="mt-6">
-                    <Button href="/studios" variant="outline">
+                    <Button href="/change-studios" variant="outline">
                       Explore case studies
                     </Button>
                   </div>
@@ -486,7 +505,7 @@ export default function HomeClient({ content }: HomeClientProps) {
                         <h3 className="mt-2 text-xl md:text-2xl">{work.title}</h3>
                       </div>
                       <Link
-                        href="/studios"
+                        href="/change-studios"
                         className="label link-underline rounded-full border border-white/15 px-4 py-2 text-white/85 transition-all duration-300 hover:border-[var(--accent)] hover:text-[var(--accent)]"
                       >
                         View
@@ -582,25 +601,32 @@ export default function HomeClient({ content }: HomeClientProps) {
               process that creates strong visuals, keeps production calm, and delivers assets their
               team can immediately put to work.
             </p>
-            <div className="mt-10 space-y-4">
-              {EXPERTISE.map((entry) => (
-                <div key={entry.id} className="border-t border-[var(--border)] pt-4 group/item">
-                  <div className="flex items-start gap-4">
-                    <span className="label-accent transition-transform duration-300 group-hover/item:translate-x-1">{entry.id}</span>
-                    <div>
-                      <p className="text-lg text-white transition-colors duration-300 group-hover/item:text-[var(--accent)]">{entry.title}</p>
-                      <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                        {entry.description}
-                      </p>
-                    </div>
-                  </div>
+    <div className="mt-10 space-y-4">
+      {EXPERTISE.map((entry) => (
+        <div key={entry.id} className="border-t border-[var(--border)] pt-4 group/item cursor-pointer">
+          <div className="flex items-start gap-4">
+            <span className="label-accent transition-transform duration-300 group-hover/item:translate-x-1">{entry.id}</span>
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <p className="text-lg text-white transition-colors duration-[400ms] group-hover/item:text-[var(--accent)]">{entry.title}</p>
+                <span className="text-[var(--text-secondary)] transition-transform duration-[400ms] group-hover/item:rotate-180">+</span>
+              </div>
+              <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-[400ms] ease-in-out group-hover/item:grid-rows-[1fr] group-hover/item:opacity-100 group-hover/item:pt-3">
+                <div className="overflow-hidden">
+                  <p className="text-sm leading-relaxed text-[var(--text-secondary)] pr-6">
+                    {entry.description}
+                  </p>
                 </div>
-              ))}
+              </div>
             </div>
+          </div>
+        </div>
+      ))}
+    </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {HOME.metrics.map((metric, index) => (
+            {heroMetrics.map((metric, index) => (
               <motion.div
                 key={metric.label}
                 initial={{ opacity: 0, y: 22 }}
@@ -626,7 +652,7 @@ export default function HomeClient({ content }: HomeClientProps) {
                     same brand.
                   </p>
                 </div>
-                <Button href="/portraits" variant="ghost">
+                <Button href="/photography/portrait" variant="ghost">
                   See portraits
                 </Button>
               </div>
@@ -636,49 +662,59 @@ export default function HomeClient({ content }: HomeClientProps) {
       </section>
 
       {/* ═══════ WHAT WE DO ═══════ */}
-      <section className="py-[var(--section-padding)]">
+      <section className="min-h-screen py-32 md:py-48 flex flex-col justify-center">
         <div className="container-wide">
-          <div className="mb-10 grid gap-4 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
+          <div className="mb-16 grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
             <div>
-              <p className="eyebrow">What we do</p>
-              <h2 className="mt-4 text-4xl md:text-6xl">
-                Strategy, production, and delivery aligned from the start.
+              <p className="eyebrow tracking-widest uppercase">What we do</p>
+              <h2 className="mt-6 text-5xl md:text-7xl font-light tracking-tight">
+                Strategy, production, and delivery <br className="hidden lg:block"/> aligned from the start.
               </h2>
             </div>
-            <p className="max-w-2xl text-base leading-relaxed text-[var(--text-secondary)] md:justify-self-end">
-              We are most useful when a client needs help thinking through the message, directing
-              the people on camera, and leaving the project with assets that can do more than one
-              job.
-            </p>
+            <div className="max-w-xl md:justify-self-end md:mt-16">
+              <p className="text-lg md:text-xl leading-relaxed text-[var(--text-secondary)]">
+                We are most useful when a client needs help thinking through the message, directing
+                the people on camera, and leaving the project with assets that can do more than one
+                job.
+              </p>
+            </div>
           </div>
 
-          <div className="grid gap-5 xl:grid-cols-3">
+          <div className="grid gap-8 md:gap-12 xl:grid-cols-3">
             {EXPERTISE.map((entry, index) => (
               <motion.article
                 key={entry.id}
-                initial={{ opacity: 0, y: 28 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: index * 0.08, duration: 0.55 }}
-                className="editorial-card glow-border flex h-full flex-col p-6 md:p-8"
+                viewport={{ once: true, margin: "-120px" }}
+                transition={{ delay: index * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="editorial-card glow-border group flex h-full flex-col p-8 md:p-12 transition-all duration-500 hover:border-white/20"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <span className="label-accent">{entry.id}</span>
-                  <span className="label text-[var(--text-secondary)]">Core service</span>
+                  <span className="label-accent transition-transform duration-500 group-hover:-translate-y-1">{entry.id}</span>
+                  <span className="label text-[var(--text-dim)] uppercase tracking-wider text-xs">Core service</span>
                 </div>
-                <h3 className="mt-8 text-3xl">{entry.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
-                  {entry.description}
-                </p>
-                <div className="divider-glow my-6" />
-                <ul className="space-y-3">
+                <h3 className="mt-12 text-3xl font-light tracking-tight">{entry.title}</h3>
+                
+                <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-500 ease-in-out group-hover:grid-rows-[1fr] group-hover:opacity-100 group-hover:mt-6">
+                  <div className="overflow-hidden">
+                    <p className="text-sm md:text-base leading-relaxed text-[var(--text-secondary)]">
+                      {entry.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="divider-glow my-8 transition-opacity duration-500 opacity-30 group-hover:opacity-100" />
+                <ul className="space-y-4 flex-1">
                   {entry.items.map((item) => (
                     <li
                       key={item}
-                      className="flex items-center justify-between gap-4 text-sm text-[var(--text-secondary)]"
+                      className="flex items-center justify-between gap-4 text-sm tracking-wide text-[var(--text-secondary)] transition-colors duration-300 group-hover:text-white"
                     >
                       <span>{item}</span>
-                      <span className="text-[var(--accent)] transition-transform duration-300 hover:rotate-90">+</span>
+                      <span className="text-[var(--accent)] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:rotate-90">
+                        +
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -798,9 +834,9 @@ export default function HomeClient({ content }: HomeClientProps) {
           </div>
 
           <div className="grid gap-4">
-            {FAQS.map((faq) => (
+            {faqItems.map((faq) => (
               <details
-                key={faq.question}
+                key={faq.id}
                 className="editorial-card group p-5 md:p-6 open:border-[var(--border-accent)]"
               >
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-base md:text-lg">

@@ -1,10 +1,10 @@
 {
   "hero": {
-    "eyebrow": "Still systems • Documentary fieldwork",
-    "availability": "Denver / Chicago / NYC — Worldwide",
+    "eyebrow": "Editorial stills • Documentary fieldwork",
+    "availability": "Denver / Chicago / NYC / Remote prep",
     "title": "Photography practice",
-    "highlight": "for ambitious teams",
-    "subtitle": "Portrait retainers, editorial fly-kits, and campaign field crews that sit inside the Change Studios care system.",
+    "highlight": "for care-centered teams",
+    "subtitle": "Portrait retainers, editorial fly-kits, and campaign field crews integrated with the Change Studios production system.",
     "primaryCta": { "label": "See the work", "href": "#portfolio", "variant": "primary" },
     "secondaryCta": { "label": "Talk with the studio", "href": "#contact", "variant": "secondary" },
     "stats": [
@@ -141,7 +141,7 @@
       "id": "studio-retainer",
       "numeral": "I",
       "title": "Studio Retainer",
-      "description": "Campaign-aligned stills crews embedded with the Change Studios production calendar.",
+      "description": "Campaign-aligned stills crews embedded inside the Change Studios production calendar.",
       "price": "$4,800",
       "periodLabel": "Quarterly from",
       "features": [
@@ -159,7 +159,7 @@
       "id": "portrait-atelier",
       "numeral": "II",
       "title": "Portrait Atelier",
-      "description": "Executive sessions engineered for fast-moving leadership teams and policy partners.",
+      "description": "Executive portrait sessions designed for fast-moving leadership teams and policy partners.",
       "price": "$2,900",
       "periodLabel": "Collections from",
       "features": [
@@ -177,7 +177,7 @@
       "id": "executive-fly-kit",
       "numeral": "III",
       "title": "Executive Fly-Kit",
-      "description": "Lean portrait coverage that ships with your team for offsite summits and roadshows.",
+      "description": "Lean portrait coverage that travels with your team for offsite summits and roadshows.",
       "price": "$1,950",
       "periodLabel": "Capsules from",
       "features": [
@@ -194,14 +194,14 @@
   ],
   "cta": {
     "eyebrow": "Private Commissions",
-    "headline": "Let’s architect the stills layer inside your practice.",
-    "description": "We pair the Change Studios production team with a portrait atelier so your leadership always has ready-to-ship imagery.",
+    "headline": "Let us build the stills layer inside your campaign practice.",
+    "description": "We pair Change Studios production with an editorial portrait atelier so your leadership always has ready-to-ship imagery.",
     "primaryCta": { "label": "Schedule a call", "href": "/contact", "variant": "primary" },
     "secondaryCta": { "label": "Download spec sheet", "href": "/deck", "variant": "secondary" }
   },
   "seo": {
     "title": "CHANGE Media Photography",
-    "description": "Luxury photography studio for founders, policy leaders, and premium brands.",
+    "description": "Editorial photography practice for founders, policy leaders, and care-driven organizations.",
     "ogImage": "https://res.cloudinary.com/demo/image/upload/c_fill,q_auto,f_auto,w_1200,h_630/v1731340000/photography-og.jpg"
   },
   "media": {

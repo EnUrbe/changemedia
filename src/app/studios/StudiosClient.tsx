@@ -23,6 +23,7 @@ export default function StudiosClient() {
           src={STUDIOS.hero.image}
           alt="Change Studios"
           fill
+          sizes="100vw"
           className="object-cover opacity-40"
           priority
         />
@@ -180,6 +181,7 @@ export default function StudiosClient() {
                   src={work.image}
                   alt={work.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />

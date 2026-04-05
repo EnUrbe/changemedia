@@ -13,7 +13,7 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleFeaturedChange = (index: number, field: string, value: any) => {
+  const handleFeaturedChange = (index: number, field: string, value: string | string[]) => {
     const newFeatured = [...content.featuredCases];
     newFeatured[index] = { ...newFeatured[index], [field]: value };
     setContent((prev) => ({
@@ -65,9 +65,9 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
       
       setMessage("Saved successfully!");
       router.refresh();
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Save exception:", e);
-      setMessage(`Error saving content: ${e.message}`);
+      setMessage(`Error saving content: ${e instanceof Error ? e.message : "Unknown error"}`);
     } finally {
       setSaving(false);
     }
@@ -94,7 +94,7 @@ export default function LandingPageForm({ initialContent }: { initialContent: Si
         </div>
         
         <p className="text-sm text-neutral-500">
-          These images are used in the "Glass Grid" on the hero section and the "Work" slider.
+          These images are used in the &quot;Glass Grid&quot; on the hero section and the &quot;Work&quot; slider.
           The first image is also used as the hero background.
         </p>
 

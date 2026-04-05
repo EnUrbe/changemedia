@@ -47,8 +47,8 @@ export default function AdminLoginPage() {
       if (error) {
         setError(error.message);
       }
-    } catch (err: any) {
-      setError(err?.message || "Google sign-in failed");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Google sign-in failed");
     } finally {
       setGoogleLoading(false);
     }

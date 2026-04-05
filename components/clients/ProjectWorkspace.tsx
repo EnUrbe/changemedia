@@ -131,9 +131,9 @@ export default function ProjectWorkspace({ project, accessKey, photoSelections =
       if (url) {
         window.location.href = url;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      setDownloadError(error?.message || "Could not start download");
+      setDownloadError(error instanceof Error ? error.message : "Could not start download");
     } finally {
       setDownloadingAll(false);
     }

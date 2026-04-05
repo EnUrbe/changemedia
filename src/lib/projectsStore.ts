@@ -10,8 +10,34 @@ import {
 
 export type ClientFacingProject = Omit<ClientProject, "accessCode">;
 
+type DeliverableRow = {
+  id: string;
+  type: Deliverable["type"];
+  title: string;
+  description?: string | null;
+  url: string;
+  thumbnail?: string | null;
+  images?: string[] | null;
+  status: Deliverable["status"];
+};
+
+type ProjectRow = {
+  id: string;
+  client_name: string;
+  project_title: string;
+  status: ClientProject["status"];
+  summary?: string | null;
+  due_date: string;
+  point_of_contact: ClientProject["pointOfContact"];
+  access_code: string;
+  deliverables?: DeliverableRow[];
+  feedback?: FeedbackNote[];
+  checklist?: string[];
+  ai_notes?: string | null;
+};
+
 // Helper to map DB rows to our application schema
-function mapProjectFromDB(row: any): ClientProject {
+function mapProjectFromDB(row: ProjectRow): ClientProject {
   return {
     id: row.id,
     clientName: row.client_name,
@@ -28,7 +54,7 @@ function mapProjectFromDB(row: any): ClientProject {
   };
 }
 
-function mapDeliverableFromDB(row: any): Deliverable {
+function mapDeliverableFromDB(row: DeliverableRow): Deliverable {
   return {
     id: row.id,
     type: row.type,

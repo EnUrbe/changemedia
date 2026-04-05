@@ -1,8 +1,11 @@
 declare module "node-ical" {
   export const sync: {
-    parseICS: (body: string) => Record<string, any>;
+    parseICS: (body: string) => Record<string, unknown>;
   };
   export const async: {
-    fromURL: (url: string, callback?: (err: any, data: any) => void) => Promise<Record<string, any>>;
+    fromURL: (
+      url: string,
+      callback?: (err: unknown, data: unknown) => void
+    ) => Promise<Record<string, unknown>>;
   };
 }

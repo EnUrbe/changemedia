@@ -189,18 +189,34 @@ export async function getAllPendingEdits(): Promise<PhotoSelectionGallery[]> {
   }
 }
 
-function mapFromDB(row: any): PhotoSelectionGallery {
+type PhotoSelectionRow = {
+  id: string;
+  project_id: string;
+  title: string;
+  description?: string | null;
+  photos?: unknown;
+  max_selections: number;
+  status: PhotoSelectionGallery["status"];
+  selected_photos?: unknown;
+  client_notes?: string | null;
+  submitted_at?: string | null;
+  created_at: string;
+};
+
+function mapFromDB(row: PhotoSelectionRow): PhotoSelectionGallery {
   return {
     id: row.id,
     projectId: row.project_id,
     title: row.title,
-    description: row.description,
-    photos: row.photos || [],
+    description: row.description ?? undefined,
+    photos: Array.isArray(row.photos) ? (row.photos as PhotoItem[]) : [],
     maxSelections: row.max_selections,
     status: row.status,
-    selectedPhotos: row.selected_photos || [],
-    clientNotes: row.client_notes,
-    submittedAt: row.submitted_at,
+    selectedPhotos: Array.isArray(row.selected_photos)
+      ? (row.selected_photos as string[])
+      : [],
+    clientNotes: row.client_notes ?? undefined,
+    submittedAt: row.submitted_at ?? undefined,
     createdAt: row.created_at,
   };
 }

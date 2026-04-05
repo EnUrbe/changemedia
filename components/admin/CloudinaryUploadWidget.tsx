@@ -9,15 +9,32 @@ interface CloudinaryUploadWidgetProps {
   children?: React.ReactNode;
 }
 
+type CloudinaryUploadResult = {
+  event?: string;
+  info?: {
+    secure_url?: string;
+  };
+};
+
+type CloudinaryWidget = {
+  open: () => void;
+};
+
+type CloudinaryGlobal = {
+  createUploadWidget: (
+    options: Record<string, unknown>,
+    callback: (error: unknown, result: CloudinaryUploadResult) => void
+  ) => CloudinaryWidget;
+};
+
 declare global {
   interface Window {
-    cloudinary: any;
+    cloudinary?: CloudinaryGlobal;
   }
 }
 
 export default function CloudinaryUploadWidget({ onUpload, children }: CloudinaryUploadWidgetProps) {
   const [loaded, setLoaded] = useState(false);
-  const widgetRef = useRef<any>(null);
   const onUploadRef = useRef(onUpload);
 
   useEffect(() => {
@@ -60,8 +77,8 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
         clientAllowedFormats: ["image", "video"],
         maxImageFileSize: 10000000, // 10MB
       },
-      (error: any, result: any) => {
-        if (!error && result && result.event === "success") {
+      (error: unknown, result: CloudinaryUploadResult) => {
+        if (!error && result?.event === "success" && result.info?.secure_url) {
           console.log("Upload success:", result.info.secure_url);
           onUploadRef.current(result.info.secure_url);
         }

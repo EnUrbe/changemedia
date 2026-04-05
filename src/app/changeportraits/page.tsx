@@ -129,7 +129,7 @@ function ChangePortraitsLanding() {
       <NavBar
         links={[
           { href: "/photography", label: "Photography" },
-          { href: "/portraits", label: "Portraits" },
+          { href: "/photography/portrait", label: "Portraits" },
           { href: "/change-studios", label: "Studios" },
         ]}
         cta={{ href: "#form", label: "Book Session" }}

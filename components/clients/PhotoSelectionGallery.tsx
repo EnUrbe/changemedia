@@ -280,7 +280,7 @@ export default function PhotoSelectionGallery({
               {submitting ? "Submitting..." : `Submit ${selected.size} Selections`}
             </button>
             <p className="text-center text-xs text-neutral-500">
-              Once submitted, we'll begin editing your selected photos
+              Once submitted, we&apos;ll begin editing your selected photos
             </p>
           </div>
         </div>

@@ -2,17 +2,17 @@
   "hero": {
     "eyebrow": "The CHANGE Media Practice",
     "locationPill": "Denver • traveling often",
-    "title": "Stories that turn care into motion.",
-    "titleGradient": "Film × Portrait × Systems",
-    "subtitle": "One studio for health orgs, coalitions, and families who need editorial-grade stories that feel human and act like strategy.",
+    "title": "Stories that move people to care and act.",
+    "titleGradient": "Film x Portrait x Systems",
+    "subtitle": "One practice for health orgs, coalitions, and community teams who need editorial-grade storytelling that feels human and performs like strategy.",
     "ctas": [
       { "label": "Enter Change Studios", "href": "/change-studios", "variant": "primary" },
       { "label": "Portrait Atelier", "href": "/photography/portrait", "variant": "secondary" },
       { "label": "Talk with the practice", "href": "#contact", "variant": "ghost" }
     ],
     "metrics": [
-      { "value": "210+", "label": "field stories documented" },
-      { "value": "35+", "label": "movement partners" },
+      { "value": "220+", "label": "field stories documented" },
+      { "value": "40+", "label": "movement partners" },
       { "value": "72 hr", "label": "event-to-edit" },
       { "value": "1 team", "label": "shared across practice" }
     ]
@@ -77,45 +77,45 @@
   "galleryCases": [
     {
       "id": "gm-1",
-      "title": "Case Study 1",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Street Medicine Follow-Up Series",
+      "subtitle": "Field documentary series",
       "imageUrl": "https://picsum.photos/seed/changemedia-1/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["community", "health", "story system"]
     },
     {
       "id": "gm-2",
-      "title": "Case Study 2",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Regional Prevention Campaign",
+      "subtitle": "Campaign toolkit",
       "imageUrl": "https://picsum.photos/seed/changemedia-2/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["public health", "campaign", "reels"]
     },
     {
       "id": "gm-3",
-      "title": "Case Study 3",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Neighborhood Organizer Portraits",
+      "subtitle": "Editorial portrait commission",
       "imageUrl": "https://picsum.photos/seed/changemedia-3/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["portraits", "leadership", "editorial"]
     },
     {
       "id": "gm-4",
-      "title": "Case Study 4",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Maternal Health Listening Tour",
+      "subtitle": "Docu-short + social cutdowns",
       "imageUrl": "https://picsum.photos/seed/changemedia-4/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["care", "community", "documentary"]
     },
     {
       "id": "gm-5",
-      "title": "Case Study 5",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Workforce Pipeline Stories",
+      "subtitle": "Recruitment campaign assets",
       "imageUrl": "https://picsum.photos/seed/changemedia-5/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["workforce", "education", "campaign"]
     },
     {
       "id": "gm-6",
-      "title": "Case Study 6",
-      "subtitle": "60–90s • Micro-doc",
+      "title": "Coalition Annual Impact Rollout",
+      "subtitle": "Impact film + deck visuals",
       "imageUrl": "https://picsum.photos/seed/changemedia-6/900/700",
-      "tags": ["community", "health", "policy"]
+      "tags": ["impact", "policy", "reporting"]
     }
   ],
   "features": [
@@ -139,7 +139,7 @@
       "Field kit: cinema + medium format stills",
       "Data care: consent logs, secure storage"
     ],
-    "quote": "The map should learn from the foot that walks it. Our job is to listen, film, and translate care into images that move people to act.",
+    "quote": "The map should learn from the foot that walks it. Our job is to listen, film, and translate care into images that move people to action.",
     "attribution": "— CHANGE Media Notes"
   },
   "services": [

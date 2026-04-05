@@ -12,6 +12,17 @@ export interface Booking {
   notes?: string;
 }
 
+type BookingRow = {
+  id: string;
+  client_name: string;
+  client_email: string;
+  service_type: string;
+  start_time: string;
+  end_time: string;
+  status: "confirmed" | "cancelled";
+  notes?: string | null;
+};
+
 export async function createBooking(booking: Omit<Booking, "id" | "status">) {
   const supabase = getSupabaseAdminClient();
   
@@ -44,7 +55,7 @@ export async function getBookingsForDateRange(start: Date, end: Date) {
 
   if (error) throw new Error(`Failed to fetch bookings: ${error.message}`);
   
-  return data.map((row: any) => ({
+  return data.map((row: BookingRow) => ({
     id: row.id,
     clientName: row.client_name,
     clientEmail: row.client_email,
@@ -72,7 +83,7 @@ export async function getAllUpcomingBookings() {
       return [];
     }
     
-    return data.map((row: any) => ({
+    return data.map((row: BookingRow) => ({
       id: row.id,
       clientName: row.client_name,
       clientEmail: row.client_email,

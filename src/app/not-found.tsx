@@ -16,7 +16,7 @@ export default function NotFound() {
           Lost in the<br />footage.
         </h1>
         <p className="max-w-md text-lg text-white/60 mb-10 leading-relaxed">
-          The page you are looking for has been moved, deleted, or never existed. Let's get you back to the studio.
+          The page you are looking for has been moved, deleted, or never existed. Let&apos;s get you back to the studio.
         </p>
         
         <Link 

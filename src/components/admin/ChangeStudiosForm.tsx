@@ -12,7 +12,7 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleChangeStudios = (field: string, value: any) => {
+  const handleChangeStudios = (field: string, value: unknown) => {
     setContent((prev) => ({
       ...prev,
       changeStudios: {
@@ -48,13 +48,13 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
     }));
   };
 
-  const handlePillarChange = (index: number, field: string, value: any) => {
+  const handlePillarChange = (index: number, field: string, value: unknown) => {
     const newPillars = [...content.changeStudios!.pillars];
     newPillars[index] = { ...newPillars[index], [field]: value };
     handleChangeStudios("pillars", newPillars);
   };
 
-  const handleShowcaseChange = (index: number, field: string, value: any) => {
+  const handleShowcaseChange = (index: number, field: string, value: unknown) => {
     const newShowcase = [...content.changeStudios!.showcase];
     newShowcase[index] = { ...newShowcase[index], [field]: value };
     handleChangeStudios("showcase", newShowcase);
@@ -78,9 +78,9 @@ export default function ChangeStudiosForm({ initialContent }: { initialContent: 
       
       setMessage("Saved successfully!");
       router.refresh();
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Save exception:", e);
-      setMessage(`Error saving content: ${e.message}`);
+      setMessage(`Error saving content: ${e instanceof Error ? e.message : "Unknown error"}`);
     } finally {
       setSaving(false);
     }

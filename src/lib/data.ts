@@ -5,9 +5,9 @@
 
 export const SITE = {
   name: "CHANGE Media",
-  tagline: "Documentary films and portraits that build trust.",
+  tagline: "Documentary storytelling for care-centered teams.",
   description:
-    "Documentary films and portrait studio for nonprofits, founders, schools, and mission-driven brands. Campaign films, headshots, event coverage, and fast-turnaround content.",
+    "An editorial documentary practice for nonprofits, coalitions, founders, and care-driven teams. Films, portraits, and campaign systems built to move people to trust and action.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://changemedia.org",
   email: "hello@changemedia.org",
   phone: "",
@@ -23,10 +23,11 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-  { label: "Work", href: "/studios" },
-  { label: "Portraits", href: "/portraits" },
-  { label: "About", href: "/about" },
+  { label: "Change Studios", href: "/change-studios" },
+  { label: "Photography", href: "/photography" },
+  { label: "Portraits", href: "/photography/portrait" },
   { label: "Field Notes", href: "/field-notes" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -42,8 +43,8 @@ export const HOME = {
     subheadline:
       "We help nonprofits, founders, schools, and mission-driven teams look credible on camera and communicate clearly with film, portraits, and campaign-ready content.",
     ctas: [
-      { label: "See the work", href: "/studios" },
-      { label: "Start a conversation", href: "/contact" },
+      { label: "Explore Change Studios", href: "/change-studios" },
+      { label: "Book discovery call", href: "/contact" },
     ],
   },
   metrics: [
@@ -59,7 +60,7 @@ export const HOME = {
       title: "Change Studios",
       description:
         "Documentary films, launch videos, event coverage, and recurring content systems for organizations that need more than random social posts.",
-      href: "/studios",
+      href: "/change-studios",
       image:
         "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=80",
     },
@@ -69,7 +70,7 @@ export const HOME = {
       title: "Portrait Atelier",
       description:
         "Executive portraits, team headshots, and personal brand sessions that make people look trustworthy, polished, and human.",
-      href: "/portraits",
+      href: "/photography/portrait",
       image:
         "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
     },
@@ -143,7 +144,7 @@ export const HOME = {
       description:
         "An interview-led film with supporting stills and cutdowns designed to carry one clear idea across launch moments, fundraising, and public storytelling.",
       points: ["Interviews + b-roll", "Hero edit + supporting cutdowns", "Website, deck, and social-ready assets"],
-      href: "/studios",
+      href: "/change-studios",
     },
     {
       title: "Ongoing Story Partnership",
@@ -151,7 +152,7 @@ export const HOME = {
       description:
         "A recurring production cadence for teams that need fresh films, stills, and rollout assets without losing consistency from one month to the next.",
       points: ["Monthly planning", "Short-form edits + stills", "Flexible campaign support"],
-      href: "/studios",
+      href: "/change-studios",
     },
     {
       title: "Leadership + Team Portraits",
@@ -159,7 +160,7 @@ export const HOME = {
       description:
         "Portrait sessions for leaders and teams who need images that feel current, trustworthy, and aligned with the rest of the brand language.",
       points: ["On-site setup", "Calm direction", "Web, press, and internal-use delivery"],
-      href: "/portraits",
+      href: "/photography/portrait",
     },
   ],
   leadMagnet: {
@@ -361,9 +362,9 @@ export const PORTRAITS = {
 /* ── ABOUT PAGE ── */
 
 export const ABOUT = {
-  headline: "A studio for teams\nthat need trust,\nnot just content.",
+  headline: "A practice for teams\nthat need trust,\nnot noise.",
   intro:
-    "CHANGE Media helps nonprofits, founders, schools, and mission-driven brands show up with more clarity. We make documentary films, portraits, and campaign assets that feel human, polished, and useful in the real world — whether you are launching something new, rebuilding trust, or trying to communicate your value more clearly.",
+    "CHANGE Media helps nonprofits, founders, schools, and mission-driven brands communicate with care, precision, and momentum. We build documentary films, portraits, and campaign assets that feel human and strategic, so your story can do real work in public.",
   values: [
     {
       title: "Clarity before production",
