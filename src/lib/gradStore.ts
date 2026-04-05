@@ -1,23 +1,25 @@
 import "server-only";
-import { getSupabaseAdminClient } from "./supabaseAdmin";
+import { getSupabaseAdminClient, hasSupabaseAdminEnv } from "./supabaseAdmin";
 import { gradContentSchema, type GradContent } from "./gradSchema";
 
 const CONTENT_KEY = "grad_page";
 
 export async function getGradContent(): Promise<GradContent> {
-  try {
-    const supabase = getSupabaseAdminClient();
-    const { data } = await supabase
-      .from("site_content")
-      .select("content")
-      .eq("key", CONTENT_KEY)
-      .single();
+  if (hasSupabaseAdminEnv()) {
+    try {
+      const supabase = getSupabaseAdminClient();
+      const { data } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("key", CONTENT_KEY)
+        .single();
 
-    if (data?.content) {
-      return gradContentSchema.parse(data.content);
+      if (data?.content) {
+        return gradContentSchema.parse(data.content);
+      }
+    } catch (error) {
+      console.error("Failed to load grad content from Supabase, falling back to empty:", error);
     }
-  } catch (error) {
-    console.error("Failed to load grad content from Supabase, falling back to empty:", error);
   }
 
   // Fallback defaults

@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { revalidatePath } from "next/cache";
 import { siteContentSchema, SiteContent } from "./contentSchema";
-import { getSupabaseAdminClient } from "./supabaseAdmin";
+import { getSupabaseAdminClient, hasSupabaseAdminEnv } from "./supabaseAdmin";
 
 const CONTENT_PATH = path.join(process.cwd(), "content", "site.json");
 const HISTORY_DIR = path.join(process.cwd(), "content", "history");
@@ -26,19 +26,21 @@ async function ensureHistoryDir() {
 
 export async function getContent(): Promise<SiteContent> {
   // 1. Try Supabase first
-  try {
-    const supabase = getSupabaseAdminClient();
-    const { data } = await supabase
-      .from('site_content')
-      .select('content')
-      .eq('key', 'main')
-      .single();
+  if (hasSupabaseAdminEnv()) {
+    try {
+      const supabase = getSupabaseAdminClient();
+      const { data } = await supabase
+        .from('site_content')
+        .select('content')
+        .eq('key', 'main')
+        .single();
 
-    if (data?.content) {
-      return siteContentSchema.parse(data.content);
+      if (data?.content) {
+        return siteContentSchema.parse(data.content);
+      }
+    } catch (e) {
+      console.warn("Supabase content fetch failed, falling back to file", e);
     }
-  } catch (e) {
-    console.warn("Supabase content fetch failed, falling back to file", e);
   }
 
   // 2. Fallback to local file

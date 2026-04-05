@@ -3,26 +3,28 @@ import { promises as fs } from "fs";
 import path from "path";
 import { revalidatePath } from "next/cache";
 import { photographyContentSchema, PhotographyContent } from "./photographySchema";
-import { getSupabaseAdminClient } from "./supabaseAdmin";
+import { getSupabaseAdminClient, hasSupabaseAdminEnv } from "./supabaseAdmin";
 
 const PHOTOGRAPHY_CONTENT_PATH = path.join(process.cwd(), "content", "photography.json");
 const CONTENT_KEY = "photography";
 
 export async function getPhotographyContent(): Promise<PhotographyContent> {
   // 1. Try fetching from Supabase first
-  try {
-    const supabase = getSupabaseAdminClient();
-    const { data } = await supabase
-      .from("site_content")
-      .select("content")
-      .eq("key", CONTENT_KEY)
-      .single();
+  if (hasSupabaseAdminEnv()) {
+    try {
+      const supabase = getSupabaseAdminClient();
+      const { data } = await supabase
+        .from("site_content")
+        .select("content")
+        .eq("key", CONTENT_KEY)
+        .single();
 
-    if (data?.content) {
-      return photographyContentSchema.parse(data.content);
+      if (data?.content) {
+        return photographyContentSchema.parse(data.content);
+      }
+    } catch (error) {
+      console.error("Failed to load photography content from Supabase:", error);
     }
-  } catch (error) {
-    console.error("Failed to load photography content from Supabase:", error);
   }
 
   // 2. Fall back to local JSON if not in DB
