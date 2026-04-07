@@ -495,12 +495,13 @@ function ParallaxImage({ item }: { item: { title: string; image: string } }) {
   return (
     <div ref={ref} className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] group shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
       <motion.div style={{ scale }} className="absolute inset-0 origin-center w-full h-full">
-        <Image 
-          src={item.image} 
-          alt={item.title} 
-          fill 
-          sizes="(max-width: 768px) 100vw, 50vw" 
-          className="object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" 
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 600px"
+          quality={90}
+          className="object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100"
         />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none mix-blend-multiply opacity-50 transition-opacity duration-700 group-hover:opacity-20" />
