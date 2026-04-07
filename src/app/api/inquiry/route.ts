@@ -265,6 +265,8 @@ export async function POST(req: Request) {
 
 function buildGradClientEmail(name: string, packageName: string | null): string {
   const firstName = name.split(" ")[0];
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://changemedia.studio";
+  const bookingUrl = `${siteUrl}/book`;
   return [
     `Hey ${firstName},`,
     "",
@@ -274,10 +276,10 @@ function buildGradClientEmail(name: string, packageName: string | null): string 
     "",
     "Here's what happens next:",
     "",
-    "1. I'll send you my full pricing guide with available dates within 24 hours.",
-    "2. Pick a date and time that works for you.",
-    "3. A signed contract + retainer locks your spot on my calendar.",
-    "4. We'll connect beforehand to plan locations, outfits, and the vibe.",
+    "1. Lock in your date — grab a time slot that works for you:",
+    `   ${bookingUrl}`,
+    "2. A signed contract + retainer secures your spot on my calendar.",
+    "3. We'll connect beforehand to plan locations, outfits, and the vibe.",
     "",
     "In the meantime, if you have any questions, just reply to this email.",
     "",
@@ -291,6 +293,8 @@ function buildGradClientEmail(name: string, packageName: string | null): string 
 
 function buildGradClientEmailHtml(name: string, packageName: string | null): string {
   const firstName = name.split(" ")[0];
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://changemedia.studio";
+  const bookingUrl = `${siteUrl}/book`;
   return `
 <!DOCTYPE html>
 <html>
@@ -301,9 +305,13 @@ function buildGradClientEmailHtml(name: string, packageName: string | null): str
   ${packageName ? `<p style="margin:0 0 16px">You mentioned you're interested in the <strong>${packageName}</strong> experience. Great choice.</p>` : ""}
   <p style="margin:0 0 8px"><strong>Here's what happens next:</strong></p>
   <ol style="margin:0 0 16px;padding-left:20px">
-    <li style="margin-bottom:8px">I'll send you my full pricing guide with available dates within 24 hours.</li>
-    <li style="margin-bottom:8px">Pick a date and time that works for you.</li>
-    <li style="margin-bottom:8px">A signed contract + retainer locks your spot on my calendar.</li>
+    <li style="margin-bottom:12px">
+      <strong>Lock in your date</strong> — grab a time slot that works for you:<br />
+      <a href="${bookingUrl}" style="color:#111;font-weight:600;display:inline-block;margin-top:6px;padding:10px 20px;background:#111;color:#fff;border-radius:8px;text-decoration:none">
+        Book your session &rarr;
+      </a>
+    </li>
+    <li style="margin-bottom:8px">A signed contract + retainer secures your spot on my calendar.</li>
     <li style="margin-bottom:8px">We'll connect beforehand to plan locations, outfits, and the vibe.</li>
   </ol>
   <p style="margin:0 0 16px">In the meantime, if you have any questions, just reply to this email.</p>
