@@ -24,7 +24,7 @@ export async function sendEmail({ to, subject, text, html, attachments }: SendEm
 
   try {
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "CHANGE Media <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM || "CHANGE Media <no-reply@changemedia.studio>",
       to: [to],
       subject,
       text,

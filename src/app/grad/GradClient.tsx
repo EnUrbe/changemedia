@@ -1,13 +1,14 @@
 "use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   useScroll,
   useTransform,
   useInView,
-  useMotionValue,
   useSpring,
+  useVelocity,
+  useAnimationFrame,
+  useMotionValue,
 } from "framer-motion";
 import Image from "next/image";
 import Nav from "@/components/Nav";
@@ -17,12 +18,9 @@ import type {
   GradContent, 
   GradPackage, 
   GradAddon, 
-  GradGalleryItem, 
-  GradPortfolioGalleryItem 
+  GradGalleryItem 
 } from "@/lib/gradSchema";
-
 /* ─── Data ─── */
-
 const DEFAULT_PACKAGES: GradPackage[] = [
   {
     name: "The Snap",
@@ -78,7 +76,6 @@ const DEFAULT_PACKAGES: GradPackage[] = [
     best: "The definitive graduation shoot. For when this moment deserves the full treatment.",
   },
 ];
-
 const DEFAULT_ADDONS: GradAddon[] = [
   { name: "Extra edited images (beyond package count)", price: "$12 / photo" },
   { name: "48-hour rush delivery", price: "+$50" },
@@ -88,13 +85,11 @@ const DEFAULT_ADDONS: GradAddon[] = [
   { name: "Social media resize pack (IG, LinkedIn, FB cover)", price: "+$35" },
   { name: "Phone wallpaper set (3 photos for your lock screen)", price: "+$15" },
 ];
-
 const ANNOUNCEMENTS = [
   { qty: "25 cards", price: "$75" },
   { qty: "50 cards", price: "$120" },
   { qty: "75 cards", price: "$160" },
 ];
-
 const PRINTS = {
   canvas: [
     { size: '11x14', price: "$95" },
@@ -112,7 +107,6 @@ const PRINTS = {
     { size: '11x14', price: "$40" },
   ],
 };
-
 const STEPS = [
   {
     num: "01",
@@ -138,7 +132,6 @@ const STEPS = [
       "Your edited digitals are ready to post. Want prints or announcements? Order directly from your gallery.",
   },
 ];
-
 const FAQS = [
   {
     q: "Where do we shoot?",
@@ -173,7 +166,6 @@ const FAQS = [
     a: "Book with 2 or more friends and everyone gets $15 off their session. You all shoot back-to-back at the same location -- easy to coordinate, and you get candid group shots between sessions for free.",
   },
 ];
-
 const DEFAULT_GALLERY_ITEMS: GradGalleryItem[] = [
   {
     title: "Cap, gown, and the cleanest first frame",
@@ -216,18 +208,15 @@ const DEFAULT_GALLERY_ITEMS: GradGalleryItem[] = [
       "https://images.unsplash.com/photo-1511421133909-6fda7b6f1f79?w=1600&q=80",
   },
 ];
-
 type QuizOption = {
   label: string;
   bias: number;
 };
-
 type QuizQuestion = {
   id: string;
   prompt: string;
   options: QuizOption[];
 };
-
 const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "coverage",
@@ -260,28 +249,11 @@ const QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
   },
 ];
-
 function mapBiasToPackageIndex(bias: number, packageCount: number): number {
   if (packageCount <= 1) return 0;
   const clamped = Math.max(0, Math.min(4, bias));
   return Math.round((clamped / 4) * (packageCount - 1));
 }
-
-function parseAddonPrice(price: string): number {
-  const match = price.match(/\d+(?:\.\d+)?/);
-  if (!match) return 0;
-  const value = Number.parseFloat(match[0]);
-  return Number.isFinite(value) ? value : 0;
-}
-
-function formatUsd(value: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
 function PackageFitQuiz({
   packages,
   onUseRecommendation,
@@ -290,18 +262,15 @@ function PackageFitQuiz({
   onUseRecommendation: (packageName: string) => void;
 }) {
   const [answers, setAnswers] = useState<Record<string, number>>({});
-
   const recommendedPackage = useMemo(() => {
     if (packages.length === 0) return null;
     if (Object.keys(answers).length < QUIZ_QUESTIONS.length) return null;
-
     const scores = new Array(packages.length).fill(0);
     for (const question of QUIZ_QUESTIONS) {
       const bias = answers[question.id];
       const packageIndex = mapBiasToPackageIndex(bias, packages.length);
       scores[packageIndex] += 1;
     }
-
     let winningIndex = 0;
     let winningScore = scores[0];
     for (let i = 1; i < scores.length; i += 1) {
@@ -310,10 +279,8 @@ function PackageFitQuiz({
         winningIndex = i;
       }
     }
-
     return packages[winningIndex] ?? null;
   }, [answers, packages]);
-
   return (
     <Section className="py-20 border-y border-[var(--border)] bg-[var(--bg-elevated)]">
       <div className="container-wide">
@@ -325,7 +292,6 @@ function PackageFitQuiz({
           <p className="mt-4 text-sm md:text-base text-[var(--text-secondary)] max-w-2xl">
             Answer three quick questions and we will point you to the package that matches your goals.
           </p>
-
           <div className="mt-10 grid gap-6">
             {QUIZ_QUESTIONS.map((question) => (
               <div key={question.id} className="section-panel p-5 md:p-6">
@@ -354,7 +320,6 @@ function PackageFitQuiz({
               </div>
             ))}
           </div>
-
           {recommendedPackage && (
             <div className="mt-8 editorial-card p-6 md:p-8">
               <p className="eyebrow mb-2">Recommended for you</p>
@@ -364,16 +329,13 @@ function PackageFitQuiz({
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--text-secondary)]">
-                  {formatUsd(recommendedPackage.price)}
-                </span>
-                <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--text-secondary)]">
                   {recommendedPackage.time}
                 </span>
                 <Button
                   onClick={() => onUseRecommendation(recommendedPackage.name)}
                   size="md"
                 >
-                  Use this recommendation
+                  Explore this Experience
                 </Button>
               </div>
             </div>
@@ -383,9 +345,7 @@ function PackageFitQuiz({
     </Section>
   );
 }
-
 /* ─── Helpers ─── */
-
 function Section({
   children,
   className = "",
@@ -410,7 +370,6 @@ function Section({
     </motion.section>
   );
 }
-
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -443,180 +402,124 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </div>
   );
 }
-
-function GalleryFrame({
-  item,
-  index,
-}: {
-  item: GradGalleryItem;
-  index: number;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["5deg", "-5deg"]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-5deg", "5deg"]);
-  const springConfig = { damping: 20, stiffness: 100, mass: 0.5 };
-  const smoothRotateX = useSpring(rotateX, springConfig);
-  const smoothRotateY = useSpring(rotateY, springConfig);
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseXPos = e.clientX - rect.left;
-    const mouseYPos = e.clientY - rect.top;
-    const xPct = mouseXPos / width - 0.5;
-    const yPct = mouseYPos / height - 0.5;
-    mouseX.set(xPct);
-    mouseY.set(yPct);
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
-
+function wrap(min: number, max: number, v: number) {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+}
+function ParallaxText({ children, baseVelocity = -20 }: { children: string; baseVelocity?: number }) {
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400
+  });
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false
+  });
+  const directionFactor = useRef<number>(1);
+  useAnimationFrame((t, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -1;
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 1;
+    }
+    moveBy += directionFactor.current * moveBy * velocityFactor.get();
+    baseX.set(baseX.get() + moveBy);
+  });
+  const x = useTransform(baseX, (v) => `${wrap(-45, -20, v)}%`);
   return (
-    <motion.div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX: smoothRotateX,
-        rotateY: smoothRotateY,
-        transformPerspective: 1000,
-      }}
-      className={`relative shrink-0 group overflow-hidden cursor-[url('/cursor-explore.png'),_zoom-in] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300
-        ${index % 3 === 0 ? "w-[85vw] md:w-[45vw] h-[65vh] md:h-[70vh]" : index % 3 === 1 ? "w-[75vw] md:w-[35vw] h-[75vh] md:h-[80vh]" : "w-[90vw] md:w-[55vw] h-[55vh] md:h-[65vh]"}
-        ${index % 2 === 0 ? "self-start mt-12 md:mt-24" : "self-end mb-12 md:mb-24"}
-      `}
-    >
-      <div className="relative w-full h-full overflow-hidden">
-        <Image
-          src={item.image}
-          alt={item.title}
-          fill
-          sizes="(100vw)"
-          className="object-cover opacity-50 group-hover:opacity-100 transition-all duration-1000 ease-out-expo grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 mix-blend-multiply pointer-events-none" />
-        
-        {/* Glow effect on hover */}
-        <motion.div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none mix-blend-overlay"
-          style={{
-            background: `radial-gradient(circle at center, var(--accent) 0%, transparent 60%)`,
-          }}
-        />
-
-        <div className="absolute inset-0 inset-x-8 bottom-12 md:bottom-20 z-20 flex flex-col justify-end gap-4 pointer-events-none">
-          <div className="overflow-hidden">
-            <span className="eyebrow ghost block text-[var(--accent)] translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-              SCENE 00{index + 1} &mdash; {item.location}
-            </span>
-          </div>
-          <h3 className="font-serif text-3xl md:text-6xl text-white tracking-tighter w-full max-w-3xl translate-y-8 group-hover:translate-y-0 transition-transform duration-700 ease-out-expo drop-shadow-lg">
-            {item.title}
-          </h3>
-          <p className="text-white/60 max-w-xl text-sm md:text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-1000 delay-200">
-            {item.caption}
-          </p>
-        </div>
-      </div>
-    </motion.div>
+    <div className="overflow-hidden m-0 flex flex-nowrap w-full pointer-events-none opacity-20 -my-20">
+      <motion.div className="flex whitespace-nowrap uppercase text-[8rem] sm:text-[10rem] md:text-[15rem] leading-none font-serif tracking-tight text-white/50" style={{ x }}>
+        <span className="block pr-12">{children}</span>
+        <span className="block pr-12">{children}</span>
+        <span className="block pr-12">{children}</span>
+        <span className="block pr-12">{children}</span>
+        <span className="block pr-12">{children}</span>
+        <span className="block pr-12">{children}</span>
+      </motion.div>
+    </div>
   );
 }
-
-function PortfolioScrollGallery({ items }: { items: GradGalleryItem[] }) {
+function InteractivePortfolioGallery({
+  items,
+}: {
+  items: { title: string; image: string }[];
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   });
-
-  const x = useTransform(scrollYProgress, [0, 1], ["20%", "-60%"]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.15, 0.2], [1, 1, 0]);
-
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["15%", "-15%"]);
+  if (items.length === 0) return null;
+  const col1 = items.filter((_, i) => i % 2 === 0);
+  const col2 = items.filter((_, i) => i % 2 !== 0);
   return (
-    <Section id="gallery" className="relative h-[300vh] bg-[#010100] /* Aesthetic dark */">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="absolute inset-0 grain opacity-50 pointer-events-none z-50 mix-blend-overlay" />
-
-        {/* Cinematic Title Marquee */}
-        <motion.div
-          ref={containerRef}
-          style={{ opacity: titleOpacity }}
-          className="absolute left-12 md:left-24 top-1/2 -translate-y-1/2 z-40 pointer-events-none"
-        >
-          <h2 className="font-serif text-6xl md:text-9xl text-white tracking-tighter leading-[0.9]">
-            The<br/>
-            Cinematic<br/>
-            <span className="text-[var(--accent)] italic font-light">Archive</span>
-          </h2>
-          <p className="mt-20 text-white/50 uppercase tracking-widest text-[10px] font-mono animate-pulse">
-            Scroll to explore &rarr;
-          </p>
-        </motion.div>
-
-        {/* The Film Strip */}
-        <motion.div
-          style={{ x }}
-          className="flex gap-8 md:gap-24 pl-[100vw] pr-[20vw] w-max items-center h-full"
-        >
-          {items.map((item, i) => (
-            <GalleryFrame key={i.toString()} item={item} index={i} />
-          ))}
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
-
-function StandardPortfolioGallery({ items }: { items: GradPortfolioGalleryItem[] }) {
-  if (!items || items.length === 0) return null;
-  return (
-    <Section id="work" className="py-24 bg-[var(--bg)] relative overflow-hidden">
-      <div className="absolute inset-0 grain opacity-30 pointer-events-none" />
-      <div className="container-wide mb-16 relative z-10">
-        <p className="eyebrow mb-4">Past Sessions</p>
-        <h2 className="font-serif text-4xl md:text-6xl text-[var(--text)] tracking-tighter">
-          Graduation Portfolio
+    <Section id="gallery" className="py-24 md:py-32 bg-[var(--bg)] border-y border-[var(--border)] overflow-hidden">
+      <div className="container-wide mb-16 md:mb-24 text-center">
+        <p className="eyebrow mb-4">Portfolio</p>
+        <h2 className="font-serif text-4xl md:text-7xl text-white tracking-tighter">
+          The Archive
         </h2>
+        <p className="mt-4 text-sm md:text-base text-[var(--text-secondary)] uppercase tracking-widest">
+          Scroll to explore &darr;
+        </p>
       </div>
-      <div className="container-wide relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-          {items.map((item, i) => (
-            <div key={i} className="group relative aspect-[4/5] overflow-hidden rounded-[0.5rem] bg-[var(--surface-color)] editorial-card shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 ease-out-expo group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500 mix-blend-multiply pointer-events-none" />
-              <div className="absolute inset-x-0 bottom-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                <span className="eyebrow ghost block text-[var(--accent)] mb-2">Frame {String(i + 1).padStart(2, '0')}</span>
-                <h3 className="text-2xl text-white font-serif tracking-tight drop-shadow-md">{item.title}</h3>
-              </div>
-            </div>
-          ))}
+      <div ref={containerRef} className="container-wide max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start">
+          <motion.div style={{ y: y1 }} className="flex flex-col gap-6 md:gap-12">
+            {col1.map((item, i) => (
+              <ParallaxImage key={`col1-${i}`} item={item} />
+            ))}
+          </motion.div>
+          <motion.div style={{ y: y2 }} className="flex flex-col gap-6 md:gap-12 pt-0 md:pt-32">
+            {col2.map((item, i) => (
+              <ParallaxImage key={`col2-${i}`} item={item} />
+            ))}
+          </motion.div>
         </div>
       </div>
     </Section>
   );
 }
-
+function ParallaxImage({ item }: { item: { title: string; image: string } }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  return (
+    <div ref={ref} className="relative aspect-[3/4] md:aspect-[4/5] w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] group shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+      <motion.div style={{ scale }} className="absolute inset-0 origin-center w-full h-full">
+        <Image 
+          src={item.image} 
+          alt={item.title} 
+          fill 
+          sizes="(max-width: 768px) 100vw, 50vw" 
+          className="object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" 
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none mix-blend-multiply opacity-50 transition-opacity duration-700 group-hover:opacity-20" />
+    </div>
+  );
+}
 /* ─── Main Component ─── */
-
 export default function GradClient({ content }: { content: GradContent }) {
   const packages = content.packages?.length ? content.packages : DEFAULT_PACKAGES;
   const addons = content.addons?.length ? content.addons : DEFAULT_ADDONS;
   const galleryItems = content.gallery?.length ? content.gallery : DEFAULT_GALLERY_ITEMS;
   const portfolioGalleryItems = content.portfolioGallery || [];
+  const interactivePortfolioItems = useMemo(
+    () =>
+      portfolioGalleryItems.length > 0
+        ? portfolioGalleryItems.map((item) => ({ title: item.title, image: item.image }))
+        : galleryItems.map((item) => ({ title: item.title, image: item.image })),
+    [galleryItems, portfolioGalleryItems]
+  );
   const [recommendedPackageName, setRecommendedPackageName] = useState<string | null>(null);
   const [selectedPackageName, setSelectedPackageName] = useState<string>(
     packages.find((pkg) => pkg.popular)?.name ?? packages[0]?.name ?? ""
@@ -628,27 +531,22 @@ export default function GradClient({ content }: { content: GradContent }) {
   });
   const heroY = useTransform(heroProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(heroProgress, [0, 0.8], [1, 0]);
-
   useEffect(() => {
     if (!packages.some((pkg) => pkg.name === selectedPackageName)) {
       setSelectedPackageName(packages.find((pkg) => pkg.popular)?.name ?? packages[0]?.name ?? "");
     }
   }, [packages, selectedPackageName]);
-
-  const scrollToBook = () => {
-    document.getElementById("book")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToInquire = () => {
+    document.getElementById("inquire")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-
   const useRecommendation = (packageName: string) => {
     setRecommendedPackageName(packageName);
     setSelectedPackageName(packageName);
-    scrollToBook();
+    scrollToInquire();
   };
-
   return (
     <>
       <Nav />
-
       <main className="relative overflow-hidden">
         {/* ─── HERO ─── */}
         <div ref={heroRef} className="relative h-[100svh] flex items-center justify-center overflow-hidden">
@@ -669,7 +567,6 @@ export default function GradClient({ content }: { content: GradContent }) {
             <div className="absolute inset-0 bg-black/60" />
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
           </motion.div>
-
           <motion.div
             style={{ opacity: heroOpacity }}
             className="relative z-10 container-wide text-center max-w-4xl mx-auto px-6"
@@ -683,21 +580,20 @@ export default function GradClient({ content }: { content: GradContent }) {
               Professional grad portraits that go just as hard on your mom&apos;s mantle as they do on the grid.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button href="#book" size="lg">
-                Book Your Session
+              <Button href="#inquire" size="lg">
+                Request Pricing & Details
               </Button>
               <Button href="#packages" variant="outline" size="lg">
-                View Packages
+                View Sessions
               </Button>
               <Button href="#gallery" variant="ghost" size="lg">
-                Scroll the Gallery
+                View the Archive
               </Button>
             </div>
             <p className="mt-6 text-xs text-[var(--text-dim)]">
               Limited spring availability -- slots filling fast before commencement.
             </p>
           </motion.div>
-
           {/* Scroll indicator */}
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -713,22 +609,19 @@ export default function GradClient({ content }: { content: GradContent }) {
             </div>
           </motion.div>
         </div>
-
         {/* ─── GALLERY ─── */}
-        <PortfolioScrollGallery items={galleryItems} />
-        <StandardPortfolioGallery items={portfolioGalleryItems} />
-        <PackageFitQuiz packages={packages} onUseRecommendation={useRecommendation} />
-
+        <InteractivePortfolioGallery items={interactivePortfolioItems} />
+        <ParallaxText baseVelocity={5}>Class of 2026</ParallaxText>
+        <ParallaxText baseVelocity={-5}>Change Media Studio</ParallaxText>
         {/* ─── PACKAGES ─── */}
         <Section id="packages" className="py-[var(--section-padding)]">
           <div className="container-wide">
             <div className="text-center mb-16">
-              <p className="eyebrow mb-4">Session Packages</p>
+              <p className="eyebrow mb-4">Session Experiences</p>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white tracking-[-0.06em]">
-                Pick Your Level.
+                The Portfolio.
               </h2>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {packages.map((pkg) => (
                 <div
@@ -754,12 +647,9 @@ export default function GradClient({ content }: { content: GradContent }) {
                     </span>
                   )}
                   <div className="mb-6">
-                    <h3 className="font-serif text-2xl text-white mb-1">
+                    <h3 className="font-serif text-2xl text-white mb-2">
                       {pkg.name}
                     </h3>
-                    <p className="text-3xl font-serif text-gradient">
-                      ${pkg.price}
-                    </p>
                   </div>
                   <div className="space-y-3 text-sm text-[var(--text-secondary)] flex-1">
                     <div className="flex items-center gap-2">
@@ -775,16 +665,11 @@ export default function GradClient({ content }: { content: GradContent }) {
                       {pkg.images}
                     </div>
                     {pkg.extras.map((e) => (
-                      <div key={e} className="flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                        {e}
+                      <div key={e} className="flex items-start gap-2 text-left">
+                        <span className="w-1 h-1 rounded-full bg-[var(--accent)] mt-1.5 flex-shrink-0" />
+                        <span>{e}</span>
                       </div>
                     ))}
-                    <div className="h-px bg-[var(--border)] my-3" />
-                    <div className="flex items-start gap-2">
-                      <span className="w-1 h-1 rounded-full bg-[var(--accent)] mt-1.5 flex-shrink-0" />
-                      <span>Delivered in 5-7 days</span>
-                    </div>
                   </div>
                   <p className="mt-6 text-xs text-[var(--text-muted)] italic leading-relaxed">
                     {pkg.best}
@@ -792,132 +677,87 @@ export default function GradClient({ content }: { content: GradContent }) {
                   <Button
                     onClick={() => {
                       setSelectedPackageName(pkg.name);
-                      scrollToBook();
+                      scrollToInquire();
                     }}
                     className="mt-6 w-full"
                     variant={pkg.popular ? "primary" : "outline"}
                   >
-                    Choose {pkg.name}
+                    Inquire about {pkg.name}
                   </Button>
                 </div>
               ))}
             </div>
           </div>
         </Section>
-
-        {/* ─── ADD-ONS ─── */}
+        <PackageFitQuiz packages={packages} onUseRecommendation={useRecommendation} />
+        {/* ─── ADD-ONS, ANNOUNCEMENTS & PRINTS ─── */}
         <Section className="py-[var(--section-padding)] bg-[var(--bg-elevated)]">
           <div className="container-narrow">
             <div className="text-center mb-12">
-              <p className="eyebrow mb-4">Add-Ons</p>
+              <p className="eyebrow mb-4">Everything Else</p>
               <h2 className="font-serif text-3xl md:text-4xl text-white tracking-[-0.06em]">
-                Make It Yours.
+                Add-Ons, Announcements & Prints
               </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+                One place for all optional upgrades and keepsakes after your session.
+              </p>
             </div>
-            <div className="space-y-0">
-              {addons.map((addon, i) => (
-                <div
-                  key={addon.name}
-                  className={`flex items-center justify-between py-4 ${
-                    i < addons.length - 1 ? "border-b border-[var(--border)]" : ""
-                  }`}
-                >
-                  <span className="text-sm text-[var(--text-secondary)]">
-                    {addon.name}
-                  </span>
-                  <span className="text-sm font-medium text-[var(--accent)] whitespace-nowrap ml-4">
-                    {addon.price}
-                  </span>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <article className="editorial-card p-6 md:p-8">
+                <h3 className="font-serif text-xl text-white mb-4">Session Add-Ons</h3>
+                <div className="space-y-0">
+                  {addons.map((addon, i) => (
+                    <div
+                      key={addon.name}
+                      className={`flex items-center justify-between py-3 ${
+                        i < addons.length - 1 ? "border-b border-[var(--border)]" : ""
+                      }`}
+                    >
+                      <span className="text-sm text-[var(--text-secondary)]">{addon.name}</span>
+                      <span className="ml-4 whitespace-nowrap text-sm font-medium text-[var(--accent)]">{addon.price}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </Section>
-
-        {/* ─── ANNOUNCEMENTS ─── */}
-        <Section className="py-[var(--section-padding)]">
-          <div className="container-narrow">
-            <div className="editorial-card p-8 md:p-12">
-              <p className="eyebrow mb-4">Graduation Announcements</p>
-              <h2 className="font-serif text-3xl md:text-4xl text-white tracking-[-0.06em] mb-4">
-                You Are Gonna Send Announcements Anyway. Make Them Hit.
-              </h2>
-              <p className="text-[var(--text-secondary)] text-sm md:text-base leading-relaxed mb-8 max-w-2xl">
-                Custom-designed graduation announcement cards featuring your session photos.
-                Choose from three design templates -- clean minimal, editorial, or warm and organic.
-                Printed on premium cardstock and shipped directly to you.
-              </p>
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                {ANNOUNCEMENTS.map((a) => (
-                  <div
-                    key={a.qty}
-                    className="text-center p-4 md:p-6 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)]"
-                  >
-                    <p className="text-2xl md:text-3xl font-serif text-gradient mb-1">
-                      {a.price}
-                    </p>
-                    <p className="text-xs text-[var(--text-muted)]">{a.qty}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-[var(--text-dim)] leading-relaxed">
-                Available to anyone who books a session. Designs are customized with your name, degree, and university.
-                Turnaround is 7-10 business days from design approval.
-              </p>
-            </div>
-          </div>
-        </Section>
-
-        {/* ─── PRINT PRODUCTS ─── */}
-        <Section className="py-[var(--section-padding)] bg-[var(--bg-elevated)]">
-          <div className="container-narrow">
-            <div className="text-center mb-4">
-              <p className="eyebrow mb-4">Print Products</p>
-              <h2 className="font-serif text-3xl md:text-4xl text-white tracking-[-0.06em] mb-4">
-                Put It On the Wall.
-              </h2>
-              <p className="text-[var(--text-secondary)] text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-12">
-                Every photo from your session is available as a gallery-quality print, canvas, or framed piece.
-                Order directly from your private gallery after your session -- everything ships straight to your door (or your mom&apos;s door).
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {(
-                [
-                  { title: "Canvas Wraps", items: PRINTS.canvas },
-                  { title: "Framed Prints", items: PRINTS.framed },
-                  { title: "Loose Prints", items: PRINTS.loose },
-                ] as const
-              ).map((group) => (
-                <div
-                  key={group.title}
-                  className="section-panel p-6"
-                >
-                  <h3 className="font-serif text-lg text-white mb-4">
-                    {group.title}
-                  </h3>
-                  <div className="space-y-3">
-                    {group.items.map((item) => (
-                      <div
-                        key={item.size}
-                        className="flex items-center justify-between text-sm"
-                      >
-                        <span className="text-[var(--text-secondary)]">
-                          {item.size}
-                        </span>
-                        <span className="text-[var(--accent)] font-medium">
-                          {item.price}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+              </article>
+              <article className="editorial-card p-6 md:p-8">
+                <h3 className="font-serif text-xl text-white mb-4">Graduation Announcements</h3>
+                <p className="mb-5 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  Custom-designed cards featuring your session photos on premium cardstock.
+                </p>
+                <div className="space-y-3">
+                  {ANNOUNCEMENTS.map((a) => (
+                    <div key={a.qty} className="flex items-center justify-between text-sm">
+                      <span className="text-[var(--text-secondary)]">{a.qty}</span>
+                      <span className="font-medium text-[var(--accent)]">{a.price}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </article>
+              <article className="editorial-card p-6 md:p-8">
+                <h3 className="font-serif text-xl text-white mb-4">Prints</h3>
+                <div className="space-y-4">
+                  {(
+                    [
+                      { title: "Canvas Wraps", items: PRINTS.canvas },
+                      { title: "Framed Prints", items: PRINTS.framed },
+                      { title: "Loose Prints", items: PRINTS.loose },
+                    ] as const
+                  ).map((group) => (
+                    <div key={group.title}>
+                      <p className="label mb-2">{group.title}</p>
+                      {group.items.map((item) => (
+                        <div key={item.size} className="flex items-center justify-between py-1 text-sm">
+                          <span className="text-[var(--text-secondary)]">{item.size}</span>
+                          <span className="font-medium text-[var(--accent)]">{item.price}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </article>
             </div>
           </div>
         </Section>
-
         {/* ─── HOW IT WORKS ─── */}
         <Section className="py-[var(--section-padding)]">
           <div className="container-narrow">
@@ -927,27 +767,31 @@ export default function GradClient({ content }: { content: GradContent }) {
                 Four Steps. That Is It.
               </h2>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {STEPS.map((step) => (
-                <div key={step.num} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] mb-4">
-                    <span className="font-mono text-sm text-[var(--accent)]">
-                      {step.num}
-                    </span>
+            <div className="mx-auto max-w-2xl relative pb-20">
+              {STEPS.map((step, index) => (
+                <div
+                  key={step.num}
+                  className="sticky z-10 w-full mb-4 md:mb-6"
+                  style={{ top: `calc(120px + ${index * 24}px)` }}
+                >
+                  <div className="editorial-card p-6 py-12 md:p-12 shadow-[0_30px_60px_rgba(0,0,0,0.8)] border-t border-[var(--accent)]/10 text-center flex flex-col items-center justify-center min-h-[300px] bg-[var(--bg-card)]/90 backdrop-blur-xl origin-bottom transition-all">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] mb-6">
+                      <span className="font-mono text-sm text-[var(--accent)]">
+                        {step.num}
+                      </span>
+                    </div>
+                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-4 tracking-tighter">
+                      {step.title}
+                    </h3>
+                    <p className="text-base md:text-lg text-[var(--text-secondary)] leading-relaxed max-w-md mx-auto">
+                      {step.detail}
+                    </p>
                   </div>
-                  <h3 className="font-serif text-xl text-white mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                    {step.detail}
-                  </p>
                 </div>
               ))}
             </div>
           </div>
         </Section>
-
         {/* ─── FAQ ─── */}
         <Section className="py-[var(--section-padding)] bg-[var(--bg-elevated)]">
           <div className="container-narrow">
@@ -964,112 +808,89 @@ export default function GradClient({ content }: { content: GradContent }) {
             </div>
           </div>
         </Section>
-
-        {/* ─── BOOKING CTA ─── */}
-        <Section id="book" className="py-[var(--section-padding)] relative">
+        {/* ─── INQUIRY CTA ─── */}
+        <Section id="inquire" className="py-[var(--section-padding)] relative">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[var(--accent)]/8 blur-[200px]" />
           </div>
-
           <div className="container-wide relative z-10">
             <div className="text-center mb-12">
-              <p className="eyebrow mb-4">Book Now</p>
+              <p className="eyebrow mb-4">Inquire</p>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white tracking-[-0.06em] mb-4">
-                This Degree Hits<br />Different on Camera.
+                Request Pricing & Details.
               </h2>
               <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-lg mx-auto">
-                Spring sessions are almost full. Do not be the one who waited too long.
+                Fill out the form below to receive full pricing, available dates, and detailed package options.
               </p>
             </div>
-
-            <BookingForm
+            <InquiryForm
               packages={packages}
-              addons={addons}
               initialPackageName={selectedPackageName}
-              recommendedPackageName={recommendedPackageName}
             />
           </div>
         </Section>
       </main>
-
       <Footer />
     </>
   );
 }
-
-/* ─── Booking Form ─── */
-
-function BookingForm({
+/* ─── Inquiry Form ─── */
+function InquiryForm({
   packages,
-  addons,
   initialPackageName,
-  recommendedPackageName,
 }: {
   packages: GradPackage[];
-  addons: GradAddon[];
   initialPackageName: string;
-  recommendedPackageName: string | null;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [university, setUniversity] = useState("");
-  const [preferredDate, setPreferredDate] = useState("");
-  const [preferredTime, setPreferredTime] = useState("");
+  const [expectedGraduation, setExpectedGraduation] = useState("");
   const [selectedPackageName, setSelectedPackageName] = useState(initialPackageName);
-  const [selectedAddonNames, setSelectedAddonNames] = useState<string[]>([]);
-
+  const [vibe, setVibe] = useState("");
+  const [notes, setNotes] = useState("");
   useEffect(() => {
     if (initialPackageName) {
       setSelectedPackageName(initialPackageName);
     }
   }, [initialPackageName]);
-
   const selectedPackage = useMemo(
     () => packages.find((pkg) => pkg.name === selectedPackageName) ?? null,
     [packages, selectedPackageName]
   );
-
-  const packagePrice = selectedPackage?.price ?? 0;
-  const addonTotal = useMemo(
-    () =>
-      selectedAddonNames.reduce((sum, addonName) => {
-        const addon = addons.find((item) => item.name === addonName);
-        if (!addon) return sum;
-        return sum + parseAddonPrice(addon.price);
-      }, 0),
-    [addons, selectedAddonNames]
-  );
-  const estimatedTotal = packagePrice + addonTotal;
-  const hasRushAddon = selectedAddonNames.some((name) => /rush|48-hour|48 hour/i.test(name));
-  const estimatedDelivery = hasRushAddon ? "48 hours" : "5-7 days";
-  const prepProgress = [
-    !!selectedPackageName,
-    !!preferredDate,
-    !!preferredTime,
-    !!university,
-    name.trim().length > 0,
-    email.trim().length > 0,
-  ].filter(Boolean).length;
-
-  const toggleAddon = (addonName: string) => {
-    setSelectedAddonNames((prev) =>
-      prev.includes(addonName)
-        ? prev.filter((name) => name !== addonName)
-        : [...prev, addonName]
-    );
-  };
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSending(true);
-    // Simulate form submit -- replace with real endpoint
-    await new Promise((r) => setTimeout(r, 1200));
-    setSending(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: name,
+          email,
+          phone,
+          organization: university,
+          session_type: selectedPackageName || null,
+          timeline: expectedGraduation || null,
+          message: [vibe ? `Vibe: ${vibe}` : null, notes || null].filter(Boolean).join("\n") || null,
+          service_type: "grad_portraits",
+          source: "grad_page",
+          ts: Date.now(),
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Submission failed");
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
-
   if (submitted) {
     return (
       <motion.div
@@ -1082,41 +903,26 @@ function BookingForm({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="font-serif text-2xl text-white mb-2">You Are Locked In.</h3>
+        <h3 className="font-serif text-2xl text-white mb-2">Request Sent.</h3>
         <p className="text-sm text-[var(--text-secondary)]">
-          Check your email -- you will hear from me within 24 hours to confirm details and finalize your session.
+          Thank you! Check your email—your custom pricing guide will be arriving shortly.
         </p>
       </motion.div>
     );
   }
-
   const inputClass =
     "w-full rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3 text-sm text-[var(--text)] placeholder-[var(--text-dim)] transition-all focus:border-[var(--accent)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/10";
-
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
       <form onSubmit={handleSubmit} className="editorial-card p-8 md:p-12">
-        <div className="space-y-5">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-[var(--text-dim)]">Booking prep</p>
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              {prepProgress}/6 complete
-            </p>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
-              <div
-                className="h-full bg-[var(--accent)] transition-all duration-500"
-                style={{ width: `${(prepProgress / 6) * 100}%` }}
-              />
-            </div>
-          </div>
-
+        <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="label mb-1.5 block">Full Name</label>
               <input
                 name="name"
                 required
-                placeholder="Your name"
+                placeholder="First & Last Name"
                 className={inputClass}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -1135,163 +941,141 @@ function BookingForm({
               />
             </div>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="label mb-1.5 block">Phone</label>
-              <input name="phone" type="tel" placeholder="(303) 555-0100" className={inputClass} />
+              <label className="label mb-1.5 block">Phone Number</label>
+              <input 
+                name="phone" 
+                type="tel" 
+                placeholder="(303) 555-0100" 
+                className={inputClass}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
             <div>
-              <label className="label mb-1.5 block">University</label>
-              <select
+              <label className="label mb-1.5 block">University / School</label>
+              <input
                 name="university"
                 required
+                placeholder="i.e. CU Boulder, MSU Denver"
                 className={inputClass}
                 value={university}
                 onChange={(e) => setUniversity(e.target.value)}
-              >
-                <option value="">Select campus</option>
-                <option value="cu-denver">CU Denver</option>
-                <option value="cu-boulder">CU Boulder</option>
-                <option value="other">Other</option>
-              </select>
+              />
             </div>
           </div>
-
+          <div className="grid grid-cols-1 gap-5">
+            <div>
+              <label className="label mb-1.5 block">Expected Graduation Month/Year</label>
+              <input
+                name="expectedGraduation"
+                placeholder="i.e. May 2024"
+                className={inputClass}
+                value={expectedGraduation}
+                onChange={(e) => setExpectedGraduation(e.target.value)}
+              />
+            </div>
+          </div>
           <div>
-            <label className="label mb-1.5 block">Package</label>
+            <label className="label mb-1.5 block">Which Experience Fits Best?</label>
             <select
               name="package"
-              required
               className={inputClass}
               value={selectedPackageName}
               onChange={(e) => setSelectedPackageName(e.target.value)}
             >
-              <option value="">Select a package</option>
+              <option value="">I&apos;m not sure yet</option>
               {packages.map((p) => (
                 <option key={p.name} value={p.name}>
-                  {p.name} -- {formatUsd(p.price)}
+                  {p.name}
                 </option>
               ))}
             </select>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div>
-              <label className="label mb-1.5 block">Preferred Date</label>
-              <input
-                name="date"
-                type="date"
-                required
-                className={inputClass}
-                value={preferredDate}
-                onChange={(e) => setPreferredDate(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="label mb-1.5 block">Preferred Time</label>
-              <select
-                name="time"
-                className={inputClass}
-                value={preferredTime}
-                onChange={(e) => setPreferredTime(e.target.value)}
-              >
-                <option value="">Flexible</option>
-                <option value="morning">Morning (8am-11am)</option>
-                <option value="midday">Midday (11am-2pm)</option>
-                <option value="golden">Golden Hour (5pm-7pm)</option>
-              </select>
-            </div>
-          </div>
-
           <div>
-            <label className="label mb-1.5 block">Add-Ons (optional)</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {addons.map((addon) => (
-                <label
-                  key={addon.name}
-                  className="flex items-start gap-2 text-xs text-[var(--text-secondary)] cursor-pointer hover:text-[var(--text)] transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    name="addons"
-                    value={addon.name}
-                    checked={selectedAddonNames.includes(addon.name)}
-                    onChange={() => toggleAddon(addon.name)}
-                    className="mt-0.5 accent-[var(--accent)]"
-                  />
-                  <span>
-                    {addon.name} <span className="text-[var(--accent)]">{addon.price}</span>
-                  </span>
-                </label>
-              ))}
-            </div>
+            <label className="label mb-1.5 block">What is the vibe?</label>
+            <input
+              name="vibe"
+              placeholder="Cinematic, editorial, casual, popping champagne..."
+              className={inputClass}
+              value={vibe}
+              onChange={(e) => setVibe(e.target.value)}
+            />
           </div>
-
           <div>
-            <label className="label mb-1.5 block">Anything else I should know?</label>
+            <label className="label mb-1.5 block">Any specific locations or concepts?</label>
             <textarea
               name="notes"
-              rows={3}
-              placeholder="Locations you love, outfit ideas, who is coming with you..."
+              rows={4}
+              placeholder="Tell me about your dream locations, outfits, or who's joining you..."
               className={inputClass}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
             />
           </div>
         </div>
-
         <Button type="submit" size="lg" className="w-full mt-8" disabled={sending}>
-          {sending ? "Sending..." : `Reserve for ${formatUsd(estimatedTotal)}`}
+          {sending ? "Sending..." : "Request Pricing & Details"}
         </Button>
-
-        <p className="text-center text-xs text-[var(--text-dim)] mt-4">
-          You will receive a confirmation email within 24 hours.
-        </p>
       </form>
-
       <aside className="editorial-card p-6 md:p-8 lg:sticky lg:top-24">
-        <p className="eyebrow mb-3">Live session summary</p>
-        <h3 className="font-serif text-2xl text-white tracking-tight">
-          {selectedPackage?.name ?? "Choose a package"}
+        <p className="eyebrow mb-3">What happens next?</p>
+        <h3 className="font-serif text-2xl text-white tracking-tight mb-4">
+          The Process
         </h3>
-        {recommendedPackageName && (
-          <p className="mt-2 text-xs text-[var(--accent)] uppercase tracking-[0.14em]">
-            Quiz recommendation: {recommendedPackageName}
-          </p>
+        <div className="space-y-6">
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)] font-serif text-sm">
+                1
+              </div>
+              <div className="w-px h-full bg-[var(--border)] mt-2" />
+            </div>
+            <div className="pb-2">
+              <h4 className="text-white text-sm font-medium mb-1">Get the Guide</h4>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                Check your inbox for my full pricing guide with pricing, package details, and available dates.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)] font-serif text-sm">
+                2
+              </div>
+              <div className="w-px h-full bg-[var(--border)] mt-2" />
+            </div>
+            <div className="pb-2">
+              <h4 className="text-white text-sm font-medium mb-1">Lock in your Date</h4>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                Choose your ideal date and time directly from the guide. A signed contract and retainer secure your spot on my calendar.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full border border-[var(--accent)]/30 bg-[var(--accent-soft)] flex items-center justify-center text-[var(--accent)] font-serif text-sm">
+                3
+              </div>
+            </div>
+            <div>
+              <h4 className="text-white text-sm font-medium mb-1">Plan the Shoot</h4>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                We&apos;ll collaborate on locations, outfits, and the overall vibe so you can show up feeling confident and ready.
+              </p>
+            </div>
+          </div>
+        </div>
+        {selectedPackageName && selectedPackage && (
+          <div className="mt-8 pt-6 border-t border-[var(--border)]">
+            <p className="text-xs uppercase tracking-[0.14em] text-[var(--text-dim)]">Interested in</p>
+            <p className="mt-2 font-serif text-lg text-white">{selectedPackage.name}</p>
+            <p className="mt-1 text-xs text-[var(--text-secondary)] italic">
+              {selectedPackage.best}
+            </p>
+          </div>
         )}
-        <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
-          {selectedPackage?.best ?? "Pick a package to see your tailored booking summary."}
-        </p>
-
-        <div className="mt-6 space-y-3 text-sm">
-          <div className="flex items-center justify-between text-[var(--text-secondary)]">
-            <span>Package subtotal</span>
-            <span className="text-white">{formatUsd(packagePrice)}</span>
-          </div>
-          <div className="flex items-center justify-between text-[var(--text-secondary)]">
-            <span>Add-ons subtotal</span>
-            <span className="text-white">{formatUsd(addonTotal)}</span>
-          </div>
-          <div className="h-px bg-[var(--border)]" />
-          <div className="flex items-center justify-between">
-            <span className="text-[var(--text-secondary)]">Estimated total</span>
-            <span className="text-xl font-serif text-[var(--accent)]">{formatUsd(estimatedTotal)}</span>
-          </div>
-        </div>
-
-        <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
-          <p className="text-xs uppercase tracking-[0.14em] text-[var(--text-dim)]">Estimated delivery</p>
-          <p className="mt-1 text-sm text-white">{estimatedDelivery}</p>
-        </div>
-
-        <div className="mt-6">
-          <p className="text-xs uppercase tracking-[0.14em] text-[var(--text-dim)]">Next steps</p>
-          <ul className="mt-3 space-y-2 text-sm text-[var(--text-secondary)]">
-            <li className={name ? "text-white" : ""}>1. Share your name and email.</li>
-            <li className={selectedPackageName ? "text-white" : ""}>2. Confirm your package.</li>
-            <li className={preferredDate && preferredTime ? "text-white" : ""}>3. Pick your date and time window.</li>
-            <li className={university ? "text-white" : ""}>4. Select your campus.</li>
-          </ul>
-        </div>
       </aside>
     </div>
   );

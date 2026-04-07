@@ -15,7 +15,7 @@ export default async function GradAdminPage() {
             Graduation Page Content
           </h1>
           <p className="text-sm text-neutral-600">
-            Edit the packages, add-ons, cinematic film strip gallery, and standard portfolio gallery.
+            Edit the packages, add-ons, horizontal scroll strip gallery, and standard portfolio gallery.
           </p>
         </header>
 

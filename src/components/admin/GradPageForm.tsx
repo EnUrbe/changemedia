@@ -205,10 +205,10 @@ export default function GradPageForm({ initialContent }: { initialContent: GradC
         </div>
       </section>
 
-      {/* Cinematic Gallery Section */}
+      {/* Horizontal Strip Gallery Section */}
       <section className="space-y-4 border-t border-neutral-200 pt-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-serif">Cinematic Film Strip (Top Free Floating)</h2>
+          <h2 className="text-2xl font-serif">Horizontal Scroll Strip Gallery</h2>
           <Button type="button" onClick={addGalleryItem} variant="ghost" size="md">
             Add Frame
           </Button>

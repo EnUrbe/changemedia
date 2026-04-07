@@ -3,9 +3,9 @@ import GradClient from "./GradClient";
 import { getGradContent } from "@/lib/gradStore";
 
 export const metadata: Metadata = {
-  title: "Graduation Portraits — Class of 2026 | Change Media Studio",
+  title: "Graduation Portraits | Change Media Studio",
   description:
-    "Professional grad portraits for CU Denver and CU Boulder seniors. Five session tiers from quick snaps to the full legacy experience. Book your spring session before slots fill.",
+    "Professional graduation portraits for seniors and recent grads. Choose from quick sessions to full signature coverage with digital delivery, announcements, and print options.",
 };
 
 export default async function GradPage() {

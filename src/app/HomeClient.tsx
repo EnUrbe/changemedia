@@ -1,12 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import AnimatedCounter from "@/components/AnimatedCounter";
 import Button from "@/components/Button";
 import type { SiteContent } from "@/lib/contentSchema";
 import { FAQS, FIELD_NOTES, HOME, SITE } from "@/lib/data";
@@ -44,12 +43,6 @@ const EXPERTISE = [
   },
 ] as const;
 
-const DEFAULT_PRINCIPLES = [
-  "Built for nonprofits, founders, schools, and mission-driven brands.",
-  "One shoot can support your website, campaign, deck, social, and press assets.",
-  "Fast turnarounds without losing taste, rigor, or human presence.",
-] as const;
-
 const HERO_FRAMES = [
   {
     title: HOME.selectedWork[0].title,
@@ -77,33 +70,15 @@ type HomeClientProps = {
 
 export default function HomeClient({ content }: HomeClientProps) {
   const heroRef = useRef<HTMLElement>(null);
-  const storyRef = useRef<HTMLElement>(null);
-  const [activeStoryIndex, setActiveStoryIndex] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
 
-  const { scrollYProgress: storyProgress } = useScroll({
-    target: storyRef,
-    offset: ["start start", "end end"],
-  });
-
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
-
-  const featuredCases =
-    content.featuredCases.length > 0
-      ? content.featuredCases
-      : HOME.selectedWork.map((work) => ({
-          id: work.id,
-          title: work.title,
-          subtitle: `${work.category} / ${work.year}`,
-          imageUrl: work.image,
-          tags: [work.category, work.year],
-        }));
 
   const galleryCases =
     content.galleryCases.length > 0
@@ -132,14 +107,6 @@ export default function HomeClient({ content }: HomeClientProps) {
   const secondaryHeroCta =
     content.hero.ctas[1] ?? { label: "Book discovery call", href: SITE.calendlyUrl, variant: "secondary" as const };
 
-  const principleCards =
-    content.features.length > 0
-      ? content.features
-      : DEFAULT_PRINCIPLES.map((description, index) => ({
-          title: `Approach ${index + 1}`,
-          description,
-        }));
-
   const heroMetrics =
     content.hero.metrics.length > 0
       ? content.hero.metrics
@@ -149,14 +116,6 @@ export default function HomeClient({ content }: HomeClientProps) {
     content.faqs.length > 0
       ? content.faqs
       : FAQS.map((faq, index) => ({ id: `faq-${index + 1}`, question: faq.question, answer: faq.answer }));
-
-  useMotionValueEvent(storyProgress, "change", (latest) => {
-    const nextIndex = Math.min(
-      featuredCases.length - 1,
-      Math.max(0, Math.floor(latest * featuredCases.length))
-    );
-    setActiveStoryIndex(nextIndex);
-  });
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-white atmosphere editorial-shell">
@@ -211,23 +170,6 @@ export default function HomeClient({ content }: HomeClientProps) {
                 <Button href={secondaryHeroCta.href} variant="outline" size="lg">
                   {secondaryHeroCta.label}
                 </Button>
-              </motion.div>
-
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                custom={5}
-                variants={fadeUp}
-                className="mt-12 grid gap-4 md:grid-cols-3"
-              >
-                {principleCards.map((principle) => (
-                  <div key={principle.title} className="editorial-card glow-border p-5 md:p-6">
-                    <span className="label-accent">{principle.title}</span>
-                    <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)] md:text-[0.95rem]">
-                      {principle.description}
-                    </p>
-                  </div>
-                ))}
               </motion.div>
             </div>
 
@@ -301,126 +243,6 @@ export default function HomeClient({ content }: HomeClientProps) {
                 {metric.value} {metric.label}
               </span>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        ref={storyRef}
-        className="relative border-b border-[var(--border)] bg-[var(--bg)]"
-        style={{ minHeight: `${Math.max(featuredCases.length, 3) * 75}vh` }}
-      >
-        <div className="sticky top-20 min-h-[calc(100vh-5rem)]">
-          <div className="container-wide grid min-h-[calc(100vh-5rem)] gap-10 py-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
-            <div className="max-w-xl">
-              <p className="eyebrow">Featured stories</p>
-              <h2 className="mt-4 text-4xl md:text-6xl">
-                Scroll through the stories behind the work.
-              </h2>
-              <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">
-                As you move through this section, each project comes forward to show the people,
-                moments, and outcomes at the center of the work.
-              </p>
-
-              <div className="mt-10 space-y-4">
-                {featuredCases.map((item, index) => {
-                  const isActive = index === activeStoryIndex;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveStoryIndex(index)}
-                      className={`w-full rounded-[1.5rem] border p-5 text-left transition-all duration-300 ${
-                        isActive
-                          ? "border-[var(--accent)]/40 bg-[var(--accent-soft)]"
-                          : "border-[var(--border)] bg-[var(--bg-card)]/70 hover:border-[var(--border-hover)]"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="label-accent">0{index + 1}</p>
-                          <h3 className="mt-2 text-2xl">{item.title}</h3>
-                          <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                            {item.subtitle}
-                          </p>
-                        </div>
-                        <span
-                          className={`mt-2 h-2.5 w-2.5 rounded-full ${
-                            isActive ? "bg-[var(--accent)]" : "bg-white/15"
-                          }`}
-                        />
-                      </div>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {item.tags.slice(0, 3).map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full border border-white/10 px-3 py-1 text-[10px] font-sans font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="editorial-card glow-border relative min-h-[520px] overflow-hidden">
-                {featuredCases.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    animate={{
-                      opacity: index === activeStoryIndex ? 1 : 0,
-                      scale: index === activeStoryIndex ? 1 : 1.04,
-                    }}
-                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute inset-0"
-                    style={{ pointerEvents: index === activeStoryIndex ? "auto" : "none" }}
-                  >
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 55vw"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/22 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                      <p className="label-accent">{item.subtitle}</p>
-                      <h3 className="mt-3 max-w-2xl text-3xl md:text-5xl">{item.title}</h3>
-                      {item.tags.length > 0 && (
-                        <div className="mt-5 flex flex-wrap gap-2">
-                          {item.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="rounded-full border border-white/15 px-3 py-1 text-[10px] font-sans font-semibold uppercase tracking-[0.14em] text-white/85"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="mt-5 flex items-center gap-3">
-                {featuredCases.map((item, index) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-label={`View ${item.title}`}
-                    onClick={() => setActiveStoryIndex(index)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === activeStoryIndex ? "w-14 bg-[var(--accent)]" : "w-8 bg-white/12"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -588,81 +410,8 @@ export default function HomeClient({ content }: HomeClientProps) {
         </div>
       </section>
 
-      {/* ═══════ METRICS + EXPERTISE ═══════ */}
-      <section className="border-y border-[var(--border)] bg-[var(--bg-elevated)] py-[var(--section-padding)]">
-        <div className="container-wide grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
-          <div className="editorial-card glow-border p-7 md:p-9">
-            <p className="eyebrow">Metrics & milestones</p>
-            <h2 className="mt-4 text-4xl md:text-6xl">
-              Creative work is more valuable when the system is reliable.
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--text-secondary)]">
-              Clients hire us when they need more than a nice-looking final piece. They need a
-              process that creates strong visuals, keeps production calm, and delivers assets their
-              team can immediately put to work.
-            </p>
-    <div className="mt-10 space-y-4">
-      {EXPERTISE.map((entry) => (
-        <div key={entry.id} className="border-t border-[var(--border)] pt-4 group/item cursor-pointer">
-          <div className="flex items-start gap-4">
-            <span className="label-accent transition-transform duration-300 group-hover/item:translate-x-1">{entry.id}</span>
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <p className="text-lg text-white transition-colors duration-[400ms] group-hover/item:text-[var(--accent)]">{entry.title}</p>
-                <span className="text-[var(--text-secondary)] transition-transform duration-[400ms] group-hover/item:rotate-180">+</span>
-              </div>
-              <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-[400ms] ease-in-out group-hover/item:grid-rows-[1fr] group-hover/item:opacity-100 group-hover/item:pt-3">
-                <div className="overflow-hidden">
-                  <p className="text-sm leading-relaxed text-[var(--text-secondary)] pr-6">
-                    {entry.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {heroMetrics.map((metric, index) => (
-              <motion.div
-                key={metric.label}
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: index * 0.08, duration: 0.5 }}
-                className="editorial-card glow-border p-6 md:p-7"
-              >
-                <AnimatedCounter value={metric.value} label={metric.label} />
-              </motion.div>
-            ))}
-
-            <div className="editorial-card glow-border p-6 md:col-span-2 md:p-7">
-              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                <div className="max-w-xl">
-                  <p className="label-accent">Performance snapshot</p>
-                  <h3 className="mt-3 text-2xl md:text-3xl">
-                    One studio, multiple deliverables, no drop in quality.
-                  </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
-                    Campaign films, portraits, and event coverage all run through the same visual
-                    standard, so your website, launch, and team photos feel like they belong to the
-                    same brand.
-                  </p>
-                </div>
-                <Button href="/photography/portrait" variant="ghost">
-                  See portraits
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ═══════ WHAT WE DO ═══════ */}
-      <section className="min-h-screen py-32 md:py-48 flex flex-col justify-center">
+      <section className="py-[var(--section-padding)]">
         <div className="container-wide">
           <div className="mb-16 grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
             <div>
@@ -719,41 +468,6 @@ export default function HomeClient({ content }: HomeClientProps) {
                   ))}
                 </ul>
               </motion.article>
-            ))}
-          </div>
-
-          <div className="mt-14 grid gap-5 lg:grid-cols-2">
-            {HOME.practices.map((practice, index) => (
-              <motion.div
-                key={practice.id}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-              >
-                <Link href={practice.href} className="editorial-card group relative block min-h-[420px] overflow-hidden">
-                  <Image
-                    src={practice.image}
-                    alt={practice.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/24 to-transparent" />
-                  <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="eyebrow-pill">{practice.label}</span>
-                      <span className="label text-white/72">Practice</span>
-                    </div>
-                    <div className="max-w-lg">
-                      <h3 className="text-3xl md:text-5xl">{practice.title}</h3>
-                      <p className="mt-4 text-sm leading-relaxed text-white/75 md:text-base">
-                        {practice.description}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
             ))}
           </div>
         </div>

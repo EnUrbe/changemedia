@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient, type PortraitInquiryStatus } from "@/lib/supabaseAdmin";
+import { sendEmail } from "@/lib/email";
 
 const RL_WINDOW_MS = 60_000;
 const RL_MAX = 5;
@@ -218,9 +219,125 @@ export async function POST(req: Request) {
         (referralFrom ? `\nReferral: ${referralFrom}` : "")
     );
 
+    const isGrad = requestedService === "grad_portraits";
+
+    // Client confirmation email
+    sendEmail({
+      to: email,
+      subject: isGrad
+        ? "Your grad session inquiry — Change Media Studio"
+        : "Got your inquiry — Change Media Studio",
+      text: isGrad
+        ? buildGradClientEmail(fullName, sessionType)
+        : buildGenericClientEmail(fullName),
+      html: isGrad
+        ? buildGradClientEmailHtml(fullName, sessionType)
+        : buildGenericClientEmailHtml(fullName),
+    }).catch((err) => console.error("Client confirmation email failed:", err));
+
+    // Photographer notification email
+    const notifyEmail = process.env.NOTIFY_EMAIL;
+    if (notifyEmail) {
+      sendEmail({
+        to: notifyEmail,
+        subject: `New ${isGrad ? "grad" : ""} inquiry: ${fullName}`,
+        text: [
+          `Name: ${fullName}`,
+          `Email: ${email}`,
+          phone ? `Phone: ${phone}` : null,
+          organization ? `School/Org: ${organization}` : null,
+          sessionType ? `Package: ${sessionType}` : null,
+          timeline ? `Graduation: ${timeline}` : null,
+          preferredDates ? `Details: ${preferredDates}` : null,
+          `Source: ${source}`,
+        ]
+          .filter(Boolean)
+          .join("\n"),
+      }).catch((err) => console.error("Photographer notification email failed:", err));
+    }
+
     return NextResponse.json({ success: true, id: inserted.id });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
+}
+
+function buildGradClientEmail(name: string, packageName: string | null): string {
+  const firstName = name.split(" ")[0];
+  return [
+    `Hey ${firstName},`,
+    "",
+    "Thanks for reaching out — I got your grad session inquiry and I'm excited to work with you.",
+    "",
+    packageName ? `You mentioned you're interested in the ${packageName} experience. Great choice.` : "",
+    "",
+    "Here's what happens next:",
+    "",
+    "1. I'll send you my full pricing guide with available dates within 24 hours.",
+    "2. Pick a date and time that works for you.",
+    "3. A signed contract + retainer locks your spot on my calendar.",
+    "4. We'll connect beforehand to plan locations, outfits, and the vibe.",
+    "",
+    "In the meantime, if you have any questions, just reply to this email.",
+    "",
+    "Talk soon,",
+    "William",
+    "Change Media Studio",
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+}
+
+function buildGradClientEmailHtml(name: string, packageName: string | null): string {
+  const firstName = name.split(" ")[0];
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body style="font-family:sans-serif;color:#111;max-width:560px;margin:0 auto;padding:32px 16px;line-height:1.6">
+  <p style="margin:0 0 16px">Hey ${firstName},</p>
+  <p style="margin:0 0 16px">Thanks for reaching out — I got your grad session inquiry and I'm excited to work with you.</p>
+  ${packageName ? `<p style="margin:0 0 16px">You mentioned you're interested in the <strong>${packageName}</strong> experience. Great choice.</p>` : ""}
+  <p style="margin:0 0 8px"><strong>Here's what happens next:</strong></p>
+  <ol style="margin:0 0 16px;padding-left:20px">
+    <li style="margin-bottom:8px">I'll send you my full pricing guide with available dates within 24 hours.</li>
+    <li style="margin-bottom:8px">Pick a date and time that works for you.</li>
+    <li style="margin-bottom:8px">A signed contract + retainer locks your spot on my calendar.</li>
+    <li style="margin-bottom:8px">We'll connect beforehand to plan locations, outfits, and the vibe.</li>
+  </ol>
+  <p style="margin:0 0 16px">In the meantime, if you have any questions, just reply to this email.</p>
+  <p style="margin:0">Talk soon,<br /><strong>William</strong><br />Change Media Studio</p>
+</body>
+</html>`;
+}
+
+function buildGenericClientEmail(name: string): string {
+  const firstName = name.split(" ")[0];
+  return [
+    `Hey ${firstName},`,
+    "",
+    "Got your inquiry — thanks for reaching out to Change Media Studio.",
+    "",
+    "I'll be in touch within 24 hours with more details.",
+    "",
+    "Talk soon,",
+    "William",
+    "Change Media Studio",
+  ].join("\n");
+}
+
+function buildGenericClientEmailHtml(name: string): string {
+  const firstName = name.split(" ")[0];
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body style="font-family:sans-serif;color:#111;max-width:560px;margin:0 auto;padding:32px 16px;line-height:1.6">
+  <p style="margin:0 0 16px">Hey ${firstName},</p>
+  <p style="margin:0 0 16px">Got your inquiry — thanks for reaching out to Change Media Studio.</p>
+  <p style="margin:0 0 16px">I'll be in touch within 24 hours with more details.</p>
+  <p style="margin:0">Talk soon,<br /><strong>William</strong><br />Change Media Studio</p>
+</body>
+</html>`;
 }
