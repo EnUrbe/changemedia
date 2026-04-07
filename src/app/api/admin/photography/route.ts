@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { savePhotographyContent } from "@/lib/photographyStore";
 import { photographyContentSchema } from "@/lib/photographySchema";
+import { ADMIN_SESSION_COOKIE, isHardcodedAdminSession } from "@/lib/adminHardcodedAuth";
 
 export async function POST(req: NextRequest) {
   try {
     const token = req.cookies.get('admin_token')?.value || req.cookies.get('sb-auth-token')?.value || req.cookies.get('supabase-auth-token')?.value;
+    const hardcodedToken = req.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    const hasHardcodedAdminSession = isHardcodedAdminSession(hardcodedToken);
     
-    if (!token && process.env.NODE_ENV !== "development") {
+    if (!token && !hasHardcodedAdminSession && process.env.NODE_ENV !== "development") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

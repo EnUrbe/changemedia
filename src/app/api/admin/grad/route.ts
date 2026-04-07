@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveGradContent } from "@/lib/gradStore";
 import { gradContentSchema } from "@/lib/gradSchema";
+import { ADMIN_SESSION_COOKIE, isHardcodedAdminSession } from "@/lib/adminHardcodedAuth";
 
 export async function POST(req: NextRequest) {
   try {
     const token = req.cookies.get('admin_token')?.value || req.cookies.get('sb-auth-token')?.value || req.cookies.get('supabase-auth-token')?.value;
+    const hardcodedToken = req.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+    const hasHardcodedAdminSession = isHardcodedAdminSession(hardcodedToken);
     
     // minimal check since they are likely logged in, but ensure it exists
-    if (!token && process.env.NODE_ENV !== "development") {
+    if (!token && !hasHardcodedAdminSession && process.env.NODE_ENV !== "development") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

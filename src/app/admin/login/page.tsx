@@ -2,56 +2,36 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import Button from "@/components/ui/Button";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
     });
 
-    if (error) {
-      setError(error.message);
+    if (!response.ok) {
+      setError("Invalid admin email or password");
       setLoading(false);
-    } else {
-      router.push("/admin/projects");
-      router.refresh();
+      return;
     }
-  };
 
-  const handleGoogle = async () => {
-    try {
-      setError(null);
-      setGoogleLoading(true);
-      const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/admin/projects` : undefined;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo,
-        },
-      });
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Google sign-in failed");
-    } finally {
-      setGoogleLoading(false);
-    }
+    router.push("/admin/projects");
+    router.refresh();
   };
 
   return (
@@ -90,23 +70,6 @@ export default function AdminLoginPage() {
 
           <Button type="submit" fullWidth disabled={loading}>
             {loading ? "Signing in..." : "Sign in"}
-          </Button>
-
-          <div className="flex items-center gap-3 text-xs text-white/30">
-            <span className="h-px flex-1 bg-white/10" />
-            <span>or</span>
-            <span className="h-px flex-1 bg-white/10" />
-          </div>
-
-          <Button
-            type="button"
-            fullWidth
-            variant="soft"
-            disabled={googleLoading}
-            onClick={handleGoogle}
-            className="!bg-white/10 !text-white hover:!bg-white/20"
-          >
-            {googleLoading ? "Opening Google…" : "Continue with Google"}
           </Button>
         </form>
       </div>

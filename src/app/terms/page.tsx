@@ -26,7 +26,7 @@ export default function TermsPage() {
         <div className="prose prose-invert prose-lg max-w-none text-[var(--text-secondary)]">
           <h2 className="text-2xl font-serif text-white mt-12 mb-4">1. Acceptance of Terms</h2>
           <p>
-            By accessing and using this website, you accept and agree to be bound by the terms and provisions of this agreement. In addition, when using this website's particular services, you shall be subject to any posted guidelines or rules applicable to such services. Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users, and others who access or use the Service.
+            By accessing and using this website, you accept and agree to be bound by the terms and provisions of this agreement. In addition, when using this website&apos;s particular services, you shall be subject to any posted guidelines or rules applicable to such services. Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users, and others who access or use the Service.
           </p>
 
           <h2 className="text-2xl font-serif text-white mt-12 mb-4">2. Intellectual Property</h2>
@@ -56,7 +56,7 @@ export default function TermsPage() {
 
           <h2 className="text-2xl font-serif text-white mt-12 mb-4">5. Disclaimer of Warranties</h2>
           <p>
-            Your use of the website and services is at your sole risk. The service is provided on an "AS IS" and "AS AVAILABLE" basis. The service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
+            Your use of the website and services is at your sole risk. The service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. The service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement, or course of performance.
           </p>
           
           <h2 className="text-2xl font-serif text-white mt-12 mb-4">6. Limitation of Liability</h2>

@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { ADMIN_SESSION_COOKIE, isHardcodedAdminSession } from '@/lib/adminHardcodedAuth'
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -47,9 +48,12 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  const hardcodedAdminSession = request.cookies.get(ADMIN_SESSION_COOKIE)?.value
+  const hasHardcodedAdminSession = isHardcodedAdminSession(hardcodedAdminSession)
+
   // Protect /admin routes
   if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
-    if (!user) {
+    if (!user && !hasHardcodedAdminSession) {
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return NextResponse.redirect(url)
