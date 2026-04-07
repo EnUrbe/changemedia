@@ -24,7 +24,11 @@ export default function GradPageForm({ initialContent }: { initialContent: GradC
         body: JSON.stringify(content),
       });
 
-      if (!res.ok) throw new Error("Failed to save content");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        const detail = errBody?.details ? JSON.stringify(errBody.details) : errBody?.error || "Unknown error";
+        throw new Error(`Failed to save content: ${detail}`);
+      }
       setMessage("Content saved successfully.");
       router.refresh();
       setTimeout(() => setMessage(""), 3000);
