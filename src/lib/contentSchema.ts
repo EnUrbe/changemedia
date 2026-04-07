@@ -41,23 +41,23 @@ export const marqueeSchema = z.object({
 });
 
 export const logoCloudSchema = z.object({
-  heading: z.string().min(1),
+  heading: z.string().optional().default(""),
   logos: z
     .array(
       z.object({
-        src: z.string().min(1),
-        alt: z.string().min(1),
+        src: z.string().optional().default(""),
+        alt: z.string().optional().default(""),
       })
     )
-    .min(1),
+    .default([]),
 });
 
 export const caseStudySchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
   subtitle: z.string().min(1),
-  imageUrl: httpsUrl,
-  videoUrl: httpsUrl.optional(),
+  imageUrl: z.string().optional().default(""),
+  videoUrl: z.string().optional(),
   tags: z.array(z.string().min(1)).default([]),
 });
 
@@ -136,7 +136,7 @@ export const testimonialSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   role: z.string().min(1),
-  avatar: httpsUrl,
+  avatar: z.string().optional().default(""),
   quote: z.string().min(1),
 });
 
@@ -148,16 +148,16 @@ export const faqSchema = z.object({
 
 export const contactSchema = z.object({
   email: z.string().email(),
-  city: z.string().min(1),
+  city: z.string().optional().default(""),
   instagram: z.object({
-    handle: z.string().min(1),
-    url: httpsUrl,
+    handle: z.string().optional().default(""),
+    url: z.string().optional().default(""),
   }),
   youtube: z.object({
-    label: z.string().min(1),
-    url: httpsUrl,
+    label: z.string().optional().default(""),
+    url: z.string().optional().default(""),
   }),
-  calendlyUrl: httpsUrl,
+  calendlyUrl: z.string().optional().default(""),
 });
 
 export const seoSchema = z.object({
