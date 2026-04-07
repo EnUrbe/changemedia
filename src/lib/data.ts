@@ -1,13 +1,13 @@
 /* ─────────────────────────────────────────────
-   CHANGE Media — Static Site Content
+   Change Studios — Static Site Content
    All copy, links, and metadata in one place.
    ───────────────────────────────────────────── */
 
 export const SITE = {
-  name: "CHANGE Media",
-  tagline: "Documentary storytelling for care-centered teams.",
+  name: "Change Studios",
+  tagline: "Documentary storytelling for social impact organizations.",
   description:
-    "An editorial documentary practice for nonprofits, coalitions, founders, and care-driven teams. Films, portraits, and campaign systems built to move people to trust and action.",
+    "An editorial documentary practice for social impact organizations, coalitions, and mission-driven teams. Films, portraits, and campaign assets built to move people to trust and action.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://changemedia.org",
   email: "hello@changemedia.org",
   phone: "",
@@ -23,10 +23,8 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-  { label: "Change Studios", href: "/change-studios" },
+  { label: "Work", href: "/change-studios" },
   { label: "Photography", href: "/photography" },
-  { label: "Portraits", href: "/photography/portrait" },
-  { label: "Field Notes", href: "/field-notes" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
@@ -39,12 +37,12 @@ export const HOME = {
       "https://cdn.coverr.co/videos/coverr-aerial-view-of-city-lights-at-night-2559/1080p.mp4",
     posterUrl:
       "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1920&q=80",
-    headline: "Documentary films\nand portraits\nthat build trust.",
+    headline: "Documentary films\nand portraits\nfor social impact.",
     subheadline:
-      "We help nonprofits, founders, schools, and mission-driven teams look credible on camera and communicate clearly with film, portraits, and campaign-ready content.",
+      "We help social impact organizations, coalitions, and mission-driven teams tell their story clearly — with films, portraits, and campaign assets that build real trust.",
     ctas: [
-      { label: "Explore Change Studios", href: "/change-studios" },
-      { label: "Book discovery call", href: "/contact" },
+      { label: "See the work", href: "/change-studios" },
+      { label: "Start a conversation", href: "/contact" },
     ],
   },
   metrics: [
@@ -150,7 +148,7 @@ export const HOME = {
       title: "Ongoing Story Partnership",
       price: "Monthly rhythm",
       description:
-        "A recurring production cadence for teams that need fresh films, stills, and rollout assets without losing consistency from one month to the next.",
+        "A recurring production cadence for organizations that need fresh films, stills, and rollout assets without losing consistency from one month to the next.",
       points: ["Monthly planning", "Short-form edits + stills", "Flexible campaign support"],
       href: "/change-studios",
     },
@@ -158,9 +156,9 @@ export const HOME = {
       title: "Leadership + Team Portraits",
       price: "Half or full day",
       description:
-        "Portrait sessions for leaders and teams who need images that feel current, trustworthy, and aligned with the rest of the brand language.",
+        "Portrait sessions for leadership teams and org staff who need images that feel current, trustworthy, and aligned with the rest of the brand.",
       points: ["On-site setup", "Calm direction", "Web, press, and internal-use delivery"],
-      href: "/photography/portrait",
+      href: "/photography",
     },
   ],
   leadMagnet: {
@@ -364,7 +362,7 @@ export const PORTRAITS = {
 export const ABOUT = {
   headline: "A practice for teams\nthat need trust,\nnot noise.",
   intro:
-    "CHANGE Media helps nonprofits, founders, schools, and mission-driven brands communicate with care, precision, and momentum. We build documentary films, portraits, and campaign assets that feel human and strategic, so your story can do real work in public.",
+    "Change Studios helps social impact organizations, coalitions, advocacy groups, and mission-driven teams communicate with care, precision, and momentum. We build documentary films, portraits, and campaign assets that feel human and strategic, so your story can do real work in public.",
   values: [
     {
       title: "Clarity before production",
@@ -418,7 +416,7 @@ export const FAQS = [
   {
     question: "Who do you work best with?",
     answer:
-      "We are a strong fit for nonprofits, founders, schools, agencies, and mission-driven teams that need high-quality visuals and a partner who can help shape the message, not just capture footage.",
+      "We do our best work with social impact organizations, coalitions, advocacy groups, community orgs, and mission-driven teams that need a partner who can help shape the message, not just capture footage.",
   },
   {
     question: "What&apos;s included in a portrait session?",

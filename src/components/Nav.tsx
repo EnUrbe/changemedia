@@ -43,7 +43,7 @@ export default function Nav() {
           >
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">Change</span>
             <br />
-            <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">Media</span>
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">Studios</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">

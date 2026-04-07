@@ -14,7 +14,7 @@ export default function Footer() {
               href="/"
               className="font-serif text-xl leading-none tracking-[-0.05em] text-white transition-colors duration-300 hover:text-[var(--accent)]"
             >
-              Change<br />Media
+              Change<br />Studios
             </Link>
             <p className="mt-5 text-sm text-[var(--text-muted)] max-w-xs leading-relaxed">
               {SITE.description}
