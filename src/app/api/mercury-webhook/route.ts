@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { sendEmail } from "@/lib/email";
 
 type MercuryWebhookPayload = {
   id?: string;
