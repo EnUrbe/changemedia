@@ -846,11 +846,12 @@ function InquiryForm({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="label mb-1.5 block">Phone Number</label>
-              <input 
-                name="phone" 
-                type="tel" 
-                placeholder="(303) 555-0100" 
+              <label className="label mb-1.5 block">Phone Number <span className="text-[var(--accent)]">*</span></label>
+              <input
+                name="phone"
+                type="tel"
+                required
+                placeholder="(303) 555-0100"
                 className={inputClass}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
