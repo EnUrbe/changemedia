@@ -117,19 +117,19 @@ const STEPS = [
     num: "02",
     title: "Show Up",
     detail:
-      "Bring your cap, your gown, and whatever else you want to shoot in. I handle the rest -- posing direction, locations, lighting, all of it.",
+      "Bring your cap, gown, and whatever fit represents you. I handle everything else — posing, direction, lighting, locations. You just have to show up.",
   },
   {
     num: "03",
     title: "Preview",
     detail:
-      "Your private gallery goes live within 5-7 days. Browse, favorite, share.",
+      "Your private gallery drops within 5–7 days. Browse, favorite, and share the link with your family.",
   },
   {
     num: "04",
     title: "Download + Order",
     detail:
-      "Your edited digitals are ready to post. Want prints or announcements? Order directly from your gallery.",
+      "Your edited digitals are ready to post. Prints, canvas wraps, announcements — order anything you need straight from your gallery before it closes in 60 days.",
   },
 ];
 const FAQS = [
@@ -143,7 +143,7 @@ const FAQS = [
   },
   {
     q: "What if the weather is bad?",
-    a: "We reschedule. No charge, no hassle. Colorado weather is unpredictable -- I always have backup dates available.",
+    a: "We reschedule — no charge, no hassle. Colorado weather does what it wants, and I always keep backup dates open in the calendar. It genuinely is not a problem.",
   },
   {
     q: "How long until I get my photos?",
@@ -290,7 +290,7 @@ function PackageFitQuiz({
             Find your best-fit session in 20 seconds.
           </h2>
           <p className="mt-4 text-sm md:text-base text-[var(--text-secondary)] max-w-2xl">
-            Answer three quick questions and we will point you to the package that matches your goals.
+            Three questions. Twenty seconds. I&apos;ll match you to the session that actually fits what you&apos;re going for.
           </p>
           <div className="mt-10 grid gap-6">
             {QUIZ_QUESTIONS.map((question) => (
@@ -584,7 +584,7 @@ export default function GradClient({ content }: { content: GradContent }) {
               <span className="text-gradient">One Perfect Shot.</span>
             </h1>
             <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Professional grad portraits that go just as hard on your mom&apos;s mantle as they do on the grid.
+              I shoot editorial grad portraits across Denver and Boulder — images that hit just as hard on your mom&apos;s mantle as they do on the grid.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button href="#inquire" size="lg">
@@ -598,7 +598,7 @@ export default function GradClient({ content }: { content: GradContent }) {
               </Button>
             </div>
             <p className="mt-6 text-xs text-[var(--text-dim)]">
-              Limited spring availability -- slots filling fast before commencement.
+              Limited spring availability — I only take a set number of grad sessions each season, so spots go fast.
             </p>
           </motion.div>
           {/* Scroll indicator */}
@@ -706,7 +706,7 @@ export default function GradClient({ content }: { content: GradContent }) {
                 Add-Ons, Announcements & Prints
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-                One place for all optional upgrades and keepsakes after your session.
+                Everything you might want before, during, or after your session — all in one place.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -824,10 +824,10 @@ export default function GradClient({ content }: { content: GradContent }) {
             <div className="text-center mb-12">
               <p className="eyebrow mb-4">Inquire</p>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white tracking-[-0.06em] mb-4">
-                Request Pricing & Details.
+                Let&apos;s Make Your Grad Shoot Happen.
               </h2>
               <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-lg mx-auto">
-                Fill out the form below to receive full pricing, available dates, and detailed package options.
+                Send me the details below and I&apos;ll get you a full pricing guide — packages, available dates, and everything you need to decide. Usually in your inbox the same day.
               </p>
             </div>
             <InquiryForm
@@ -912,7 +912,7 @@ function InquiryForm({
         </div>
         <h3 className="font-serif text-2xl text-white mb-2">Request Sent.</h3>
         <p className="text-sm text-[var(--text-secondary)]">
-          Thank you! Check your email—your custom pricing guide will be arriving shortly.
+          Thank you — I&apos;ll personally send your pricing guide shortly. If you don&apos;t see it in a few minutes, check your spam folder.
         </p>
       </motion.div>
     );
@@ -1042,7 +1042,7 @@ function InquiryForm({
             <div className="pb-2">
               <h4 className="text-white text-sm font-medium mb-1">Get the Guide</h4>
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Check your inbox for my full pricing guide with pricing, package details, and available dates.
+                I&apos;ll send you my full guide — pricing, package details, available dates, and what to expect on the day of your shoot.
               </p>
             </div>
           </div>

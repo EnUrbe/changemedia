@@ -6,6 +6,21 @@ import type { GradContent } from "@/lib/gradSchema";
 import { useRouter } from "next/navigation";
 import CloudinaryUploadWidget from "@/components/admin/CloudinaryUploadWidget";
 
+function flattenZodErrors(obj: Record<string, unknown>, prefix = ""): string[] {
+  const messages: string[] = [];
+  for (const [key, value] of Object.entries(obj)) {
+    if (key === "_errors" && Array.isArray(value) && value.length > 0) {
+      messages.push(prefix ? `${prefix}: ${value.join(", ")}` : String(value[0]));
+    } else if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      const child = prefix
+        ? isNaN(Number(key)) ? `${prefix}.${key}` : `${prefix}[${key}]`
+        : key;
+      messages.push(...flattenZodErrors(value as Record<string, unknown>, child));
+    }
+  }
+  return messages;
+}
+
 export default function GradPageForm({ initialContent }: { initialContent: GradContent }) {
   const router = useRouter();
   const [content, setContent] = useState<GradContent>(initialContent);
@@ -26,8 +41,14 @@ export default function GradPageForm({ initialContent }: { initialContent: GradC
 
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}));
-        const detail = errBody?.details ? JSON.stringify(errBody.details) : errBody?.error || "Unknown error";
-        throw new Error(`Failed to save content: ${detail}`);
+        let detail: string;
+        if (errBody?.details && typeof errBody.details === "object") {
+          const msgs = flattenZodErrors(errBody.details as Record<string, unknown>);
+          detail = msgs.length ? msgs.join(" · ") : "Validation failed";
+        } else {
+          detail = errBody?.error || "Unknown error";
+        }
+        throw new Error(detail);
       }
       setMessage("Content saved successfully.");
       router.refresh();
@@ -150,7 +171,7 @@ export default function GradPageForm({ initialContent }: { initialContent: GradC
                 </div>
                 <div>
                   <label className="block text-xs font-bold mb-1 uppercase tracking-wider text-neutral-500">Price (Number)</label>
-                  <input type="number" className="w-full bg-neutral-100 p-2 rounded focus:ring-2 ring-neutral-900 outline-none" value={pkg.price} onChange={(e) => updatePackage(i, "price", parseFloat(e.target.value))} />
+                  <input type="number" min="0" className="w-full bg-neutral-100 p-2 rounded focus:ring-2 ring-neutral-900 outline-none" value={pkg.price} onChange={(e) => { const n = e.target.valueAsNumber; updatePackage(i, "price", Number.isFinite(n) ? n : 0); }} />
                 </div>
                 <div>
                   <label className="block text-xs font-bold mb-1 uppercase tracking-wider text-neutral-500">Time / Duration</label>
@@ -164,7 +185,7 @@ export default function GradPageForm({ initialContent }: { initialContent: GradC
                   <label className="block text-xs font-bold mb-1 uppercase tracking-wider text-neutral-500">Images Delivered</label>
                   <input className="w-full bg-neutral-100 p-2 rounded focus:ring-2 ring-neutral-900 outline-none" value={pkg.images} onChange={(e) => updatePackage(i, "images", e.target.value)} />
                 </div>
-                <div>
+                <div className="col-span-2">
                   <label className="block text-xs font-bold mb-1 uppercase tracking-wider text-neutral-500">Best For (Subtitle)</label>
                   <input className="w-full bg-neutral-100 p-2 rounded focus:ring-2 ring-neutral-900 outline-none" value={pkg.best} onChange={(e) => updatePackage(i, "best", e.target.value)} />
                 </div>
