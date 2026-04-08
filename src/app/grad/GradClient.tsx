@@ -745,6 +745,7 @@ function InquiryForm({
   packages: GradPackage[];
   initialPackageName: string;
 }) {
+  const mountTs = useRef(Date.now());
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [name, setName] = useState("");
@@ -781,7 +782,7 @@ function InquiryForm({
           message: [vibe ? `Vibe: ${vibe}` : null, notes || null].filter(Boolean).join("\n") || null,
           service_type: "grad_portraits",
           source: "grad_page",
-          ts: Date.now(),
+          ts: mountTs.current,
         }),
       });
       const json = await res.json();
