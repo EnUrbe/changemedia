@@ -3,8 +3,18 @@
 import { useState } from "react";
 import Button from "@/components/ui/Button";
 import type { GradContent } from "@/lib/gradSchema";
+import { DEFAULT_PACKAGES, DEFAULT_ADDONS, DEFAULT_GALLERY_ITEMS } from "@/lib/gradDefaults";
 import { useRouter } from "next/navigation";
 import CloudinaryUploadWidget from "@/components/admin/CloudinaryUploadWidget";
+
+function seedContent(content: GradContent): GradContent {
+  return {
+    packages: content.packages.length ? content.packages : DEFAULT_PACKAGES,
+    addons: content.addons.length ? content.addons : DEFAULT_ADDONS,
+    gallery: content.gallery.length ? content.gallery : DEFAULT_GALLERY_ITEMS,
+    portfolioGallery: content.portfolioGallery,
+  };
+}
 
 function flattenZodErrors(obj: Record<string, unknown>, prefix = ""): string[] {
   const messages: string[] = [];
@@ -23,7 +33,7 @@ function flattenZodErrors(obj: Record<string, unknown>, prefix = ""): string[] {
 
 export default function GradPageForm({ initialContent }: { initialContent: GradContent }) {
   const router = useRouter();
-  const [content, setContent] = useState<GradContent>(initialContent);
+  const [content, setContent] = useState<GradContent>(() => seedContent(initialContent));
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
