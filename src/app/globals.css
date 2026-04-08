@@ -322,6 +322,7 @@ h1, h2, h3, h4 {
   .editorial-card {
     position: relative;
     overflow: hidden;
+    min-width: 0;
   }
 
   .editorial-card::before {

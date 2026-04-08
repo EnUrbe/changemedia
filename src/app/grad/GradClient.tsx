@@ -15,11 +15,13 @@ import Button from "@/components/Button";
 import type {
   GradContent,
   GradPackage,
+  GradFriendPricing,
 } from "@/lib/gradSchema";
 import {
   DEFAULT_PACKAGES,
   DEFAULT_ADDONS,
   DEFAULT_GALLERY_ITEMS,
+  DEFAULT_FRIEND_PRICING,
 } from "@/lib/gradDefaults";
 const ANNOUNCEMENTS = [
   { qty: "25 cards", price: "$75" },
@@ -408,12 +410,103 @@ function ParallaxImage({ item }: { item: { title: string; image: string } }) {
     </div>
   );
 }
+/* ─── Package Card ─── */
+function PackageCard({
+  pkg,
+  isRecommended,
+  onInquire,
+}: {
+  pkg: GradPackage;
+  isRecommended: boolean;
+  onInquire: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div
+      className={`editorial-card p-8 md:p-10 flex flex-col relative ${
+        pkg.popular ? "ring-1 ring-[var(--accent)]/30" : ""
+      } ${isRecommended ? "ring-2 ring-[var(--accent)]/50" : ""}`}
+    >
+      {pkg.popular && (
+        <span className="absolute -top-3 left-8 eyebrow-pill text-[10px]">
+          Most Popular
+        </span>
+      )}
+      {isRecommended && (
+        <span className="absolute -top-3 right-8 eyebrow-pill text-[10px] bg-[var(--accent)] text-black">
+          Quiz Match
+        </span>
+      )}
+
+      {/* Header */}
+      <div className="mb-2">
+        <h3 className="font-serif text-2xl md:text-3xl text-white">{pkg.name}</h3>
+      </div>
+      {pkg.subtitle && (
+        <p className="text-xs text-[var(--text-dim)] italic mb-6 break-words">{pkg.subtitle}</p>
+      )}
+
+      {/* Description */}
+      {pkg.description && (
+        <div className="mb-6">
+          <p className={`text-sm text-[var(--text-secondary)] leading-relaxed ${!expanded ? "line-clamp-3" : ""}`}>
+            {pkg.description}
+          </p>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="mt-2 text-xs text-[var(--accent)] hover:text-white transition-colors"
+          >
+            {expanded ? "Show less" : "Read more"}
+          </button>
+        </div>
+      )}
+
+      {/* Who this is for */}
+      {pkg.best && (
+        <div className="mb-6 p-4 rounded-xl bg-[var(--accent-soft)] border border-[var(--accent)]/10">
+          <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--accent)] mb-2 font-medium">Who this is for</p>
+          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{pkg.best}</p>
+        </div>
+      )}
+
+      {/* What's included */}
+      <div className="flex-1">
+        <p className="text-[10px] uppercase tracking-[0.14em] text-[var(--text-dim)] mb-3 font-medium">What&apos;s included</p>
+        <div className="space-y-2.5">
+          {pkg.extras.map((e) => (
+            <div key={e} className="flex items-start gap-2.5 text-left">
+              <span className="w-1 h-1 rounded-full bg-[var(--accent)] mt-1.5 flex-shrink-0" />
+              <span className="text-sm text-[var(--text-secondary)] leading-relaxed">{e}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Not included */}
+      {pkg.notIncluded && (
+        <p className="mt-5 text-xs text-[var(--text-dim)] leading-relaxed">
+          <span className="font-medium text-[var(--text-muted)]">Not included:</span>{" "}
+          {pkg.notIncluded}
+        </p>
+      )}
+
+      <Button
+        onClick={onInquire}
+        className="mt-8 w-full"
+        variant={pkg.popular ? "primary" : "outline"}
+      >
+        Inquire about {pkg.name}
+      </Button>
+    </div>
+  );
+}
 /* ─── Main Component ─── */
 export default function GradClient({ content }: { content: GradContent }) {
   const packages = content.packages?.length ? content.packages : DEFAULT_PACKAGES;
   const addons = content.addons?.length ? content.addons : DEFAULT_ADDONS;
   const galleryItems = content.gallery?.length ? content.gallery : DEFAULT_GALLERY_ITEMS;
   const portfolioGalleryItems = content.portfolioGallery || [];
+  const friendPricing: GradFriendPricing[] = content.friendPricing?.length ? content.friendPricing : DEFAULT_FRIEND_PRICING;
   const interactivePortfolioItems = useMemo(
     () =>
       portfolioGalleryItems.length > 0
@@ -545,76 +638,25 @@ export default function GradClient({ content }: { content: GradContent }) {
                 The Portfolio.
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {packages.map((pkg) => (
-                <div
+                <PackageCard
                   key={pkg.name}
-                  className={`editorial-card p-8 flex flex-col ${
-                    pkg.popular
-                      ? "lg:col-span-1 ring-1 ring-[var(--accent)]/30 relative"
-                      : ""
-                  } ${
-                    pkg.name === recommendedPackageName
-                      ? "ring-2 ring-[var(--accent)]/50"
-                      : ""
-                  }`}
-                >
-                  {pkg.popular && (
-                    <span className="absolute -top-3 left-8 eyebrow-pill text-[10px]">
-                      Most Popular
-                    </span>
-                  )}
-                  {pkg.name === recommendedPackageName && (
-                    <span className="absolute -top-3 right-8 eyebrow-pill text-[10px] bg-[var(--accent)] text-black">
-                      Quiz Match
-                    </span>
-                  )}
-                  <div className="mb-6">
-                    <h3 className="font-serif text-2xl text-white mb-2">
-                      {pkg.name}
-                    </h3>
-                  </div>
-                  <div className="space-y-3 text-sm text-[var(--text-secondary)] flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                      {pkg.time}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                      {pkg.locations}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                      {pkg.images}
-                    </div>
-                    {pkg.extras.map((e) => (
-                      <div key={e} className="flex items-start gap-2 text-left">
-                        <span className="w-1 h-1 rounded-full bg-[var(--accent)] mt-1.5 flex-shrink-0" />
-                        <span>{e}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="mt-6 text-xs text-[var(--text-muted)] italic leading-relaxed">
-                    {pkg.best}
-                  </p>
-                  <Button
-                    onClick={() => {
-                      setSelectedPackageName(pkg.name);
-                      scrollToInquire();
-                    }}
-                    className="mt-6 w-full"
-                    variant={pkg.popular ? "primary" : "outline"}
-                  >
-                    Inquire about {pkg.name}
-                  </Button>
-                </div>
+                  pkg={pkg}
+                  isRecommended={pkg.name === recommendedPackageName}
+                  onInquire={() => {
+                    setSelectedPackageName(pkg.name);
+                    scrollToInquire();
+                  }}
+                />
               ))}
             </div>
           </div>
         </Section>
         <PackageFitQuiz packages={packages} onUseRecommendation={useRecommendation} />
+
         {/* ─── ADD-ONS, ANNOUNCEMENTS & PRINTS ─── */}
-        <Section className="py-[var(--section-padding)] bg-[var(--bg-elevated)]">
+        <Section className="py-[var(--section-padding)]">
           <div className="container-narrow">
             <div className="text-center mb-12">
               <p className="eyebrow mb-4">Everything Else</p>

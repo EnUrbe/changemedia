@@ -13,6 +13,7 @@ function seedContent(content: GradContent): GradContent {
     addons: content.addons.length ? content.addons : DEFAULT_ADDONS,
     gallery: content.gallery.length ? content.gallery : DEFAULT_GALLERY_ITEMS,
     portfolioGallery: content.portfolioGallery,
+    friendPricing: content.friendPricing ?? [],
   };
 }
 

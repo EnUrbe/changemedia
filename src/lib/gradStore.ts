@@ -28,6 +28,7 @@ export async function getGradContent(): Promise<GradContent> {
     addons: [],
     gallery: [],
     portfolioGallery: [],
+    friendPricing: [],
   };
 }
 
