@@ -340,15 +340,15 @@ function buildGradClientEmailHtml(name: string, packageName: string | null): str
                   </td></tr>
                   <tr><td style="font-size:0;height:8px" height="8">&nbsp;</td></tr>
 
-                  <!-- CTA BUTTON -->
+                  <!-- CTA BUTTON: PRICING GUIDE -->
                   <tr><td style="padding:0px 20px"><table cellpadding="0" cellspacing="0" border="0" style="width:100%"><tbody><tr><td align="center">
-                    <table cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:230px"><tbody><tr><td style="width:100%;padding:20px 0">
+                    <table cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:230px"><tbody><tr><td style="width:100%;padding:20px 0 8px">
                       <table cellpadding="0" cellspacing="0" style="width:100%;border-spacing:0;border-collapse:separate"><tbody><tr>
                         <td valign="middle" height="41" style="height:41px;vertical-align:middle;box-sizing:border-box;background-color:#378d90">
-                          <a href="${bookingUrl}" target="_blank" rel="noopener" style="text-decoration:none;display:block">
+                          <a href="https://canva.link/j4wkc4mx7makl0d" target="_blank" rel="noopener" style="text-decoration:none;display:block">
                             <table cellpadding="0" cellspacing="0" style="width:100%;height:100%;border-spacing:0;border-collapse:collapse"><tbody><tr>
                               <td style="color:#ffffff;font-size:17px;font-weight:bold;font-family:Helvetica,Arial,sans-serif;text-align:center;line-height:1.1em;letter-spacing:-0.02em;vertical-align:middle;box-sizing:border-box">
-                                Book your session
+                                Read the full guide
                               </td>
                             </tr></tbody></table>
                           </a>
@@ -356,6 +356,13 @@ function buildGradClientEmailHtml(name: string, packageName: string | null): str
                       </tr></tbody></table>
                     </td></tr></tbody></table>
                   </td></tr></tbody></table></td></tr>
+
+                  <!-- SECONDARY: BOOK LINK -->
+                  <tr><td style="text-align:center;padding:0 20px 8px">
+                    <a href="${bookingUrl}" target="_blank" rel="noopener" style="color:#378d90;font-size:13px;font-family:Helvetica,Arial,sans-serif;text-decoration:underline">
+                      Or book your session directly &rarr;
+                    </a>
+                  </td></tr>
 
                   <tr><td style="font-size:0;height:16px" height="16">&nbsp;</td></tr>
 
