@@ -30,7 +30,7 @@ export function buildGradClientEmail(name: string, packageName: string | null): 
     "https://c_cmlh427bmd6dq3e9v3ovobdktb8oaudah5_gezqwy.canva-cdn.email/208dd5669fd053fb8d94d246cbb5ce75.jpg";
 
   const packageLine = packageName
-    ? `<tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0px 20px 16px">You mentioned you&rsquo;re interested in the <strong>${esc(packageName)}</strong> experience &mdash; solid pick. I think you&rsquo;re going to love it.</td></tr>`
+    ? `<tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:left;padding:0px 20px 16px">You mentioned you&rsquo;re interested in the <strong>${esc(packageName)}</strong> experience &mdash; solid pick. I think you&rsquo;re going to love it.</td></tr>`
     : "";
 
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -62,11 +62,11 @@ export function buildGradClientEmail(name: string, packageName: string | null): 
             <tbody><tr><td style="padding:24px 0 10px 0;vertical-align:top">
               <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" style="font-family:Helvetica,Arial,sans-serif;border-collapse:collapse">
                 <tbody>
-                  <tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0px 20px 8px">
+                  <tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:left;padding:0px 20px 8px">
                     Hey ${first} &mdash; congrats on graduating. That&rsquo;s a big deal, and you deserve photos that actually match the moment.
                   </td></tr>
                   ${packageLine}
-                  <tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0px 20px 16px">
+                  <tr><td dir="ltr" style="color:#0b1e1c;font-size:14.6667px;font-family:Helvetica,Arial,sans-serif;text-align:left;padding:0px 20px 16px">
                     I put together a full pricing guide with every package, what&rsquo;s included, and available dates. Take a look &mdash; then reply to this email or text me and we&rsquo;ll lock in your session. I&rsquo;ll get back to you same day.
                   </td></tr>
                   <tr><td style="font-size:0;height:8px" height="8">&nbsp;</td></tr>

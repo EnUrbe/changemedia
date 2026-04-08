@@ -11,8 +11,6 @@ import {
   useMotionValue,
 } from "framer-motion";
 import Image from "next/image";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import type {
   GradContent,
@@ -449,7 +447,29 @@ export default function GradClient({ content }: { content: GradContent }) {
   };
   return (
     <>
-      <Nav />
+      {/* ─── MINIMAL HEADER (logo only) ─── */}
+      <motion.nav
+        initial={false}
+        animate={{
+          backgroundColor: "rgba(9, 9, 7, 0.85)",
+          borderColor: "rgba(255, 255, 255, 0.08)",
+        }}
+        className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl border-b"
+      >
+        <div className="container-wide flex items-center justify-between h-20">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="group font-serif text-base leading-none tracking-[-0.05em] text-white transition-all duration-300 hover:text-[var(--accent)]"
+          >
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">Change</span>
+            <br />
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">Studios</span>
+          </button>
+          <Button href="#inquire" size="md">
+            Get Pricing
+          </Button>
+        </div>
+      </motion.nav>
       <main className="relative overflow-hidden">
         {/* ─── HERO ─── */}
         <div ref={heroRef} className="relative h-[100svh] flex items-center justify-center overflow-hidden">
@@ -733,7 +753,20 @@ export default function GradClient({ content }: { content: GradContent }) {
           </div>
         </Section>
       </main>
-      <Footer />
+      {/* ─── SLIM FOOTER ─── */}
+      <footer className="border-t border-[var(--border)] bg-[var(--bg)] py-8">
+        <div className="container-wide flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] uppercase tracking-[0.12em] text-[var(--text-dim)]">
+          <span>&copy; {new Date().getFullYear()} Change Studios. All rights reserved.</span>
+          <a
+            href="https://www.instagram.com/changemedia.studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors duration-300"
+          >
+            Instagram
+          </a>
+        </div>
+      </footer>
     </>
   );
 }
