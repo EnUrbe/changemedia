@@ -430,7 +430,7 @@ function ParallaxText({ children, baseVelocity = -20 }: { children: string; base
   });
   const x = useTransform(baseX, (v) => `${wrap(-45, -20, v)}%`);
   return (
-    <div className="overflow-hidden m-0 flex flex-nowrap w-full pointer-events-none opacity-20 -my-20">
+    <div className="overflow-hidden m-0 flex flex-nowrap w-full pointer-events-none opacity-20">
       <motion.div className="flex whitespace-nowrap uppercase text-[8rem] sm:text-[10rem] md:text-[15rem] leading-none font-serif tracking-tight text-white/50" style={{ x }}>
         <span className="block pr-12">{children}</span>
         <span className="block pr-12">{children}</span>
