@@ -357,15 +357,6 @@ function buildGradClientEmailHtml(name: string, packageName: string | null): str
                     </td></tr></tbody></table>
                   </td></tr></tbody></table></td></tr>
 
-                  <!-- SECONDARY: BOOK LINK -->
-                  <tr><td style="text-align:center;padding:0 20px 8px">
-                    <a href="${bookingUrl}" target="_blank" rel="noopener" style="color:#378d90;font-size:13px;font-family:Helvetica,Arial,sans-serif;text-decoration:underline">
-                      Or book your session directly &rarr;
-                    </a>
-                  </td></tr>
-
-                  <tr><td style="font-size:0;height:16px" height="16">&nbsp;</td></tr>
-
                   <!-- CONTACT -->
                   <tr><td dir="ltr" style="color:#0b1e1c;font-size:16px;font-family:Helvetica,Arial,sans-serif;line-height:1;text-align:center;padding:0px 20px">
                     <span style="font-weight:700;text-decoration:underline;letter-spacing:-0.01em">Contact me</span><br><br>
