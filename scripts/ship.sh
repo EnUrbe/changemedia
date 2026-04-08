@@ -28,10 +28,4 @@ fi
 echo "Pushing to origin/$branch..."
 git push origin "$branch"
 
-if command -v vercel >/dev/null 2>&1; then
-  echo "Triggering production deployment on Vercel..."
-  vercel --prod
-else
-  echo "Vercel CLI not found."
-  echo "Git push may still trigger deployment if your project is connected to Vercel Git integration."
-fi
+echo "Push complete. If Vercel Git integration is enabled, deployment will trigger automatically."
