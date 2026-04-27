@@ -166,6 +166,15 @@ export async function updateGalleryStatus(
   if (error) throw new Error(`Failed to update status: ${error.message}`);
 }
 
+export async function deliverGallery(galleryId: string): Promise<void> {
+  const supabase = getSupabaseAdminClient();
+  const { error } = await supabase
+    .from("photo_selections")
+    .update({ status: "delivered" })
+    .eq("id", galleryId);
+  if (error) throw new Error(`Failed to deliver gallery: ${error.message}`);
+}
+
 export async function getAllPendingEdits(): Promise<PhotoSelectionGallery[]> {
   try {
     const supabase = getSupabaseAdminClient();

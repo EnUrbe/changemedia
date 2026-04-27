@@ -7,6 +7,7 @@ import Button from "@/components/ui/Button";
 interface CloudinaryUploadWidgetProps {
   onUpload: (url: string) => void;
   children?: React.ReactNode;
+  multiple?: boolean;
 }
 
 type CloudinaryUploadResult = {
@@ -33,7 +34,7 @@ declare global {
   }
 }
 
-export default function CloudinaryUploadWidget({ onUpload, children }: CloudinaryUploadWidgetProps) {
+export default function CloudinaryUploadWidget({ onUpload, children, multiple = false }: CloudinaryUploadWidgetProps) {
   const [loaded, setLoaded] = useState(false);
   const onUploadRef = useRef(onUpload);
 
@@ -73,7 +74,7 @@ export default function CloudinaryUploadWidget({ onUpload, children }: Cloudinar
         cloudName,
         uploadPreset,
         sources: ["local", "url", "camera"], // Removed google_drive to reduce complexity/potential hangs
-        multiple: false,
+        multiple,
         clientAllowedFormats: ["image", "video"],
         maxImageFileSize: 10000000, // 10MB
       },

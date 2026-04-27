@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import DeliveryPanel from "./DeliveryPanel";
 
 interface PhotoItem {
   id: string;
@@ -243,6 +244,18 @@ export default function PhotoSelectionsAdmin({ projectId, photoSelections, acces
                   <p className="mt-4 text-xs text-neutral-400">
                     Submitted: {new Date(gallery.submittedAt).toLocaleString()}
                   </p>
+                )}
+
+                {/* Delivery panel — visible once client has submitted */}
+                {(gallery.status === "submitted" || gallery.status === "editing") && (
+                  <DeliveryPanel
+                    galleryId={gallery.id}
+                    projectId={gallery.projectId}
+                    galleryTitle={gallery.title}
+                    selectedPhotos={selectedPhotoObjects}
+                    clientNotes={gallery.clientNotes}
+                    currentStatus={gallery.status}
+                  />
                 )}
               </div>
             )}
